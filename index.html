@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gravity22 | Smart Converter</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #0f172a; color: white; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .card { background: #1e293b; padding: 2rem; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); width: 350px; text-align: center; border: 1px solid #334155; }
+        h1 { color: #38bdf8; margin-bottom: 1.5rem; }
+        input, select { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: none; background: #334155; color: white; font-size: 1rem; box-sizing: border-box; }
+        .result { background: #0ea5e9; padding: 15px; border-radius: 8px; margin-top: 20px; font-weight: bold; font-size: 1.2rem; }
+        .ad-slot { margin-top: 25px; font-size: 0.7rem; color: #64748b; border: 1px dashed #475569; padding: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h1>Gravity 22</h1>
+    <p>Fast Interactive Converter</p>
+    
+    <input type="number" id="val" placeholder="Enter value..." oninput="convert()">
+    
+    <select id="type" onchange="convert()">
+        <option value="kg-lb">KG to Pounds</option>
+        <option value="lb-kg">Pounds to KG</option>
+        <option value="km-mi">KM to Miles</option>
+        <option value="mi-km">Miles to KM</option>
+    </select>
+
+    <div class="result" id="out">Result will appear...</div>
+
+    <div class="ad-slot">AD SPACE (Ads will appear here later)</div>
+</div>
+
+<script>
+    function convert() {
+        const v = parseFloat(document.getElementById('val').value);
+        const t = document.getElementById('type').value;
+        const out = document.getElementById('out');
+        if (isNaN(v)) { out.innerText = "Waiting for input..."; return; }
+        
+        let res;
+        if(t === "kg-lb") res = (v * 2.204).toFixed(2) + " lbs";
+        else if(t === "lb-kg") res = (v / 2.204).toFixed(2) + " kg";
+        else if(t === "km-mi") res = (v * 0.621).toFixed(2) + " miles";
+        else if(t === "mi-km") res = (v / 0.621).toFixed(2) + " km";
+        
+        out.innerText = res;
+    }
+</script>
+
+</body>
+</html>
