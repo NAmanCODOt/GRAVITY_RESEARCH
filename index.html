@@ -92,7 +92,7 @@ body {
         RaviTy Research is a market insights firm focused on understanding the forces that drive financial markets.
         We break down businesses, trends, and market movements into clear, structured insights — making complex data simple and meaningful.
     </p>
-    <button class="btn" onclick="scrollToInsights()">Explore Insights</button>
+    <button class="btn" onclick="goToInsights()">Explore Insights</button>
 </div>
 
 <div class="section">
@@ -139,8 +139,11 @@ body {
     © 2026 gRaviTy Research | All Rights Reserved
 </div>
 <script>
-function scrollToInsights() {
-    document.getElementById("insights").scrollIntoView({ behavior: "smooth" });
+<script>
+function goToInsights() {
+    window.location.href = "insights.html";
+}
+</script>
 }
 </script>
 </body>
