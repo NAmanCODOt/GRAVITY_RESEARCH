@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Market Analysis | gRaviTy Research</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: #000;
+    color: #e5e5e5;
+}
+
+/* NAV */
+.nav {
+    padding: 18px;
+    text-align: center;
+    background: #000;
+    border-bottom: 1px solid #1f1f1f;
+    color: #d4af37;
+    font-weight: bold;
+}
+
+/* CONTAINER */
+.container {
+    max-width: 1000px;
+    margin: auto;
+    padding: 20px;
+}
+
+/* HEADINGS */
+h1, h2, h3 {
+    color: #d4af37;
+    font-family: 'Playfair Display', serif;
+}
+
+/* CARD */
+.card {
+    background: #0a0a0a;
+    border: 1px solid #1f1f1f;
+    padding: 20px;
+    border-radius: 12px;
+    margin: 15px 0;
+}
+
+/* SIMPLE BAR CHART */
+.bar {
+    height: 18px;
+    background: #1f1f1f;
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 8px 0;
+}
+
+.fill {
+    height: 100%;
+    background: linear-gradient(90deg, #d4af37, #f5d76e);
+}
+
+/* BUTTON */
+.btn {
+    padding: 10px 18px;
+    background: transparent;
+    border: 1px solid #d4af37;
+    color: #d4af37;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 20px;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn:hover {
+    background: #d4af37;
+    color: black;
+}
+
+/* GRID */
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+@media(max-width: 768px){
+    .grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="nav">gRaviTy Research — Market Analysis</div>
+
+<div class="container">
+
+<!-- OVERVIEW -->
+<div class="card">
+<h2>Industry Overview (Auto Sector India)</h2>
+<p>Analysis of Indian Automobile Industry with focus on Tata Motors PV segment (FY 2020–2030 outlook).</p>
+</div>
+
+<!-- GROWTH CHART -->
+<div class="card">
+<h2>Market Growth Trend</h2>
+
+<p>Production Growth</p>
+<div class="bar"><div class="fill" style="width:45%"></div></div>
+
+<p>PV Sales Growth</p>
+<div class="bar"><div class="fill" style="width:70%"></div></div>
+
+<p>EV Adoption</p>
+<div class="bar"><div class="fill" style="width:90%"></div></div>
+</div>
+
+<!-- TATA PERFORMANCE -->
+<div class="card">
+<h2>Tata Motors Performance</h2>
+
+<div class="grid">
+
+<div class="card">
+<h3>EV Market Share</h3>
+<p style="font-size:24px;color:#d4af37;">65–70%</p>
+</div>
+
+<div class="card">
+<h3>PV Market Share</h3>
+<p style="font-size:24px;color:#d4af37;">~14%</p>
+</div>
+
+<div class="card">
+<h3>Investment (FY26–30)</h3>
+<p style="font-size:24px;color:#d4af37;">₹33,000 Cr</p>
+</div>
+
+<div class="card">
+<h3>Patents Filed</h3>
+<p style="font-size:24px;color:#d4af37;">250+</p>
+</div>
+
+</div>
+</div>
+
+<!-- EV OUTLOOK -->
+<div class="card">
+<h2>EV Market Outlook</h2>
+
+<p>EV growth is exponential, not linear.</p>
+
+<div class="bar"><div class="fill" style="width:30%"></div></div>
+<p>2022</p>
+
+<div class="bar"><div class="fill" style="width:60%"></div></div>
+<p>2025</p>
+
+<div class="bar"><div class="fill" style="width:95%"></div></div>
+<p>2030 Projection</p>
+</div>
+
+<!-- FUTURE SCENARIOS -->
+<div class="card">
+<h2>2030 Scenarios</h2>
+
+<p>📈 Bull Case: 18–20% Market Share</p>
+<p>📊 Base Case: 16–18%</p>
+<p>📉 Bear Case: 12–14%</p>
+</div>
+
+<!-- BUTTON BACK -->
+<a class="btn" href="index.html">← Back to Home</a>
+
+</div>
+
+</body>
+</html>
