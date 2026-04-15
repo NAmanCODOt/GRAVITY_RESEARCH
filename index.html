@@ -115,6 +115,7 @@ body {
     }
 }
     /* GOLD MOVING ORB */
+/* BASE ORB */
 .gold-orb {
     position: fixed;
     width: 300px;
@@ -124,15 +125,52 @@ body {
     filter: blur(60px);
     pointer-events: none;
     z-index: 0;
-    animation: moveOrb 18s linear infinite;
 }
 
-@keyframes moveOrb {
+/* ORB 1 */
+.orb1 {
+    animation: move1 18s linear infinite;
+}
+
+/* ORB 2 */
+.orb2 {
+    width: 250px;
+    height: 250px;
+    animation: move2 25s linear infinite;
+    opacity: 0.7;
+}
+
+/* ORB 3 */
+.orb3 {
+    width: 200px;
+    height: 200px;
+    animation: move3 30s linear infinite;
+    opacity: 0.5;
+}
+
+/* PATHS */
+@keyframes move1 {
     0%   { top: 10%; left: 10%; }
     25%  { top: 70%; left: 20%; }
     50%  { top: 60%; left: 80%; }
     75%  { top: 20%; left: 70%; }
     100% { top: 10%; left: 10%; }
+}
+
+@keyframes move2 {
+    0%   { top: 80%; left: 80%; }
+    25%  { top: 20%; left: 70%; }
+    50%  { top: 30%; left: 10%; }
+    75%  { top: 70%; left: 20%; }
+    100% { top: 80%; left: 80%; }
+}
+
+@keyframes move3 {
+    0%   { top: 50%; left: 0%; }
+    25%  { top: 10%; left: 40%; }
+    50%  { top: 60%; left: 60%; }
+    75%  { top: 30%; left: 90%; }
+    100% { top: 50%; left: 0%; }
 }
     body > * {
     position: relative;
@@ -142,7 +180,9 @@ body {
 </head>
 
 <body>
-<div class="gold-orb"></div>
+<div class="gold-orb orb1"></div>
+<div class="gold-orb orb2"></div>
+<div class="gold-orb orb3"></div>
 <div class="nav">
     <img src="logo.png" alt="gRaviTy Logo">
 </div>
