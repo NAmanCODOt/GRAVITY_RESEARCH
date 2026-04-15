@@ -129,6 +129,54 @@ body > * {
     position: relative;
     z-index: 1;
 }
+    /* NAV */
+.nav {
+    padding: 30px 20px;
+    text-align: center;
+    border-bottom: 1px solid rgba(212,175,55,0.15);
+    position: relative;
+}
+
+/* LOGO WRAP */
+.logo-wrap {
+    position: relative;
+    display: inline-block;
+}
+
+/* LOGO IMAGE */
+.logo {
+    width: 170px;
+    position: relative;
+    z-index: 2;
+    transition: 0.4s;
+}
+
+/* GOLD GLOW BEHIND */
+.logo-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 220px;
+    height: 220px;
+    background: radial-gradient(circle, rgba(212,175,55,0.25), transparent 70%);
+    transform: translate(-50%, -50%);
+    filter: blur(50px);
+    z-index: 1;
+    animation: logoPulse 3s ease-in-out infinite;
+}
+
+/* HOVER EFFECT */
+.logo:hover {
+    transform: scale(1.07);
+    filter: drop-shadow(0 0 12px #d4af37);
+}
+
+/* PULSE ANIMATION */
+@keyframes logoPulse {
+    0% { opacity: 0.4; transform: translate(-50%, -50%) scale(1); }
+    50% { opacity: 0.9; transform: translate(-50%, -50%) scale(1.2); }
+    100% { opacity: 0.4; transform: translate(-50%, -50%) scale(1); }
+}
 </style>
 </head>
 
@@ -141,7 +189,10 @@ body > * {
 
 <!-- NAV -->
 <div class="nav">
-    <img src="logo.png">
+    <div class="logo-wrap">
+        <img src="logo.png" class="logo">
+        <div class="logo-glow"></div>
+    </div>
 </div>
 
 <!-- CONTENT -->
