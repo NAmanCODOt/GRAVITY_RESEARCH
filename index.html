@@ -6,6 +6,11 @@
     <title>gRaviTy Research | Understanding Market Forces</title>
 
     <style>
+            /* HOVER OPEN SIDEBAR */
+.nav:hover + #mySidebar,
+#mySidebar:hover {
+    width: 350px;
+}
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Inter:wght@300;400;500&display=swap');
 
         html { scroll-behavior: smooth; }
@@ -178,30 +183,59 @@
         body > * { position: relative; z-index: 1; }
     </style>
 </head>
-
 <body>
-   <div id="mySidebar" class="sidebar">
+
+<div id="mySidebar" class="sidebar">
 
     <span class="close-btn">&times;</span>
 
     <div class="sidebar-content">
-        
-        <div class="sidebar-content">
-            
-            <div class="menu-label">Full Launch Countdown</div>
-            <div class="countdown-box">
-                <div class="timer-display">
-                    <span class="timer-unit"><span id="days">00</span><small class="timer-label">Days</small></span>
-                    <span>:</span>
-                    <span class="timer-unit"><span id="hours">00</span><small class="timer-label">Hrs</small></span>
-                    <span>:</span>
-                    <span class="timer-unit"><span id="minutes">00</span><small class="timer-label">Min</small></span>
-                    <span>:</span>
-                    <span class="timer-unit"><span id="seconds">00</span><small class="timer-label">Sec</small></span>
-                </div>
-                <p style="font-size: 10px; color: #9ca3af; margin-top: 15px; letter-spacing: 1px;">LAUNCHING APRIL 25, 2026</p>
+
+        <div class="menu-label">Full Launch Countdown</div>
+
+        <div class="countdown-box">
+            <div class="timer-display">
+                <span class="timer-unit">
+                    <span id="days">00</span>
+                    <small class="timer-label">Days</small>
+                </span>
+                <span>:</span>
+                <span class="timer-unit">
+                    <span id="hours">00</span>
+                    <small class="timer-label">Hrs</small>
+                </span>
+                <span>:</span>
+                <span class="timer-unit">
+                    <span id="minutes">00</span>
+                    <small class="timer-label">Min</small>
+                </span>
+                <span>:</span>
+                <span class="timer-unit">
+                    <span id="seconds">00</span>
+                    <small class="timer-label">Sec</small>
+                </span>
             </div>
 
+            <p style="font-size: 10px; color: #9ca3af; margin-top: 15px; letter-spacing: 1px;">
+                LAUNCHING APRIL 25, 2026
+            </p>
+        </div>
+
+        <div class="menu-label">Market Insights</div>
+        <a href="markettata.html">Tata Analysis</a>
+        <a href="insights.html">General Insights</a>
+
+        <div class="menu-label">Advanced Tools</div>
+        <a href="calc.html">Wealth Projection</a>
+        <a href="clock.html">Market Clock</a>
+
+        <div class="menu-label">The Firm</div>
+        <a href="vision.html">Our Vision</a>
+        <a href="aboutus.html">About Us</a>
+
+    </div>
+
+</div>
             <div class="menu-label">Market Insights</div>
             <a href="markettata.html">Tata Analysis</a>
             <a href="insights.html">General Insights</a>
@@ -265,11 +299,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const countdownBox = document.querySelector(".countdown-box");
 
   
-    /* HOVER OPEN SIDEBAR */
-.nav:hover + #mySidebar,
-#mySidebar:hover {
-    width: 350px;
-}
+
 
     // CLICK OUTSIDE
     document.addEventListener("click", function(event) {
