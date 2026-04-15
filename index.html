@@ -114,11 +114,35 @@ body {
         transform: translateY(0);
     }
 }
+    /* GOLD MOVING ORB */
+.gold-orb {
+    position: fixed;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(212,175,55,0.25), transparent 70%);
+    border-radius: 50%;
+    filter: blur(60px);
+    pointer-events: none;
+    z-index: 0;
+    animation: moveOrb 18s linear infinite;
+}
+
+@keyframes moveOrb {
+    0%   { top: 10%; left: 10%; }
+    25%  { top: 70%; left: 20%; }
+    50%  { top: 60%; left: 80%; }
+    75%  { top: 20%; left: 70%; }
+    100% { top: 10%; left: 10%; }
+}
+    body > * {
+    position: relative;
+    z-index: 1;
+}
 </style>
 </head>
 
 <body>
-
+<div class="gold-orb"></div>
 <div class="nav">
     <img src="logo.png" alt="gRaviTy Logo">
 </div>
