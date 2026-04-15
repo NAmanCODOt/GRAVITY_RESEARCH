@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GRAVITY | CLOCK</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;300;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@100;300;600&display=swap');
 
         body {
             margin: 0;
@@ -17,112 +17,158 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            letter-spacing: 0.15em;
+            letter-spacing: 0.2em;
+            overflow: hidden;
         }
 
-        /* Top Corner Meta */
-        .meta-header {
-            position: absolute;
-            top: 40px;
-            left: 40px;
-            font-size: 10px;
-            color: #444;
-            font-weight: 600;
+        /* Gold Gradient Text Effect */
+        .gold-text {
+            background: linear-gradient(to bottom, #f9f295 0%, #e0aa3e 25%, #b88a44 50%, #e0aa3e 75%, #f9f295 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
         }
 
-        /* Large Minimal Clock */
+        /* Large Punchy Clock */
         #clock {
-            font-size: clamp(80px, 18vw, 160px);
-            font-weight: 100;
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(80px, 15vw, 180px);
+            font-weight: 700;
             margin: 0;
-            line-height: 1;
+            line-height: 0.9;
+            filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.3));
+            animation: breathe 4s ease-in-out infinite;
         }
 
-        /* Separator Line */
+        @keyframes breathe {
+            0%, 100% { filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.2)); opacity: 0.9; }
+            50% { filter: drop-shadow(0 0 30px rgba(212, 175, 55, 0.5)); opacity: 1; }
+        }
+
+        /* The Divider */
         .divider {
-            width: 40px;
-            height: 1px;
-            background: #d4af37;
-            margin: 40px 0;
-            opacity: 0.5;
+            width: 200px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #d4af37, transparent);
+            margin: 50px 0;
         }
 
-        /* Countdown */
+        /* Countdown Data */
         .countdown-container {
             display: flex;
-            gap: 40px;
+            gap: 60px;
+            text-align: center;
+        }
+
+        .unit .value {
+            font-size: 32px;
+            font-weight: 300;
+            color: #fff;
+            display: block;
+        }
+
+        .unit .label {
+            font-size: 10px;
             color: #d4af37;
+            font-weight: 600;
+            margin-top: 10px;
+            letter-spacing: 0.4em;
+        }
+
+        /* Absolute Positions */
+        .brand-stamp {
+            position: absolute;
+            top: 50px;
+            font-size: 12px;
+            color: rgba(255,255,255,0.4);
+            border-left: 1px solid #d4af37;
+            padding-left: 15px;
+        }
+
+        .launch-tag {
+            position: absolute;
+            bottom: 50px;
             font-size: 14px;
+            color: #fff;
             font-weight: 300;
         }
 
-        .unit span {
-            display: block;
-            font-size: 8px;
-            color: #444;
-            margin-bottom: 8px;
-            text-align: center;
-        }
-
-        /* Bottom Fixed Info */
-        .launch-footer {
-            position: absolute;
-            bottom: 40px;
-            font-size: 11px;
-            color: #666;
-            text-align: center;
-        }
-
-        .back-link {
-            position: absolute;
-            bottom: 40px;
-            left: 40px;
-            text-decoration: none;
-            color: #222;
-            font-size: 10px;
-            transition: color 0.3s;
-        }
-
-        .back-link:hover {
+        .launch-tag b {
             color: #d4af37;
+            font-weight: 600;
         }
 
-        /* Disable user selection for a cleaner feel */
-        * { user-select: none; }
+        .exit-link {
+            position: absolute;
+            bottom: 50px;
+            left: 50px;
+            text-decoration: none;
+            color: #333;
+            font-size: 10px;
+            border: 1px solid #333;
+            padding: 8px 20px;
+            transition: 0.4s;
+        }
+
+        .exit-link:hover {
+            color: #d4af37;
+            border-color: #d4af37;
+            background: rgba(212, 175, 55, 0.05);
+        }
+
+        /* Decorative Gold Orb */
+        .orb {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.05) 0%, transparent 70%);
+            z-index: -1;
+        }
     </style>
 </head>
 <body>
 
-    <div class="meta-header">SYSTEM_TIME</div>
+    <div class="orb"></div>
+    <div class="brand-stamp">GRAVITY RESEARCH<br>INTERNAL_TIME</div>
 
-    <div id="clock">00:00:00</div>
+    <div id="clock" class="gold-text">00:00:00</div>
 
     <div class="divider"></div>
 
     <div class="countdown-container">
-        <div class="unit"><span>DAYS</span><div id="days">000</div></div>
-        <div class="unit"><span>HRS</span><div id="hours">00</div></div>
-        <div class="unit"><span>MIN</span><div id="minutes">00</div></div>
-        <div class="unit"><span>SEC</span><div id="seconds">00</div></div>
+        <div class="unit">
+            <span class="value" id="days">000</span>
+            <span class="label">DAYS</span>
+        </div>
+        <div class="unit">
+            <span class="value" id="hours">00</span>
+            <span class="label">HOURS</span>
+        </div>
+        <div class="unit">
+            <span class="value" id="minutes">00</span>
+            <span class="label">MINUTES</span>
+        </div>
+        <div class="unit">
+            <span class="value" id="seconds">00</span>
+            <span class="label">SECONDS</span>
+        </div>
     </div>
 
-    <div class="launch-footer">
-        GRAVITY RESEARCH | 25.04.2026
-    </div>
+    <div class="launch-tag">GRAND LAUNCH : <b>25 APRIL 2026</b></div>
 
-    <a href="index.html" class="back-link">EXIT</a>
+    <a href="index.html" class="exit-link">CLOSE TERMINAL</a>
 
     <script>
         function update() {
             const now = new Date();
             
-            // Time
+            // Time logic
             document.getElementById('clock').textContent = 
                 now.getHours().toString().padStart(2, '0') + ":" +
                 now.getMinutes().toString().padStart(2, '0') + ":" +
                 now.getSeconds().toString().padStart(2, '0');
 
-            // Countdown
+            // Countdown logic
             const target = new Date("April 25, 2026 00:00:00").getTime();
             const diff = target - now.getTime();
 
