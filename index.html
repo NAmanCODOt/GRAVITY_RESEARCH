@@ -180,7 +180,7 @@
 </head>
 
 <body>
-
+        <div class="sidebar-content">
     <div id="mySidebar" class="sidebar">
         <span class="close-btn" onclick="closeNav()">&times;</span>
         <div class="sidebar-content">
@@ -217,7 +217,7 @@
     <div class="gold-orb orb2"></div>
 
     <div class="nav">
-        <div class="menu-icon" onclick="openNav()">
+        <div class="menu-icon">
             <span></span><span></span><span></span>
         </div>
         <a href="index.html"><img src="logo.png" alt="gRaviTy Research Logo"></a>
@@ -261,14 +261,12 @@ document.addEventListener("DOMContentLoaded", function () {
     const secondsEl = document.getElementById("seconds");
     const countdownBox = document.querySelector(".countdown-box");
 
-    // SIDEBAR NAVIGATION
-    window.openNav = function () {
-        sidebar.style.width = "350px";
-    }
-
-    window.closeNav = function () {
-        sidebar.style.width = "0";
-    }
+  
+    /* HOVER OPEN SIDEBAR */
+.nav:hover + #mySidebar,
+#mySidebar:hover {
+    width: 350px;
+}
 
     // CLICK OUTSIDE
     document.addEventListener("click", function(event) {
