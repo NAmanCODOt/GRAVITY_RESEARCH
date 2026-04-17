@@ -1,16 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Market Insights | gRaviTy Research</title>
+    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,600&family=Inter:wght@200;300;400;500;600&display=swap');
-        :root { --gold: #d4af37; --bg-black: #050505; }
+        :root { --gold: #d4af37; --bg-black: #050505; --glass: rgba(255, 255, 255, 0.03); }
         
         body { margin: 0; font-family: 'Inter', sans-serif; background: var(--bg-black); color: #fff; user-select: none; overflow-x: hidden; }
         
+        /* --- NAVIGATION --- */
         .nav { 
             padding: 20px 40px; display: flex; align-items: center; justify-content: space-between; 
             background: rgba(0,0,0,0.95); backdrop-filter: blur(15px); position: sticky; top: 0; z-index: 1000; 
@@ -21,30 +22,38 @@
         .home-btn:hover { background: var(--gold); color: #000; }
 
         .container { max-width: 900px; margin: 40px auto; padding: 0 20px; }
-        
+
+        /* --- SEARCH & FILTERS --- */
+        .controls { margin-bottom: 40px; text-align: center; }
+        #searchBar { 
+            width: 100%; max-width: 450px; background: var(--glass); border: 1px solid rgba(212, 175, 55, 0.2); 
+            padding: 12px 20px; color: var(--gold); outline: none; margin-bottom: 20px; font-family: 'Inter';
+        }
+        .filter-group { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+        .filter-btn { 
+            background: transparent; border: 1px solid #222; color: #666; padding: 6px 15px; 
+            font-size: 10px; text-transform: uppercase; cursor: pointer; transition: 0.3s; 
+        }
+        .filter-btn.active { border-color: var(--gold); color: var(--gold); }
+
+        /* --- INSIGHT CARD --- */
         .insight-card { 
             background: rgba(15,15,15,0.7); border: 1px solid rgba(255,255,255,0.05); 
-            padding: 25px; margin-bottom: 20px; transition: 0.4s; overflow: hidden;
+            padding: 25px; margin-bottom: 20px; transition: 0.4s; overflow: hidden; display: none;
         }
-
+        .insight-card.visible { display: block; }
         .card-header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
         .company-name { font-family: 'Playfair Display', serif; font-size: 22px; color: var(--gold); }
-
-        .arrow { font-size: 18px; color: var(--gold); transition: 0.4s; transform: rotate(0deg); }
+        .meta-row { display: flex; justify-content: space-between; font-size: 9px; color: #444; margin-bottom: 12px; text-transform: uppercase; }
+        .arrow { font-size: 18px; color: var(--gold); transition: 0.4s; }
         .insight-card.active .arrow { transform: rotate(180deg); }
 
-        /* --- THE DROPDOWN SECTION --- */
-        .details-pane { 
-            max-height: 0; opacity: 0; overflow: hidden; 
-            transition: all 0.5s ease; margin-top: 0; 
-        }
-        .insight-card.active .details-pane { 
-            max-height: 800px; opacity: 1; margin-top: 25px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.05);
-        }
-
-        .chart-frame { width: 100%; height: 400px; background: #000; margin-bottom: 20px; border: 1px solid #222; }
+        /* --- DROPDOWN --- */
+        .details-pane { max-height: 0; opacity: 0; overflow: hidden; transition: all 0.5s ease; }
+        .insight-card.active .details-pane { max-height: 1200px; opacity: 1; margin-top: 25px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.05); }
         
-        .ai-note { color: #00ff88; font-size: 13px; font-style: italic; margin-bottom: 15px; display: block; background: rgba(0,255,136,0.05); padding: 10px; border-left: 2px solid #00ff88; }
+        .chart-frame { width: 100%; height: 350px; background: #000; margin-bottom: 20px; border: 1px solid #222; }
+        .ai-verdict { color: #00ff88; font-size: 13px; font-style: italic; margin-bottom: 15px; display: block; background: rgba(0,255,136,0.05); padding: 10px; border-left: 2px solid #00ff88; }
         .analysis-text { color: #888; font-size: 14px; line-height: 1.6; }
     </style>
 </head>
@@ -56,103 +65,127 @@
     <div style="width:70px"></div>
 </div>
 
-<div class="container" id="terminal-feed">
-    <div style="text-align: center; color: var(--gold); margin-top: 100px; letter-spacing: 3px;">CONNECTING TO GLOBAL DATA STREAM...</div>
+<div class="container">
+    <div class="controls">
+        <input type="text" id="searchBar" placeholder="SEARCH ASSET CLASS OR TICKER..." onkeyup="filterAndRender()">
+        <div class="filter-group">
+            <button class="filter-btn active" onclick="setSector('all', this)">All Sectors</button>
+            <button class="filter-btn" onclick="setSector('tech', this)">Tech</button>
+            <button class="filter-btn" onclick="setSector('finance', this)">Finance</button>
+            <button class="filter-btn" onclick="setSector('consumer', this)">Consumer</button>
+        </div>
+    </div>
+
+    <div id="terminal-feed">
+        <div style="text-align: center; color: var(--gold); margin-top: 50px;">SYNCHRONIZING TERMINAL...</div>
+    </div>
 </div>
 
 <script>
-    async function loadTerminal() {
+    let allAssets = [];
+    let currentSector = 'all';
+
+    async function fetchTerminal() {
         const URL = 'https://api.sheety.co/27bb86a119d2050ea00da106b6e33003/gRaviTyResearchTerminal/sheet1';
         try {
             const res = await fetch(URL);
             const json = await res.json();
-            buildUI(json.sheet1);
-        } catch (e) { console.error("OFFLINE"); }
+            allAssets = json.sheet1;
+            filterAndRender();
+        } catch (e) { console.error("SYNC ERROR"); }
     }
 
-    function buildUI(data) {
+    function filterAndRender() {
         const feed = document.getElementById('terminal-feed');
+        const search = document.getElementById('searchBar').value.toLowerCase();
+        const now = new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
         feed.innerHTML = '';
 
-        data.forEach((item, index) => {
-            const change = (parseFloat(item.change) * 100).toFixed(2);
-            const isUp = change >= 0;
-            const color = isUp ? '#00ff88' : '#ff4444';
-            const cardId = `card-${index}`;
-            const containerId = `tv-chart-${index}`;
+        allAssets.forEach((item, index) => {
+            const matchesSearch = item.company.toLowerCase().includes(search) || item.ticker.toLowerCase().includes(search);
+            const matchesSector = currentSector === 'all' || item.sector?.toLowerCase() === currentSector;
 
-            const card = document.createElement('div');
-            card.className = 'insight-card';
-            card.id = cardId;
-            card.innerHTML = `
-                <div class="card-header" onclick="togglePulse('${cardId}', '${item.ticker}', '${containerId}')">
-                    <div>
-                        <div class="company-name">${item.company}</div>
-                        <div style="font-size: 10px; color: #444; letter-spacing: 1px;">${item.ticker} | SECTOR: ${item.sector || 'GENERAL'}</div>
+            if (matchesSearch && matchesSector) {
+                const change = (parseFloat(item.change) * 100).toFixed(2);
+                const isUp = change >= 0;
+                const color = isUp ? '#00ff88' : '#ff4444';
+                const cardId = `card-${index}`;
+                const chartId = `chart-con-${index}`;
+
+                const card = document.createElement('div');
+                card.className = 'insight-card visible';
+                card.id = cardId;
+                card.innerHTML = `
+                    <div class="meta-row">
+                        <span>NODE: G-RAV-0${index + 1}</span>
+                        <span>ANALYZED: ${now} IST</span>
                     </div>
-                    <div style="display: flex; align-items: center;">
-                        <div style="text-align: right; margin-right: 15px;">
-                            <div style="font-size: 18px;">₹${item.price.toLocaleString('en-IN')}</div>
-                            <div style="color: ${color}; font-size: 11px;">${isUp ? '▲' : '▼'} ${change}%</div>
+                    <div class="card-header" onclick="toggleCard('${cardId}', '${item.ticker}', '${chartId}')">
+                        <div>
+                            <div class="company-name">${item.company}</div>
+                            <div style="font-size: 10px; color: #444;">${item.ticker} | ASSET TYPE: EQUITY</div>
                         </div>
-                        <div class="arrow">▾</div>
+                        <div style="display: flex; align-items: center;">
+                            <div style="text-align: right; margin-right: 15px;">
+                                <div style="font-size: 18px;">₹${item.price.toLocaleString('en-IN')}</div>
+                                <div style="color: ${color}; font-size: 11px;">${isUp ? '▲' : '▼'} ${change}%</div>
+                            </div>
+                            <div class="arrow">▾</div>
+                        </div>
                     </div>
-                </div>
-
-                <div class="details-pane">
-                    <span class="ai-note">TERMINAL PULSE: "${item.verdict}"</span>
-                    
-                    <div class="chart-frame" id="${containerId}"></div>
-
-                    <div class="analysis-text">${item.analysis}</div>
-                </div>
-            `;
-            feed.appendChild(card);
+                    <div class="details-pane">
+                        <span class="ai-verdict" style="color:${color}; border-color:${color}; background: ${isUp ? 'rgba(0,255,136,0.05)' : 'rgba(255,68,68,0.05)'}">
+                            TERMINAL SENSE: "${item.verdict}"
+                        </span>
+                        <div class="chart-frame" id="${chartId}"></div>
+                        <div class="analysis-text">${item.analysis}</div>
+                    </div>
+                `;
+                feed.appendChild(card);
+            }
         });
     }
 
-    function togglePulse(cardId, ticker, containerId) {
+    function toggleCard(cardId, ticker, chartId) {
         const card = document.getElementById(cardId);
-        const isOpen = card.classList.contains('active');
-        
-        // Close others if you want only one open at a time (Optional)
-        // document.querySelectorAll('.insight-card').forEach(c => c.classList.remove('active'));
-
-        if (!isOpen) {
+        const active = card.classList.contains('active');
+        if (!active) {
             card.classList.add('active');
-            loadTradingView(ticker, containerId);
+            loadGraph(ticker, chartId);
         } else {
             card.classList.remove('active');
         }
     }
 
-    function loadTradingView(ticker, containerId) {
-    const container = document.getElementById(containerId);
-    if (container.innerHTML !== "") return; 
+    function loadGraph(ticker, conId) {
+        const container = document.getElementById(conId);
+        if (container.innerHTML !== "") return;
+        new TradingView.widget({
+            "autosize": true,
+            "symbol": ticker,
+            "interval": "D",
+            "timezone": "Asia/Kolkata",
+            "theme": "dark",
+            "style": "3",
+            "locale": "in",
+            "container_id": conId,
+            "hide_top_toolbar": true,
+            "hide_legend": true,
+            "backgroundColor": "rgba(0, 0, 0, 1)",
+            "lineColor": "#d4af37",
+            "topColor": "rgba(212, 175, 55, 0.15)",
+            "bottomColor": "rgba(212, 175, 55, 0)",
+        });
+    }
 
-    // Creating the widget using the TradingView Library
-    new TradingView.widget({
-        "autosize": true,
-        "symbol": ticker,
-        "interval": "D",
-        "timezone": "Asia/Kolkata",
-        "theme": "dark",
-        "style": "3", // Area style
-        "locale": "in",
-        "toolbar_bg": "#f1f3f6",
-        "enable_publishing": false,
-        "hide_top_toolbar": true,
-        "hide_legend": true,
-        "save_image": false,
-        "container_id": containerId,
-        "backgroundColor": "rgba(0, 0, 0, 1)",
-        "gridColor": "rgba(0, 0, 0, 0.06)",
-        "lineColor": "#d4af37",
-        "topColor": "rgba(212, 175, 55, 0.1)",
-        "bottomColor": "rgba(212, 175, 55, 0)",
-    });
-}
-    loadTerminal();
+    function setSector(s, btn) {
+        currentSector = s;
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        filterAndRender();
+    }
+
+    fetchTerminal();
 </script>
 </body>
 </html>
