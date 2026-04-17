@@ -6,11 +6,13 @@
     <title>gRaviTy Research | Understanding Market Forces</title>
 
     <style>
-            /* HOVER OPEN SIDEBAR */
-.nav:hover + #mySidebar,
-#mySidebar:hover {
-    width: 350px;
-}
+        /* HOVER OPEN SIDEBAR (PC) */
+        .nav:hover + #mySidebar,
+        #mySidebar:hover,
+        #mySidebar.open {
+            width: 350px;
+        }
+
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Inter:wght@300;400;500&display=swap');
 
         html { scroll-behavior: smooth; }
@@ -120,6 +122,7 @@
             display: flex;
             flex-direction: column;
             gap: 5px;
+            padding: 10px; /* Bigger tap target for mobile */
         }
 
         .menu-icon span {
@@ -186,13 +189,10 @@
 <body>
 
 <div id="mySidebar" class="sidebar">
-
-    <span class="close-btn">&times;</span>
+    <span class="close-btn" id="closeSidebar">&times;</span>
 
     <div class="sidebar-content">
-
         <div class="menu-label">Full Launch Countdown</div>
-
         <div class="countdown-box">
             <div class="timer-display">
                 <span class="timer-unit">
@@ -215,7 +215,6 @@
                     <small class="timer-label">Sec</small>
                 </span>
             </div>
-
             <p style="font-size: 10px; color: #9ca3af; margin-top: 15px; letter-spacing: 1px;">
                 LAUNCHING APRIL 25, 2026
             </p>
@@ -232,76 +231,87 @@
         <div class="menu-label">The Firm</div>
         <a href="vision.html">Our Vision</a>
         <a href="aboutus.html">About Us</a>
-
     </div>
-
 </div>
         
-    <div class="gold-orb orb1"></div>
-    <div class="gold-orb orb2"></div>
+<div class="gold-orb orb1"></div>
+<div class="gold-orb orb2"></div>
 
 <div class="nav-wrapper">
-
     <div class="nav">
-        <div class="menu-icon">
+        <div class="menu-icon" id="menuBtn">
             <span></span><span></span><span></span>
         </div>
         <a href="index.html"><img src="logo.png" alt="gRaviTy Research Logo"></a>
         <div style="width: 30px;"></div> 
     </div>
+</div>
 
-    
-
-</div> <div class="hero">
-        <h1>Decoding the Pulse <br>of the Market</h1>
-        <p>
-            gRaviTy Research is a market research and analysis firm focused on understanding 
-            and explaining financial markets, businesses, and industry trends.
-        </p>
-        <div class="btn-group">
-            <a href="insights.html" class="btn">Explore Insights</a>
-            <a href="vision.html" class="btn" style="border-color: rgba(212,175,55,0.2); color: #9ca3af;">Our Vision</a>
-        </div>
+<div class="hero">
+    <h1>Decoding the Pulse <br>of the Market</h1>
+    <p>
+        gRaviTy Research is a market research and analysis firm focused on understanding 
+        and explaining financial markets, businesses, and industry trends.
+    </p>
+    <div class="btn-group">
+        <a href="insights.html" class="btn">Explore Insights</a>
+        <a href="vision.html" class="btn" style="border-color: rgba(212,175,55,0.2); color: #9ca3af;">Our Vision</a>
     </div>
+</div>
 
-    <div class="section">
-        <h2>The Core Philosophy</h2>
-        <div class="card">
-            We believe that markets are governed by predictable forces. Our job is to measure the 
-            "gravity" of value, momentum, and industrial shifts to give you a clearer view of the 
-            financial horizon. We don't manage money; we decode the forces behind it.
-        </div>
+<div class="section">
+    <h2>The Core Philosophy</h2>
+    <div class="card">
+        We believe that markets are governed by predictable forces. Our job is to measure the 
+        "gravity" of value, momentum, and industrial shifts to give you a clearer view of the 
+        financial horizon. We don't manage money; we decode the forces behind it.
     </div>
+</div>
 
-    <div class="footer">
-        © 2026 gRaviTy Research | Private Analysis Firm <br>
-        <span style="font-size: 10px; opacity: 0.5; margin-top: 10px; display: block;">Informational purposes only. All market investments are subject to risk.</span>
-    </div>
+<div class="footer">
+    © 2026 gRaviTy Research | Private Analysis Firm <br>
+    <span style="font-size: 10px; opacity: 0.5; margin-top: 10px; display: block;">Informational purposes only. All market investments are subject to risk.</span>
+</div>
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
 
-    // CACHE DOM
     const sidebar = document.getElementById("mySidebar");
+    const menuBtn = document.getElementById("menuBtn");
+    const closeBtn = document.getElementById("closeSidebar");
+    
     const daysEl = document.getElementById("days");
     const hoursEl = document.getElementById("hours");
     const minutesEl = document.getElementById("minutes");
     const secondsEl = document.getElementById("seconds");
     const countdownBox = document.querySelector(".countdown-box");
 
-  
+    // TOGGLE FUNCTIONS
+    function openNav() {
+        sidebar.classList.add("open");
+    }
 
+    function closeNav() {
+        sidebar.classList.remove("open");
+    }
 
-    // CLICK OUTSIDE
+    // EVENT LISTENERS
+    menuBtn.addEventListener("click", function(e) {
+        e.stopPropagation();
+        openNav();
+    });
+
+    closeBtn.addEventListener("click", closeNav);
+
+    // CLICK OUTSIDE TO CLOSE
     document.addEventListener("click", function(event) {
-        if (event.target === sidebar) {
+        if (!sidebar.contains(event.target) && !menuBtn.contains(event.target)) {
             closeNav();
         }
     });
 
     // COUNTDOWN TIMER
     const targetTime = new Date("April 25, 2026 00:00:00").getTime();
-
     const interval = setInterval(updateCountdown, 1000);
 
     function updateCountdown() {
@@ -327,8 +337,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (secondsEl) secondsEl.textContent = String(s).padStart(2, '0');
     }
 
-    updateCountdown(); // instant render
-
+    updateCountdown(); 
 });
 </script>
 </body>
