@@ -26,10 +26,23 @@
             align-items: center;
             overflow: hidden;
             -webkit-font-smoothing: antialiased;
+            
+            /* THIS PREVENTS TEXT HIGHLIGHTING */
+            user-select: none; 
+            -webkit-user-select: none; /* Safari */
+            -moz-user-select: none; /* Firefox */
+            -ms-user-select: none; /* IE10+ */
         }
 
         /* --- AMBIENT BACKGROUND --- */
-        .gold-orb { position: fixed; border-radius: 50%; filter: blur(140px); pointer-events: none; z-index: 1; opacity: 0.15; }
+        .gold-orb { 
+            position: fixed; 
+            border-radius: 50%; 
+            filter: blur(140px); 
+            pointer-events: none; /* Prevents cursor from interacting with orbs */
+            z-index: 1; 
+            opacity: 0.15; 
+        }
         .orb1 { width: 600px; height: 600px; background: var(--gold); top: -20%; left: -10%; }
         .orb2 { width: 500px; height: 500px; background: var(--gold); bottom: -10%; right: -10%; }
 
@@ -159,7 +172,6 @@
 </div>
 
 <script>
-    // TARGET: April 25, 2026 @ 00:00 IST
     const target = new Date("2026-04-25T00:00:00+05:30").getTime();
 
     function updateClock() {
