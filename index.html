@@ -21,16 +21,36 @@ body {
     overflow-x: hidden;
 }
 
-/* CURSOR GLOW */
-.cursor-glow {
+/* PLANETS */
+.planet {
     position: fixed;
-    width: 300px;
-    height: 300px;
-    background: radial-gradient(circle, rgba(212,175,55,0.15), transparent);
-    pointer-events: none;
     border-radius: 50%;
-    transform: translate(-50%, -50%);
+    pointer-events: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
     z-index: 0;
+}
+
+/* different sizes */
+.p1 {
+    width: 140px;
+    height: 140px;
+    top: 20%;
+    left: 10%;
+    background: radial-gradient(circle, rgba(212,175,55,0.25), transparent);
+}
+.p2 {
+    width: 100px;
+    height: 100px;
+    bottom: 15%;
+    right: 12%;
+    background: radial-gradient(circle, rgba(212,175,55,0.2), transparent);
+}
+.p3 {
+    width: 80px;
+    height: 80px;
+    top: 60%;
+    left: 30%;
+    background: radial-gradient(circle, rgba(212,175,55,0.18), transparent);
 }
 
 /* SIDEBAR */
@@ -92,11 +112,6 @@ body {
     border-bottom: 1px solid rgba(255,255,255,0.05);
 }
 
-.nav img {
-    cursor: pointer;
-}
-
-/* MENU ICON */
 .menu-icon span {
     display: block;
     width: 22px;
@@ -105,18 +120,18 @@ body {
     margin: 4px 0;
 }
 
+.nav img { cursor: pointer; }
+
 /* HERO */
 .hero {
     text-align: center;
     padding: 140px 20px;
-    animation: fadeUp 1s ease;
 }
 
 .hero h1 {
     font-family: 'Playfair Display', serif;
     font-size: 60px;
     color: var(--gold);
-    animation: glow 3s infinite alternate;
 }
 
 .hero p {
@@ -125,7 +140,7 @@ body {
     color: #999;
 }
 
-/* BUTTONS */
+/* BUTTON */
 .btn {
     padding: 12px 25px;
     margin: 10px;
@@ -135,72 +150,25 @@ body {
     cursor: pointer;
     transition: 0.3s;
 }
-
 .btn:hover {
     background: var(--gold);
     color: black;
-    box-shadow: 0 0 20px rgba(212,175,55,0.4);
+    box-shadow: 0 0 20px rgba(212,175,55,0.3);
 }
-
-/* MARKET TICKER */
-.ticker {
-    white-space: nowrap;
-    overflow: hidden;
-    border-top: 1px solid rgba(255,255,255,0.05);
-    border-bottom: 1px solid rgba(255,255,255,0.05);
-    margin-top: 40px;
-}
-
-.ticker-track {
-    display: inline-block;
-    padding: 10px 0;
-    animation: scroll 20s linear infinite;
-    color: var(--gold);
-}
-
-/* ORBS */
-.gold-orb {
-    position: fixed;
-    width: 300px;
-    height: 300px;
-    background: radial-gradient(circle, rgba(212,175,55,0.2), transparent);
-    border-radius: 50%;
-    filter: blur(80px);
-    z-index: 0;
-}
-
-.orb1 { top: 10%; left: 10%; }
-.orb2 { bottom: 10%; right: 10%; }
 
 body > * {
     position: relative;
     z-index: 1;
-}
-
-/* ANIMATIONS */
-@keyframes scroll {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
-}
-
-@keyframes fadeUp {
-    from { opacity: 0; transform: translateY(40px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes glow {
-    from { text-shadow: 0 0 10px rgba(212,175,55,0.3); }
-    to { text-shadow: 0 0 30px rgba(212,175,55,0.6); }
 }
 </style>
 </head>
 
 <body>
 
-<div class="cursor-glow" id="glow"></div>
-
-<div class="gold-orb orb1"></div>
-<div class="gold-orb orb2"></div>
+<!-- PLANETS -->
+<div class="planet p1"></div>
+<div class="planet p2"></div>
+<div class="planet p3"></div>
 
 <!-- SIDEBAR -->
 <div id="sidebar" class="sidebar">
@@ -220,11 +188,8 @@ body > * {
 <!-- NAV -->
 <div class="nav">
     <div class="menu-icon" onclick="openMenu()">
-        <span></span>
-        <span></span>
-        <span></span>
+        <span></span><span></span><span></span>
     </div>
-
     <img src="logo.png" height="40" onclick="go('index.html')">
 </div>
 
@@ -239,23 +204,15 @@ body > * {
     <button class="btn" onclick="go('calc.html')">Wealth Tools</button>
 </div>
 
-<!-- TICKER -->
-<div class="ticker">
-    <div class="ticker-track">
-        NIFTY ▲ 0.84% • SENSEX ▲ 0.72% • GOLD ▲ 1.12% • BTC ▼ 0.45% • CRUDE ▲ 0.30% • 
-        NIFTY ▲ 0.84% • SENSEX ▲ 0.72% • GOLD ▲ 1.12% • BTC ▼ 0.45% • CRUDE ▲ 0.30%
-    </div>
-</div>
-
 <script>
+
+// SIDEBAR
 function openMenu() {
     document.getElementById("sidebar").classList.add("open");
 }
-
 function closeMenu() {
     document.getElementById("sidebar").classList.remove("open");
 }
-
 function go(page) {
     window.location.href = page;
 }
@@ -267,12 +224,31 @@ document.addEventListener("click", function(e) {
     }
 });
 
-/* CURSOR GLOW */
+// GRAVITY EFFECT
+const planets = document.querySelectorAll(".planet");
+
 document.addEventListener("mousemove", e => {
-    const glow = document.getElementById("glow");
-    glow.style.left = e.clientX + "px";
-    glow.style.top = e.clientY + "px";
+    planets.forEach(p => {
+        const rect = p.getBoundingClientRect();
+        const px = rect.left + rect.width / 2;
+        const py = rect.top + rect.height / 2;
+
+        const dx = e.clientX - px;
+        const dy = e.clientY - py;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+
+        if (dist < 200) {
+            const force = (200 - dist) / 200;
+
+            p.style.transform = `translate(${dx * 0.08}px, ${dy * 0.08}px) scale(${1 + force * 0.2})`;
+            p.style.boxShadow = `0 0 ${40 * force}px rgba(212,175,55,0.6)`;
+        } else {
+            p.style.transform = "translate(0,0) scale(1)";
+            p.style.boxShadow = "none";
+        }
+    });
 });
+
 </script>
 
 </body>
