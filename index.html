@@ -68,6 +68,10 @@ body {
     border-bottom: 1px solid rgba(255,255,255,0.05);
 }
 
+.nav img {
+    cursor: pointer;
+}
+
 .menu-icon {
     cursor: pointer;
 }
@@ -158,7 +162,7 @@ body > * {
         <span></span>
     </div>
 
-    <img src="logo.png" height="40">
+    <img src="logo.png" height="40" onclick="go('index.html')">
 </div>
 
 <!-- HERO -->
@@ -185,6 +189,14 @@ function closeMenu() {
 function go(page) {
     window.location.href = page;
 }
+
+/* CLICK OUTSIDE TO CLOSE */
+document.addEventListener("click", function(e) {
+    const sidebar = document.getElementById("sidebar");
+    if (!sidebar.contains(e.target) && !e.target.closest(".menu-icon")) {
+        sidebar.classList.remove("open");
+    }
+});
 </script>
 
 </body>
