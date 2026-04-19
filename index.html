@@ -21,8 +21,7 @@ body {
     overflow-x: hidden;
 }
 
-/* ================= PLANETS ================= */
-
+/* PLANETS */
 .planet {
     position: fixed;
     border-radius: 50%;
@@ -35,8 +34,7 @@ body {
 .p2 { width:100px;height:100px;bottom:15%;right:12%;background:radial-gradient(circle,rgba(212,175,55,0.2),transparent); }
 .p3 { width:80px;height:80px;top:60%;left:30%;background:radial-gradient(circle,rgba(212,175,55,0.18),transparent); }
 
-/* ================= SIDEBAR ================= */
-
+/* SIDEBAR */
 .sidebar {
     width: 0;
     height: 100%;
@@ -73,8 +71,7 @@ body {
     padding-left: 10px;
 }
 
-/* ================= NAV ================= */
-
+/* NAV */
 .nav {
     display: flex;
     justify-content: space-between;
@@ -90,8 +87,7 @@ body {
     cursor: pointer;
 }
 
-/* ================= HERO ================= */
-
+/* HERO */
 .hero {
     text-align: center;
     padding: 140px 20px;
@@ -109,8 +105,7 @@ body {
     color: #999;
 }
 
-/* ================= BUTTON ================= */
-
+/* BUTTON */
 .btn {
     padding: 12px 25px;
     margin: 10px;
@@ -125,53 +120,6 @@ body {
     color: black;
 }
 
-/* ================= BLACKHOLE TRANSITION ================= */
-
-.transition {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    background: black;
-    z-index: 9999;
-    display: none;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-}
-
-.blackhole {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    background: black;
-    box-shadow:
-        0 0 50px rgba(0,0,0,1),
-        0 0 120px rgba(212,175,55,0.4);
-    animation: suck 1s ease forwards;
-}
-
-@keyframes suck {
-    0% { transform: scale(0.5); }
-    100% { transform: scale(30); }
-}
-
-/* swirl */
-.ring {
-    position: absolute;
-    border-radius: 50%;
-    border: 2px solid rgba(212,175,55,0.2);
-    animation: spin 1s linear infinite;
-}
-
-.r1 { width: 100px; height: 100px; }
-.r2 { width: 160px; height: 160px; }
-.r3 { width: 220px; height: 220px; }
-
-@keyframes spin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-}
-
 body > * { position: relative; z-index: 1; }
 </style>
 </head>
@@ -182,14 +130,6 @@ body > * { position: relative; z-index: 1; }
 <div class="planet p1"></div>
 <div class="planet p2"></div>
 <div class="planet p3"></div>
-
-<!-- TRANSITION -->
-<div class="transition" id="transition">
-    <div class="ring r1"></div>
-    <div class="ring r2"></div>
-    <div class="ring r3"></div>
-    <div class="blackhole"></div>
-</div>
 
 <!-- SIDEBAR -->
 <div id="sidebar" class="sidebar">
@@ -230,15 +170,9 @@ function openMenu(){
 document.getElementById("sidebar").classList.toggle("open");
 }
 
-/* TRANSITION NAVIGATION */
+/* NAVIGATION */
 function go(page){
-
-    const t = document.getElementById("transition");
-    t.style.display = "flex";
-
-    setTimeout(()=>{
-        window.location.href = page;
-    },900);
+window.location.href = page;
 }
 
 /* GRAVITY EFFECT */
