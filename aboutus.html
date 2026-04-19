@@ -8,7 +8,7 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Inter:wght@300;400&display=swap');
 
-/* BACKGROUND */
+/* BASE */
 body {
     margin: 0;
     font-family: 'Inter', sans-serif;
@@ -71,7 +71,7 @@ body > * {
     z-index: 1;
 }
 
-/* NAVBAR */
+/* NAV */
 .nav {
     padding: 20px;
     text-align: center;
@@ -80,6 +80,7 @@ body > * {
 
 .nav img {
     width: 180px;
+    cursor: pointer;
     transition: 0.3s;
 }
 
@@ -159,13 +160,8 @@ body > * {
     animation: fadeUp 1s ease forwards;
 }
 
-.fade-up.delay {
-    animation-delay: 0.4s;
-}
-
-.fade-up.delay2 {
-    animation-delay: 0.8s;
-}
+.fade-up.delay { animation-delay: 0.4s; }
+.fade-up.delay2 { animation-delay: 0.8s; }
 
 @keyframes fadeUp {
     to {
@@ -181,6 +177,44 @@ body > * {
     font-size: 12px;
     color: #6b7280;
 }
+
+/* TRANSITION */
+#transition {
+    position: fixed;
+    inset: 0;
+    background: black;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.blackhole {
+    width: 0;
+    height: 0;
+    background: radial-gradient(circle, black 40%, transparent);
+    border-radius: 50%;
+}
+
+.whitehole {
+    position: absolute;
+    width: 0;
+    height: 0;
+    background: radial-gradient(circle, white, transparent);
+    border-radius: 50%;
+    opacity: 0;
+}
+
+@keyframes suckIn {
+    to { transform: scale(0.2); opacity: 0; }
+}
+@keyframes blackExpand {
+    to { width: 2000px; height: 2000px; }
+}
+@keyframes whiteBurst {
+    0% { opacity: 1; }
+    100% { width: 2000px; height: 2000px; opacity: 0; }
+}
 </style>
 </head>
 
@@ -193,7 +227,7 @@ body > * {
 
 <!-- NAV -->
 <div class="nav">
-    <img src="logo.png">
+    <img src="logo.png" onclick="go('index.html')">
 </div>
 
 <!-- HERO -->
@@ -207,7 +241,6 @@ body > * {
 
 <!-- SECTION -->
 <div class="section">
-
     <h2 class="fade-up">Our Mission</h2>
 
     <div class="card fade-up delay">
@@ -219,12 +252,10 @@ body > * {
         We aim to bridge the gap between raw market data and human understanding —
         turning noise into clarity.
     </div>
-
 </div>
 
 <!-- SECTION -->
 <div class="section">
-
     <h2 class="fade-up">Our Approach</h2>
 
     <div class="card fade-up delay">
@@ -235,12 +266,11 @@ body > * {
     <div class="card fade-up delay2">
         Instead of following hype, we focus on structure, behavior, and probability.
     </div>
-
 </div>
 
 <!-- BUTTON -->
 <div class="section">
-    <button class="btn" onclick="goHome()">← Back to Home</button>
+    <button class="btn" onclick="go('index.html')">← Back to Home</button>
 </div>
 
 <!-- FOOTER -->
@@ -248,10 +278,27 @@ body > * {
     © 2026 gRaviTy Research
 </div>
 
+<!-- TRANSITION -->
+<div id="transition">
+    <div class="blackhole"></div>
+    <div class="whitehole"></div>
+</div>
+
 <script>
-function goHome() {
-    window.location.href = "index.html";
+
+function go(page){
+    let t=document.getElementById("transition")
+    let b=t.querySelector(".blackhole")
+    let w=t.querySelector(".whitehole")
+
+    t.style.display="flex"
+    document.body.style.animation="suckIn 0.5s forwards"
+
+    setTimeout(()=>b.style.animation="blackExpand 0.5s forwards",200)
+    setTimeout(()=>w.style.animation="whiteBurst 0.4s forwards",700)
+    setTimeout(()=>window.location.href=page,900)
 }
+
 </script>
 
 </body>
