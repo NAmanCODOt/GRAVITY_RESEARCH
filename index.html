@@ -29,29 +29,9 @@ body {
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     z-index: 0;
 }
-
-/* different sizes */
-.p1 {
-    width: 140px;
-    height: 140px;
-    top: 20%;
-    left: 10%;
-    background: radial-gradient(circle, rgba(212,175,55,0.25), transparent);
-}
-.p2 {
-    width: 100px;
-    height: 100px;
-    bottom: 15%;
-    right: 12%;
-    background: radial-gradient(circle, rgba(212,175,55,0.2), transparent);
-}
-.p3 {
-    width: 80px;
-    height: 80px;
-    top: 60%;
-    left: 30%;
-    background: radial-gradient(circle, rgba(212,175,55,0.18), transparent);
-}
+.p1 { width:140px;height:140px;top:20%;left:10%;background:radial-gradient(circle,rgba(212,175,55,0.25),transparent); }
+.p2 { width:100px;height:100px;bottom:15%;right:12%;background:radial-gradient(circle,rgba(212,175,55,0.2),transparent); }
+.p3 { width:80px;height:80px;top:60%;left:30%;background:radial-gradient(circle,rgba(212,175,55,0.18),transparent); }
 
 /* SIDEBAR */
 .sidebar {
@@ -88,6 +68,7 @@ body {
     text-decoration: none;
     transition: 0.3s;
     border-bottom: 1px solid rgba(255,255,255,0.05);
+    cursor: pointer;
 }
 .sidebar a:hover {
     color: var(--gold);
@@ -140,6 +121,45 @@ body {
     color: #999;
 }
 
+/* SECTIONS */
+.section {
+    text-align: center;
+    margin-top: 100px;
+    padding: 0 20px;
+}
+
+.section h2 {
+    font-family: 'Playfair Display', serif;
+    color: var(--gold);
+}
+
+.section p {
+    max-width: 600px;
+    margin: 20px auto;
+    color: #999;
+}
+
+/* TOOL CARDS */
+.tool-grid {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+    margin-top: 40px;
+}
+
+.tool-card {
+    border: 1px solid #222;
+    padding: 20px;
+    width: 200px;
+    transition: 0.3s;
+}
+
+.tool-card:hover {
+    border-color: var(--gold);
+    transform: translateY(-5px);
+}
+
 /* BUTTON */
 .btn {
     padding: 12px 25px;
@@ -156,10 +176,7 @@ body {
     box-shadow: 0 0 20px rgba(212,175,55,0.3);
 }
 
-body > * {
-    position: relative;
-    z-index: 1;
-}
+body > * { position: relative; z-index: 1; }
 </style>
 </head>
 
@@ -195,13 +212,56 @@ body > * {
 
 <!-- HERO -->
 <div class="hero">
-    <h1>Decoding Market Forces</h1>
+    <h1>Markets Aren’t Random.</h1>
+
     <p>
-        Markets are not random. They move with patterns, logic, and hidden forces.
-        We break down complexity into clarity.
+        They move with patterns, logic, and hidden forces.
+        We decode them into clarity.
+    </p>
+
+    <p style="font-size:14px; opacity:0.7;">
+        Built for investors who think beyond noise.
     </p>
 
     <button class="btn" onclick="go('calc.html')">Wealth Tools</button>
+</div>
+
+<!-- WHAT WE DO -->
+<div class="section">
+    <h2>What We Do</h2>
+    <p>
+        We simplify complex market behavior into actionable insights.
+        From wealth-building tools to market understanding frameworks,
+        everything is designed to give you an edge.
+    </p>
+</div>
+
+<!-- TOOLS -->
+<div class="section">
+    <h2>Tools That Build Wealth</h2>
+
+    <div class="tool-grid">
+        <div class="tool-card">
+            <h4>Projection</h4>
+            <p style="color:#777;font-size:13px;">
+                Visualize how your investments grow over time.
+            </p>
+        </div>
+
+        <div class="tool-card">
+            <h4>SIP Engine</h4>
+            <p style="color:#777;font-size:13px;">
+                Build wealth consistently with compounding.
+            </p>
+        </div>
+
+        <div class="tool-card">
+            <h4>Inflation Reality</h4>
+            <p style="color:#777;font-size:13px;">
+                Understand the true value of money over time.
+            </p>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -239,7 +299,6 @@ document.addEventListener("mousemove", e => {
 
         if (dist < 200) {
             const force = (200 - dist) / 200;
-
             p.style.transform = `translate(${dx * 0.08}px, ${dy * 0.08}px) scale(${1 + force * 0.2})`;
             p.style.boxShadow = `0 0 ${40 * force}px rgba(212,175,55,0.6)`;
         } else {
