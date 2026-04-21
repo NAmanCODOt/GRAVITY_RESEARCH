@@ -82,7 +82,6 @@ h1
     font-family: 'Playfair Display', serif;
     color: var(--gold);
     font-size: clamp(32px, 6vw, 56px);
-    margin-bottom: 10px;
 }
 
 h1::after
@@ -103,30 +102,28 @@ p
     line-height: 1.7;
 }
 
-/* contact */
+/* box */
 .contact-box
 {
     margin-top: 50px;
     border: 1px solid rgba(255,255,255,0.08);
-    padding: 25px;
+    padding: 30px;
+    text-align: left;
 }
 
-/* row */
-.contact-item
+/* item */
+.item
 {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
     margin-top: 25px;
 }
 
-/* icon */
-.icon
+/* label */
+.label
 {
-    width: 22px;
-    height: 22px;
-    fill: var(--gold);
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: var(--gold);
+    margin-bottom: 6px;
 }
 
 /* link */
@@ -135,12 +132,20 @@ p
     color: #aaa;
     text-decoration: none;
     transition: 0.2s;
-    font-size: 15px;
+    font-size: 16px;
 }
 
 .link:hover
 {
     color: var(--gold);
+}
+
+/* small info */
+.info
+{
+    margin-top: 8px;
+    font-size: 13px;
+    color: #666;
 }
 
 /* button */
@@ -207,32 +212,36 @@ html
     <h1>Contact</h1>
 
     <p>
-        For collaborations, research inquiries, or serious discussions —
-        reach out directly.
+        For collaborations, research discussions, or serious inquiries —
+        reach out through the channels below.
     </p>
 
     <div class="contact-box">
 
         <!-- EMAIL -->
-        <div class="contact-item">
-            <svg class="icon" viewBox="0 0 24 24">
-                <path d="M2 4h20v16H2V4zm10 7L4 6h16l-8 5zm0 2l8-5v10H4V8l8 5z"/>
-            </svg>
+        <div class="item">
+            <div class="label">EMAIL</div>
 
             <a class="link" href="mailto:gravity.insights07@gmail.com">
                 gravity.insights07@gmail.com
             </a>
+
+            <div class="info">
+                Opens your mail app instantly.
+            </div>
         </div>
 
         <!-- INSTAGRAM -->
-        <div class="contact-item">
-            <svg class="icon" viewBox="0 0 24 24">
-                <path d="M7 2h10a5 5 0 015 5v10a5 5 0 01-5 5H7a5 5 0 01-5-5V7a5 5 0 015-5zm5 5a5 5 0 100 10 5 5 0 000-10zm6-1a1 1 0 110 2 1 1 0 010-2z"/>
-            </svg>
+        <div class="item">
+            <div class="label">INSTAGRAM</div>
 
             <a class="link" href="https://www.instagram.com/gravity.insights/" target="_blank">
-                @gravity.insights
+                https://www.instagram.com/gravity.insights/
             </a>
+
+            <div class="info">
+                For updates, insights, and quick interactions.
+            </div>
         </div>
 
     </div>
