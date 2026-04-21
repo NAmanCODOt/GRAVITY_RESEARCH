@@ -16,7 +16,6 @@
     --bg: #050505;
 }
 
-/* smooth */
 html
 {
     scroll-behavior: smooth;
@@ -30,7 +29,7 @@ body
     color: white;
 }
 
-/* glow bg */
+/* bg */
 body::before
 {
     content: "";
@@ -86,7 +85,6 @@ h1
     margin-bottom: 10px;
 }
 
-/* underline */
 h1::after
 {
     content: "";
@@ -105,26 +103,35 @@ p
     line-height: 1.7;
 }
 
-/* cards */
+/* contact */
 .contact-box
 {
     margin-top: 50px;
     border: 1px solid rgba(255,255,255,0.08);
     padding: 25px;
-    transition: 0.3s;
 }
 
-.contact-box:hover
+/* row */
+.contact-item
 {
-    border-color: var(--gold);
-    transform: translateY(-3px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 25px;
 }
 
-/* links */
+/* icon */
+.icon
+{
+    width: 22px;
+    height: 22px;
+    fill: var(--gold);
+}
+
+/* link */
 .link
 {
-    display: block;
-    margin-top: 15px;
     color: #aaa;
     text-decoration: none;
     transition: 0.2s;
@@ -152,8 +159,6 @@ p
 {
     background: var(--gold);
     color: black;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(212,175,55,0.2);
 }
 
 /* footer */
@@ -165,7 +170,6 @@ p
     color: #555;
 }
 
-/* layering */
 body > *
 {
     position: relative;
@@ -209,15 +213,27 @@ html
 
     <div class="contact-box">
 
-        <p>Email</p>
-        <a class="link" href="mailto:gravity.insights07@gmail.com">
-            gravity.insights07@gmail.com
-        </a>
+        <!-- EMAIL -->
+        <div class="contact-item">
+            <svg class="icon" viewBox="0 0 24 24">
+                <path d="M2 4h20v16H2V4zm10 7L4 6h16l-8 5zm0 2l8-5v10H4V8l8 5z"/>
+            </svg>
 
-        <p style="margin-top:30px;">Instagram</p>
-        <a class="link" href="https://www.instagram.com/gravity.insights/" target="_blank">
-            @gravity.insights
-        </a>
+            <a class="link" href="mailto:gravity.insights07@gmail.com">
+                gravity.insights07@gmail.com
+            </a>
+        </div>
+
+        <!-- INSTAGRAM -->
+        <div class="contact-item">
+            <svg class="icon" viewBox="0 0 24 24">
+                <path d="M7 2h10a5 5 0 015 5v10a5 5 0 01-5 5H7a5 5 0 01-5-5V7a5 5 0 015-5zm5 5a5 5 0 100 10 5 5 0 000-10zm6-1a1 1 0 110 2 1 1 0 010-2z"/>
+            </svg>
+
+            <a class="link" href="https://www.instagram.com/gravity.insights/" target="_blank">
+                @gravity.insights
+            </a>
+        </div>
 
     </div>
 
@@ -227,7 +243,6 @@ html
 
 </div>
 
-<!-- footer -->
 <div class="footer">
     © 2026 gRaviTy Research
 </div>
