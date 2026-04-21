@@ -1,15 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>About Us | gRaviTy Research</title>
 
 <style>
+
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Inter:wght@300;400&display=swap');
 
-/* BACKGROUND */
-body {
+/* background */
+body 
+{
     margin: 0;
     font-family: 'Inter', sans-serif;
     background: #000;
@@ -17,8 +20,9 @@ body {
     overflow-x: hidden;
 }
 
-/* ORBS */
-.gold-orb {
+/* orbs */
+.gold-orb 
+{
     position: fixed;
     border-radius: 50%;
     filter: blur(70px);
@@ -26,102 +30,161 @@ body {
     z-index: 0;
 }
 
-.orb1 {
+.orb1 
+{
     width: 300px;
     height: 300px;
     background: rgba(212,175,55,0.25);
     animation: move1 18s linear infinite;
 }
 
-.orb2 {
+.orb2 
+{
     width: 250px;
     height: 250px;
     background: rgba(212,175,55,0.2);
     animation: move2 25s linear infinite;
 }
 
-.orb3 {
+.orb3 
+{
     width: 200px;
     height: 200px;
     background: rgba(212,175,55,0.15);
     animation: move3 30s linear infinite;
 }
 
-@keyframes move1 {
-    0% { top:10%; left:10%; }
-    50% { top:70%; left:80%; }
-    100% { top:10%; left:10%; }
+/* orb motion */
+@keyframes move1 
+{
+    0% 
+    { 
+        top:10%; 
+        left:10%; 
+    }
+
+    50% 
+    { 
+        top:70%; 
+        left:80%; 
+    }
+
+    100% 
+    { 
+        top:10%; 
+        left:10%; 
+    }
 }
 
-@keyframes move2 {
-    0% { top:80%; left:80%; }
-    50% { top:20%; left:10%; }
-    100% { top:80%; left:80%; }
+@keyframes move2 
+{
+    0% 
+    { 
+        top:80%; 
+        left:80%; 
+    }
+
+    50% 
+    { 
+        top:20%; 
+        left:10%; 
+    }
+
+    100% 
+    { 
+        top:80%; 
+        left:80%; 
+    }
 }
 
-@keyframes move3 {
-    0% { top:50%; left:0%; }
-    50% { top:10%; left:90%; }
-    100% { top:50%; left:0%; }
+@keyframes move3 
+{
+    0% 
+    { 
+        top:50%; 
+        left:0%; 
+    }
+
+    50% 
+    { 
+        top:10%; 
+        left:90%; 
+    }
+
+    100% 
+    { 
+        top:50%; 
+        left:0%; 
+    }
 }
 
-/* KEEP CONTENT ABOVE ORBS */
-body > * {
+/* layer fix */
+body > * 
+{
     position: relative;
     z-index: 1;
 }
 
-/* NAVBAR */
-.nav {
+/* nav */
+.nav 
+{
     padding: 20px;
     text-align: center;
     border-bottom: 1px solid #1f1f1f;
 }
 
-.nav img {
+.nav img 
+{
     width: 180px;
     transition: 0.3s;
     cursor: pointer;
 }
 
-.nav img:hover {
+.nav img:hover 
+{
     transform: scale(1.05);
     filter: drop-shadow(0 0 8px #d4af37);
 }
 
-/* HERO */
-.hero {
+/* hero */
+.hero 
+{
     text-align: center;
     padding: 80px 20px;
 }
 
-.hero h1 {
+.hero h1 
+{
     font-family: 'Playfair Display', serif;
     font-size: 42px;
     color: #d4af37;
 }
 
-.hero p {
+.hero p 
+{
     max-width: 750px;
     margin: 20px auto;
     color: #9ca3af;
     font-size: 18px;
 }
 
-/* SECTION */
-.section {
+/* section */
+.section 
+{
     padding: 60px 20px;
     text-align: center;
 }
 
-.section h2 {
+.section h2 
+{
     font-family: 'Playfair Display', serif;
     color: #d4af37;
     margin-bottom: 30px;
 }
 
-/* CARDS */
-.card {
+/* cards */
+.card 
+{
     background: #0a0a0a;
     padding: 25px;
     margin: 20px auto;
@@ -131,13 +194,15 @@ body > * {
     transition: 0.3s;
 }
 
-.card:hover {
+.card:hover 
+{
     border: 1px solid #d4af37;
     transform: scale(1.03);
 }
 
-/* BUTTON */
-.btn {
+/* button */
+.btn 
+{
     margin-top: 30px;
     padding: 12px 25px;
     background: transparent;
@@ -148,94 +213,106 @@ body > * {
     transition: 0.3s;
 }
 
-.btn:hover {
+.btn:hover 
+{
     background: #d4af37;
     color: black;
 }
 
-/* ANIMATION */
-.fade-up {
+/* fade */
+.fade-up 
+{
     opacity: 0;
     transform: translateY(30px);
     animation: fadeUp 1s ease forwards;
 }
 
-.fade-up.delay {
+.fade-up.delay 
+{
     animation-delay: 0.4s;
 }
 
-.fade-up.delay2 {
+.fade-up.delay2 
+{
     animation-delay: 0.8s;
 }
 
-@keyframes fadeUp {
-    to {
+@keyframes fadeUp 
+{
+    to 
+    {
         opacity: 1;
         transform: translateY(0);
     }
 }
 
-/* FOOTER */
-.footer {
+/* footer */
+.footer 
+{
     text-align: center;
     padding: 20px;
     font-size: 12px;
     color: #6b7280;
 }
-    /* ===== GOLD SCROLLBAR ===== */
 
-/* width */
-::-webkit-scrollbar {
+/* scrollbar */
+::-webkit-scrollbar 
+{
     width: 6px;
 }
 
-/* track (background) */
-::-webkit-scrollbar-track {
-    background: #000; /* pure void */
+::-webkit-scrollbar-track 
+{
+    background: #000;
 }
 
-/* thumb (the moving part) */
-::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb 
+{
     background: linear-gradient(180deg, #d4af37, #b8962e);
     border-radius: 10px;
 }
 
-/* hover effect */
-::-webkit-scrollbar-thumb:hover {
+::-webkit-scrollbar-thumb:hover 
+{
     background: #ffd700;
 }
 
-/* optional: ultra thin look */
-html {
-    scrollbar-width: thin; /* Firefox */
+html 
+{
+    scrollbar-width: thin;
     scrollbar-color: #d4af37 #000;
 }
+
 </style>
 </head>
 
 <body>
 
-<!-- ORBS -->
+<!-- orbs -->
 <div class="gold-orb orb1"></div>
 <div class="gold-orb orb2"></div>
 <div class="gold-orb orb3"></div>
 
-<!-- NAV -->
+<!-- nav -->
 <div class="nav">
     <img src="logo.png" onclick="goHome()">
 </div>
 
-<!-- HERO -->
+<!-- hero -->
 <div class="hero">
+
     <h1 class="fade-up">Who We Are</h1>
+
     <p class="fade-up delay">
         gRaviTy Research is built on a simple belief — markets are not random.
         They operate on structure, behavior, and underlying forces that most people overlook.
     </p>
+
 </div>
 
-<!-- SECTION -->
+<!-- mission -->
 <div class="section">
+
     <h2 class="fade-up">Our Mission</h2>
 
     <div class="card fade-up delay">
@@ -247,10 +324,12 @@ html {
         We aim to bridge the gap between raw market data and human understanding —
         turning noise into clarity.
     </div>
+
 </div>
 
-<!-- SECTION -->
+<!-- approach -->
 <div class="section">
+
     <h2 class="fade-up">Our Approach</h2>
 
     <div class="card fade-up delay">
@@ -261,22 +340,27 @@ html {
     <div class="card fade-up delay2">
         Instead of following hype, we focus on structure, behavior, and probability.
     </div>
+
 </div>
 
-<!-- BUTTON -->
+<!-- button -->
 <div class="section">
     <button class="btn" onclick="goHome()">← Back to Home</button>
 </div>
 
-<!-- FOOTER -->
+<!-- footer -->
 <div class="footer">
     © 2026 gRaviTy Research
 </div>
 
 <script>
-function goHome() {
+
+/* nav */
+function goHome() 
+{
     window.location.href = "index.html";
 }
+
 </script>
 
 </body>
