@@ -116,6 +116,14 @@ body::before
     justify-content: space-between;
     align-items: center;
     padding: 20px 30px;
+
+    position: fixed; /* ADDED */
+    top: 0;          /* ADDED */
+    left: 0;         /* ADDED */
+    width: 100%;     /* ADDED */
+    background: rgba(5,5,5,0.9); /* ADDED */
+    backdrop-filter: blur(8px);  /* ADDED */
+    z-index: 1001;   /* ADDED */
 }
 
 .menu-icon
@@ -142,7 +150,7 @@ body::before
 .hero
 {
     text-align: center;
-    padding: 120px 20px 80px;
+    padding: 160px 20px 80px; /* CHANGED (extra top space for fixed nav) */
     max-width: 800px;
     margin: auto;
 }
@@ -369,7 +377,7 @@ window.addEventListener("scroll", () =>
     });
 });
 
-/* SUPER SMOOTH SCROLL (JS BOOST) */
+/* SUPER SMOOTH SCROLL */
 document.querySelectorAll('a[href^="#"]').forEach(anchor =>
 {
     anchor.addEventListener("click", function(e)
