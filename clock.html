@@ -22,7 +22,7 @@ body
     font-family: 'Inter', sans-serif;
     background: var(--bg);
     color: white;
-    overflow-x: hidden;
+    overflow: hidden;
 }
 
 /* sidebar */
@@ -71,39 +71,24 @@ body
     text-transform: uppercase;
 }
 
-.close-btn 
-{
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    font-size: 28px;
-    cursor: pointer;
-    color: var(--gold);
-}
-
-/* nav FIXED (important fix) */
+/* nav FIXED (no cut logo issue) */
 .nav 
 {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    box-sizing: border-box;
-
     display: flex;
     justify-content: space-between;
     align-items: center;
-
-    padding: 20px 30px;
-
+    padding: 18px 30px;
     z-index: 10;
+    box-sizing: border-box;
 }
 
-/* menu */
 .menu-icon 
 {
     cursor: pointer;
-    flex-shrink: 0;
 }
 
 .menu-icon span 
@@ -115,7 +100,6 @@ body
     margin: 4px 0;
 }
 
-/* logo FIX (prevents cut) */
 .logo 
 {
     font-family: 'Playfair Display', serif;
@@ -123,9 +107,8 @@ body
     color: var(--gold);
     letter-spacing: 2px;
     cursor: pointer;
-
-    white-space: nowrap;   /* prevents breaking */
-    flex-shrink: 0;        /* prevents squeezing */
+    white-space: nowrap; /* prevents cutting */
+    padding-right: 10px;
 }
 
 /* orbs */
@@ -177,8 +160,6 @@ body
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    padding-top: 80px; /* avoids nav overlap */
-    text-align: center;
 }
 
 .label 
@@ -208,7 +189,7 @@ body
     color: #555;
 }
 
-/* NEW LAUNCH TEXT */
+/* launch text */
 .launch-text
 {
     position: absolute;
@@ -248,18 +229,19 @@ body
 
 <body>
 
-<!-- sidebar -->
+<!-- sidebar (UPDATED like index.html) -->
 <div id="sidebar" class="sidebar">
-
-    <span class="close-btn" id="closeBtn">&times;</span>
 
     <div class="menu-label">Advanced Tools</div>
     <a href="calc.html">Wealth Calculators</a>
     <a href="clock.html">Market Clock</a>
 
     <div class="menu-label">Our Firm</div>
-    <a href="vision.html">Our Vision</a>
     <a href="aboutus.html">About Us</a>
+    <a href="vision.html">Our Vision</a>
+
+    <div class="menu-label">Access</div>
+    <a href="contactus.html">Contact Us</a>
 
 </div>
 
@@ -323,34 +305,25 @@ body
 
 <script>
 
-/* elements */
 const sidebar = document.getElementById("sidebar");
 const menuBtn = document.getElementById("menuBtn");
-const closeBtn = document.getElementById("closeBtn");
 
-/* open */
+/* open menu */
 menuBtn.addEventListener("click", function(e)
 {
     e.stopPropagation();
-    sidebar.classList.add("open");
+    sidebar.classList.toggle("open");
 });
 
-/* close btn */
-closeBtn.addEventListener("click", function()
-{
-    sidebar.classList.remove("open");
-});
-
-/* inside click */
-sidebar.addEventListener("click", function(e)
-{
-    e.stopPropagation();
-});
-
-/* outside click */
+/* close on outside click */
 document.addEventListener("click", function()
 {
     sidebar.classList.remove("open");
+});
+
+sidebar.addEventListener("click", function(e)
+{
+    e.stopPropagation();
 });
 
 /* home */
