@@ -13,6 +13,7 @@
 :root 
 {
     --gold: #d4af37;
+    --gold-soft: rgba(212,175,55,0.2);
     --bg: #050505;
 }
 
@@ -25,42 +26,30 @@ body
     overflow-x: hidden;
 }
 
+/* glow background */
+body::before
+{
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(circle at 30% 20%, rgba(212,175,55,0.08), transparent 40%),
+                radial-gradient(circle at 70% 80%, rgba(212,175,55,0.05), transparent 40%);
+    z-index: 0;
+}
+
 /* planets */
 .planet 
 {
     position: fixed;
     border-radius: 50%;
     pointer-events: none;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
     z-index: 0;
 }
 
-.p1 
-{ 
-    width:140px;
-    height:140px;
-    top:20%;
-    left:10%;
-    background:radial-gradient(circle,rgba(212,175,55,0.25),transparent); 
-}
-
-.p2 
-{ 
-    width:100px;
-    height:100px;
-    bottom:15%;
-    right:12%;
-    background:radial-gradient(circle,rgba(212,175,55,0.2),transparent); 
-}
-
-.p3 
-{ 
-    width:80px;
-    height:80px;
-    top:60%;
-    left:30%;
-    background:radial-gradient(circle,rgba(212,175,55,0.18),transparent); 
-}
+.p1 { width:140px;height:140px;top:20%;left:10%;background:radial-gradient(circle,rgba(212,175,55,0.25),transparent); }
+.p2 { width:100px;height:100px;bottom:15%;right:12%;background:radial-gradient(circle,rgba(212,175,55,0.2),transparent); }
+.p3 { width:80px;height:80px;top:60%;left:30%;background:radial-gradient(circle,rgba(212,175,55,0.18),transparent); }
 
 /* sidebar */
 .sidebar 
@@ -70,10 +59,10 @@ body
     position: fixed;
     left: 0;
     top: 0;
-    background: rgba(5,5,5,0.95);
-    backdrop-filter: blur(20px);
+    background: rgba(5,5,5,0.98);
+    backdrop-filter: blur(25px);
     overflow-x: hidden;
-    transition: 0.4s;
+    transition: width 0.4s cubic-bezier(.77,0,.18,1);
     padding-top: 80px;
     z-index: 1000;
 }
@@ -94,6 +83,7 @@ body
     font-size: 10px;
     letter-spacing: 2px;
     color: var(--gold);
+    opacity: 0.7;
 }
 
 .sidebar a 
@@ -103,12 +93,32 @@ body
     color: #888;
     text-decoration: none;
     cursor: pointer;
+    transition: 0.25s;
 }
 
 .sidebar a:hover 
 {
     color: var(--gold);
-    padding-left: 10px;
+    padding-left: 12px;
+}
+
+/* overlay */
+.overlay
+{
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(4px);
+    opacity: 0;
+    pointer-events: none;
+    transition: 0.3s;
+    z-index: 900;
+}
+
+.overlay.show
+{
+    opacity: 1;
+    pointer-events: all;
 }
 
 /* nav */
@@ -125,50 +135,88 @@ body
     width: 22px;
     height: 2px;
     background: var(--gold);
-    margin: 4px 0;
+    margin: 5px 0;
     cursor: pointer;
+    transition: 0.3s;
+}
+
+.menu-icon:hover span
+{
+    transform: translateX(4px);
 }
 
 /* hero */
 .hero 
 {
     text-align: center;
-    padding: 140px 20px;
+    padding: 160px 20px;
+    opacity: 0;
+    transform: translateY(30px);
+    animation: fadeUp 1s ease forwards;
+}
+
+@keyframes fadeUp
+{
+    to 
+    {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .hero h1 
 {
     font-family: 'Playfair Display', serif;
-    font-size: 60px;
+    font-size: 64px;
     color: var(--gold);
+    letter-spacing: 1px;
 }
 
 .hero p 
 {
     max-width: 600px;
     margin: 20px auto;
-    color: #999;
+    color: #aaa;
+    line-height: 1.6;
 }
 
 /* button */
 .btn 
 {
-    padding: 12px 25px;
+    padding: 14px 28px;
     margin: 10px;
     border: 1px solid var(--gold);
     background: transparent;
     color: var(--gold);
     cursor: pointer;
     transition: 0.3s;
+    position: relative;
+    overflow: hidden;
 }
 
-.btn:hover 
+.btn::before
 {
+    content: "";
+    position: absolute;
+    inset: 0;
     background: var(--gold);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: 0.3s;
+    z-index: -1;
+}
+
+.btn:hover::before
+{
+    transform: scaleX(1);
+}
+
+.btn:hover
+{
     color: black;
 }
 
-/* layer fix */
+/* layering */
 body > * 
 { 
     position: relative; 
@@ -176,26 +224,10 @@ body > *
 }
 
 /* scrollbar */
-::-webkit-scrollbar 
-{
-    width: 6px;
-}
-
-::-webkit-scrollbar-track 
-{
-    background: #000;
-}
-
-::-webkit-scrollbar-thumb 
-{
-    background: linear-gradient(180deg, #d4af37, #b8962e);
-    border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb:hover 
-{
-    background: #ffd700;
-}
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #000; }
+::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #d4af37, #b8962e); border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: #ffd700; }
 
 html 
 {
@@ -207,6 +239,8 @@ html
 </head>
 
 <body>
+
+<div class="overlay" id="overlay" onclick="openMenu()"></div>
 
 <!-- planets -->
 <div class="planet p1"></div>
@@ -254,10 +288,11 @@ html
 
 <script>
 
-/* menu */
+/* menu toggle */
 function openMenu()
 {
     document.getElementById("sidebar").classList.toggle("open");
+    document.getElementById("overlay").classList.toggle("show");
 }
 
 /* nav */
@@ -266,7 +301,7 @@ function go(page)
     window.location.href = page;
 }
 
-/* gravity */
+/* gravity refined */
 const planets = document.querySelectorAll(".planet");
 
 document.addEventListener("mousemove", e => 
@@ -278,26 +313,10 @@ document.addEventListener("mousemove", e =>
         const px = rect.left + rect.width / 2;
         const py = rect.top + rect.height / 2;
 
-        const dx = e.clientX - px;
-        const dy = e.clientY - py;
+        const dx = (e.clientX - px) * 0.15;
+        const dy = (e.clientY - py) * 0.15;
 
-        const dist = Math.sqrt(dx * dx + dy * dy);
-
-        let strength = p.classList.contains("p1") ? 0.03 : 
-                       p.classList.contains("p2") ? 0.06 : 0.12;
-
-        if (dist < 200) 
-        {
-            const force = (200 - dist) / 200;
-
-            p.style.transform = `translate(${dx * strength}px, ${dy * strength}px) scale(${1 + force * 0.3})`;
-            p.style.boxShadow = `0 0 ${60 * force}px rgba(212,175,55,0.7)`;
-        } 
-        else 
-        {
-            p.style.transform = "translate(0,0) scale(1)";
-            p.style.boxShadow = "none";
-        }
+        p.style.transform = `translate(${dx}px, ${dy}px)`;
     });
 });
 
