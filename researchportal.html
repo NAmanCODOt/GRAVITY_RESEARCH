@@ -361,7 +361,7 @@
     </div>
 
     <script>
-        // ================= YOUR GAS DEPLOYMENT URL (V2) =================
+        // ================= YOUR GAS DEPLOYMENT URL =================
         const GAS_URL = "https://script.google.com/macros/s/AKfycbxZKsDjsh7HcwwbEJUPkvEKPQ952Q4qfoFelphDJF2QFu6gTiJ8bYLsofI4ZfAoAKg/exec";
 
         // ================= SIDEBAR MENU LOGIC =================
@@ -430,11 +430,9 @@
             termContent.innerHTML = "Establishing secure link to gRaviTy AI Node...<br>Decrypting structural market data...<br><br>";
             
             try {
+                // FIXED: Stripped out ALL custom headers to bypass the 405 error
                 const res = await fetch(GAS_URL, {
                     method: 'POST',
-                    mode: 'cors', // Crucial for crossing domains from GitHub to Google
-                    redirect: 'follow', // Ensures redirects by Google are handled
-                    headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // text/plain prevents preflight CORS issues
                     body: JSON.stringify({ reportText: content, question: "" })
                 });
                 
@@ -450,7 +448,7 @@
                 });
                 
             } catch (e) {
-                termContent.innerHTML = `<span style='color:#ff4d4d'>[SYSTEM ERROR: AI CONNECTION REFUSED]</span><br>Details: ${e.message}<br>Ensure Google Apps Script deployment is correct and unrestricted.`;
+                termContent.innerHTML = `<span style='color:#ff4d4d'>[SYSTEM ERROR: AI CONNECTION REFUSED]</span><br>Details: ${e.message}<br>Verify script is set to 'Execute as: Me' and 'Access: Anyone'.`;
                 console.error("Fetch error: ", e);
             }
         }
@@ -471,11 +469,9 @@
             btn.disabled = true;
             
             try {
+                // FIXED: Stripped out ALL custom headers to bypass the 405 error
                 const res = await fetch(GAS_URL, {
                     method: 'POST',
-                    mode: 'cors',
-                    redirect: 'follow',
-                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                     body: JSON.stringify({ 
                         reportText: terminal.getAttribute('data-report'), 
                         question: question 
@@ -488,7 +484,9 @@
 
                 const data = await res.json();
                 
-                document.getElementById('loading-msg').remove();
+                if(document.getElementById('loading-msg')) {
+                    document.getElementById('loading-msg').remove();
+                }
                 
                 const answerSpan = document.createElement('span');
                 answerSpan.style.color = 'var(--gold)';
