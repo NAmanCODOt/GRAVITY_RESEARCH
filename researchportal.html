@@ -45,7 +45,7 @@ body.fade-out {
     background: var(--gold);
     position: fixed;
     border-radius: 50%;
-    pointer-events: none;
+    pointer-events: none; /* Crucial: stops cursor from blocking clicks */
     z-index: 10000;
     transform: translate(-50%, -50%);
     box-shadow: 0 0 10px var(--gold);
@@ -78,6 +78,7 @@ body::before
     background: radial-gradient(circle at 30% 20%, rgba(212,175,55,0.06), transparent 50%),
                 radial-gradient(circle at 70% 80%, rgba(212,175,55,0.04), transparent 60%);
     z-index: 0;
+    pointer-events: none; /* CRITICAL FIX: Stops the glow from swallowing clicks */
 }
 
 /* NAV */
@@ -119,6 +120,8 @@ body::before
     letter-spacing: 3px;
     text-decoration: none;
     cursor: pointer;
+    position: relative;
+    z-index: 1002;
 }
 
 /* SIDEBAR */
@@ -133,7 +136,7 @@ body::before
     overflow-x: hidden;
     transition: 0.3s ease;
     padding-top: 80px;
-    z-index: 1000;
+    z-index: 1005;
     border-right: 1px solid rgba(255,255,255,0.05);
 }
 
@@ -185,6 +188,8 @@ body::before
     padding: 140px 20px 60px;
     max-width: 1000px;
     margin: auto;
+    position: relative;
+    z-index: 10; /* Ensures content is above background */
 }
 
 /* heading */
@@ -204,6 +209,8 @@ h1
     border: 1px solid rgba(255,255,255,0.08);
     background: rgba(255,255,255,0.02);
     transition: 0.3s;
+    position: relative;
+    z-index: 20; /* Keep highly clickable */
 }
 
 .report-card:hover
@@ -234,6 +241,8 @@ h1
     flex-wrap: wrap;
     gap: 10px;
     align-items: center;
+    position: relative;
+    z-index: 30;
 }
 
 .btn
@@ -251,12 +260,19 @@ h1
     text-decoration: none;
     display: inline-block;
     text-align: center;
+    pointer-events: auto; /* Force clickability */
 }
 
 .btn:hover
 {
     background: var(--gold);
     color: black;
+}
+
+.btn:active
+{
+    /* Physical push-down effect so you KNOW it clicked */
+    transform: scale(0.95);
 }
 
 /* AI Terminal Drawer */
@@ -300,7 +316,7 @@ h1
 
 /* Chat Input UI */
 .chat-box {
-    display: none; /* Hidden until summary loads */
+    display: none; 
     gap: 10px;
     border-top: 1px solid #222;
     padding-top: 15px;
@@ -329,6 +345,8 @@ h1
     padding: 40px;
     font-size: 12px;
     color: #555;
+    position: relative;
+    z-index: 10;
 }
 
 /* scrollbar */
@@ -425,7 +443,7 @@ html
             <div class="term-content">Initializing...</div>
             
             <div class="chat-box">
-                <input type="text" class="chat-input" placeholder="Ask a question about this report (e.g., What is the support zone?)" onkeypress="handleEnter(event, this)">
+                <input type="text" class="chat-input" placeholder="Ask a question about this report..." onkeypress="handleEnter(event, this)">
                 <button class="btn" onclick="askQuestion(this)">Send</button>
             </div>
         </div>
@@ -457,10 +475,10 @@ function toggleMenu()
     document.getElementById("overlay").classList.toggle("show");
 }
 
-/* TOUCH DETECTION (MOBILE FIXES) */
+/* TOUCH DETECTION */
 const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
-/* CUSTOM CURSOR LOGIC */
+/* CUSTOM CURSOR */
 if (!isTouchDevice) {
     const cursorDot = document.getElementById('cursor-dot');
     window.addEventListener('mousemove', (e) => {
@@ -488,7 +506,8 @@ document.addEventListener("DOMContentLoaded", () => {
     links.forEach(link => {
         link.addEventListener('click', function(e) {
             const target = this.getAttribute('href');
-            if (target && !target.endsWith('.pdf') && !target.startsWith('http') && !target.startsWith('mailto') && target !== '#') {
+            // Allow PDF clicks to bypass the custom transition script
+            if (target && !target.toLowerCase().endsWith('.pdf') && !target.startsWith('http') && !target.startsWith('mailto') && target !== '#') {
                 e.preventDefault();
                 transitionTo(target);
             }
@@ -506,15 +525,14 @@ window.addEventListener('pageshow', (event) => {
 const GAS_URL = "https://script.google.com/macros/s/AKfycbycKRN36WPz1nPVZVfIl9bY3ISWWezB93mwxY8mqBAPQTdQvBe7iWFEEYO7dOjELOFE/exec";
 
 async function analyzeReport(btn, reportContent) {
+    console.log("AI Analysis button clicked!"); // Debug logic
     const terminal = btn.closest('.report-card').querySelector('.terminal');
     const content = terminal.querySelector('.term-content');
     const chatBox = terminal.querySelector('.chat-box');
     
-    // Store the report content in the terminal HTML so the chat box can read it later
     terminal.setAttribute('data-report', reportContent);
-    
     terminal.style.display = 'block';
-    chatBox.style.display = 'none'; // Hide chat box while generating summary
+    chatBox.style.display = 'none'; 
     content.innerHTML = "Establishing secure link to gRaviTy AI Node...<br>Generating executive summary...<br><br>";
 
     try {
@@ -534,10 +552,9 @@ async function analyzeReport(btn, reportContent) {
             if (i < text.length) {
                 content.innerHTML += text.charAt(i) === '\n' ? '<br>' : text.charAt(i);
                 i++;
-                content.scrollTop = content.scrollHeight; // Auto-scroll down
+                content.scrollTop = content.scrollHeight; 
                 setTimeout(type, 15);
             } else {
-                // Reveal the chat box when done typing
                 chatBox.style.display = 'flex';
             }
         }
@@ -569,7 +586,6 @@ async function askQuestion(btn) {
     content.scrollTop = content.scrollHeight;
     input.value = '';
     
-    // Temporarily disable input
     input.disabled = true;
     btn.disabled = true;
 
@@ -583,10 +599,8 @@ async function askQuestion(btn) {
         const data = await response.json();
         const text = data.summary;
 
-        // Remove loading message
         document.getElementById('loading-msg').remove();
         
-        // Type answer
         let i = 0;
         const answerSpan = document.createElement('span');
         answerSpan.style.color = 'var(--gold)';
