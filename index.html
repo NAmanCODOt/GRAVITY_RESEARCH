@@ -115,7 +115,7 @@ body::before
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 30px;
+    padding: 18px 30px;
 
     position: fixed;
     top: 0;
@@ -126,6 +126,69 @@ body::before
     z-index: 1001;
 }
 
+/* =========================
+   PREMIUM SVG LOGO STYLE
+========================= */
+.logo
+{
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    letter-spacing: 3px;
+    color: var(--gold);
+    cursor: pointer;
+    position: relative;
+    display: inline-block;
+    transition: 0.3s;
+    text-shadow: 0 0 10px rgba(212,175,55,0.2);
+}
+
+/* glow animation */
+.logo::before
+{
+    content: "gRaviTy";
+    position: absolute;
+    top: 0;
+    left: 0;
+    color: var(--gold);
+    filter: blur(10px);
+    opacity: 0.3;
+    animation: pulse 3s infinite ease-in-out;
+}
+
+/* shimmer sweep */
+.logo::after
+{
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255,215,0,0.3), transparent);
+    animation: shine 5s infinite;
+}
+
+@keyframes pulse
+{
+    0%,100% { transform: scale(1); opacity: 0.3; }
+    50% { transform: scale(1.05); opacity: 0.6; }
+}
+
+@keyframes shine
+{
+    0% { left: -100%; }
+    50% { left: 100%; }
+    100% { left: 100%; }
+}
+
+/* hover effect */
+.logo:hover
+{
+    transform: translateY(-2px);
+    text-shadow: 0 0 20px rgba(212,175,55,0.5);
+}
+
+/* menu icon */
 .menu-icon
 {
     cursor: pointer;
@@ -146,7 +209,7 @@ body::before
     transform: translateX(3px);
 }
 
-/* hero */
+/* HERO SECTION */
 .hero
 {
     text-align: center;
@@ -160,37 +223,13 @@ body::before
     font-family: 'Playfair Display', serif;
     font-size: clamp(34px, 6vw, 64px);
     color: var(--gold);
-    line-height: 1.2;
-    letter-spacing: 1px;
-    position: relative;
-}
-
-.hero h1::after
-{
-    content: "";
-    display: block;
-    width: 60px;
-    height: 2px;
-    margin: 14px auto 0;
-    background: var(--gold);
-    opacity: 0.6;
 }
 
 .hero p
 {
     margin-top: 20px;
     color: #8f8f8f;
-    font-size: clamp(14px, 2.5vw, 18px);
-    line-height: 1.7;
-}
-
-/* divider */
-.divider
-{
-    width: 60%;
-    height: 1px;
-    margin: 40px auto;
-    background: linear-gradient(to right, transparent, rgba(212,175,55,0.4), transparent);
+    font-size: 18px;
 }
 
 /* button */
@@ -209,8 +248,6 @@ body::before
 {
     background: var(--gold);
     color: black;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(212,175,55,0.2);
 }
 
 /* features */
@@ -222,46 +259,22 @@ body::before
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px,1fr));
     gap: 30px;
-    text-align: center;
 }
 
 .feature
 {
-    opacity: 0;
-    transform: translateY(30px);
-    transition: 0.4s ease;
     padding: 20px;
     border: 1px solid rgba(255,255,255,0.05);
     border-radius: 10px;
     background: rgba(255,255,255,0.02);
+    transition: 0.3s;
 }
 
-/* ✅ GOLD GLOW HOVER (UNIFORM ACROSS SITE STYLE) */
 .feature:hover
 {
-    transform: translateY(-6px);
     border-color: var(--gold);
-    box-shadow: 0 0 20px rgba(212,175,55,0.25),
-                0 0 60px rgba(212,175,55,0.08);
-}
-
-.feature.show
-{
-    opacity: 1;
-    transform: translateY(0);
-}
-
-.feature h3
-{
-    color: var(--gold);
-    font-weight: 500;
-    margin-bottom: 10px;
-}
-
-.feature p
-{
-    color: #888;
-    font-size: 14px;
+    box-shadow: 0 0 25px rgba(212,175,55,0.2);
+    transform: translateY(-6px);
 }
 
 /* layering */
@@ -269,17 +282,6 @@ body > *
 {
     position: relative;
     z-index: 1;
-}
-
-/* scrollbar */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: #000; }
-::-webkit-scrollbar-thumb { background: #d4af37; }
-
-html
-{
-    scrollbar-width: thin;
-    scrollbar-color: #d4af37 #000;
 }
 
 </style>
@@ -321,58 +323,39 @@ html
         <span></span>
     </div>
 
-    <img src="logo.png" height="36">
+    <!-- PREMIUM LOGO -->
+    <div class="logo" onclick="go('index.html')">
+        gRaviTy
+    </div>
 
 </div>
 
-<!-- HERO SECTION -->
+<!-- HERO -->
 <section class="hero">
   <h1>gRaviTy Insights</h1>
   <p>Decoding Markets. Understanding Movement.</p>
   <a href="#services" class="btn">Explore Insights</a>
 </section>
 
+<!-- FEATURES -->
+<div class="features">
 
-<!-- SERVICES PREVIEW -->
-<section id="services" class="reveal">
-  <h2>What We Do</h2>
-  <p>Market Analysis • Business Breakdown • Trend Insights</p>
-  <a href="services.html" class="btn">View Services →</a>
-</section>
+    <div class="feature">
+        <h3>Structure</h3>
+        <p>Markets follow frameworks, not chaos.</p>
+    </div>
 
+    <div class="feature">
+        <h3>Behavior</h3>
+        <p>Human psychology drives every move.</p>
+    </div>
 
-<!-- ABOUT PREVIEW -->
-<section class="reveal">
-  <h2>Who We Are</h2>
-  <p>We simplify complexity and bring clarity to markets and businesses.</p>
-  <a href="about.html" class="btn">About Us →</a>
-</section>
+    <div class="feature">
+        <h3>Probability</h3>
+        <p>Outcomes are weighted, never random.</p>
+    </div>
 
-
-<!-- REPORTS PREVIEW -->
-<section class="reveal">
-  <h2>Reports</h2>
-  <p>Structured insights and deep analysis of market movements.</p>
-  <a href="reports.html" class="btn">View Reports →</a>
-</section>
-
-
-<!-- NEWSLETTER -->
-<section class="reveal">
-  <h2>Stay Ahead</h2>
-  <p>Get insights directly to your inbox.</p>
-  <input type="email" placeholder="Enter your email">
-  <button class="btn">Subscribe</button>
-</section>
-
-
-<!-- CONTACT -->
-<footer>
-  <h3>Contact</h3>
-  <p>Email: gravity.insights07@gmail.com</p>
-  <p>Instagram: @gravity.insights</p>
-  <a href="contact.html" class="btn">Contact Us →</a>
-</footer>
+</div>
 
 <script>
 
@@ -386,21 +369,6 @@ function go(page)
 {
     window.location.href = page;
 }
-
-const features = document.querySelectorAll(".feature");
-
-window.addEventListener("scroll", () =>
-{
-    features.forEach(el =>
-    {
-        const rect = el.getBoundingClientRect();
-
-        if(rect.top < window.innerHeight - 50)
-        {
-            el.classList.add("show");
-        }
-    });
-});
 
 </script>
 
