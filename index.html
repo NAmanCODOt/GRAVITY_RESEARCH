@@ -16,6 +16,7 @@
     --bg: #050505;
 }
 
+/* SMOOTH SCROLL */
 html
 {
     scroll-behavior: smooth;
@@ -29,7 +30,7 @@ body
     color: white;
 }
 
-/* background glow */
+/* subtle gradient bg */
 body::before
 {
     content: "";
@@ -115,6 +116,7 @@ body::before
     justify-content: space-between;
     align-items: center;
     padding: 20px 30px;
+
     position: fixed;
     top: 0;
     left: 0;
@@ -139,22 +141,18 @@ body::before
     transition: 0.2s;
 }
 
-/* HERO */
+.menu-icon:hover span
+{
+    transform: translateX(3px);
+}
+
+/* hero */
 .hero
 {
     text-align: center;
     padding: 160px 20px 80px;
     max-width: 800px;
     margin: auto;
-    opacity: 0;
-    transform: translateY(40px);
-    transition: all 1s ease;
-}
-
-.hero.show
-{
-    opacity: 1;
-    transform: translateY(0);
 }
 
 .hero h1
@@ -162,27 +160,37 @@ body::before
     font-family: 'Playfair Display', serif;
     font-size: clamp(34px, 6vw, 64px);
     color: var(--gold);
+    line-height: 1.2;
+    letter-spacing: 1px;
+    position: relative;
+}
+
+.hero h1::after
+{
+    content: "";
+    display: block;
+    width: 60px;
+    height: 2px;
+    margin: 14px auto 0;
+    background: var(--gold);
+    opacity: 0.6;
 }
 
 .hero p
 {
     margin-top: 20px;
     color: #8f8f8f;
+    font-size: clamp(14px, 2.5vw, 18px);
     line-height: 1.7;
 }
 
-/* sections reveal system */
-.reveal
+/* divider */
+.divider
 {
-    opacity: 0;
-    transform: translateY(60px);
-    transition: all 0.9s cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-
-.reveal.show
-{
-    opacity: 1;
-    transform: translateY(0);
+    width: 60%;
+    height: 1px;
+    margin: 40px auto;
+    background: linear-gradient(to right, transparent, rgba(212,175,55,0.4), transparent);
 }
 
 /* button */
@@ -205,7 +213,7 @@ body::before
     box-shadow: 0 6px 20px rgba(212,175,55,0.2);
 }
 
-/* features (kept + improved) */
+/* features */
 .features
 {
     max-width: 900px;
@@ -220,12 +228,21 @@ body::before
 .feature
 {
     opacity: 0;
-    transform: translateY(40px);
-    transition: 0.6s ease;
+    transform: translateY(30px);
+    transition: 0.4s ease;
     padding: 20px;
     border: 1px solid rgba(255,255,255,0.05);
     border-radius: 10px;
     background: rgba(255,255,255,0.02);
+}
+
+/* ✅ GOLD GLOW HOVER (UNIFORM ACROSS SITE STYLE) */
+.feature:hover
+{
+    transform: translateY(-6px);
+    border-color: var(--gold);
+    box-shadow: 0 0 20px rgba(212,175,55,0.25),
+                0 0 60px rgba(212,175,55,0.08);
 }
 
 .feature.show
@@ -234,16 +251,35 @@ body::before
     transform: translateY(0);
 }
 
-.feature:hover
-{
-    border-color: var(--gold);
-    box-shadow: 0 0 20px rgba(212,175,55,0.25),
-                0 0 60px rgba(212,175,55,0.08);
-}
-
 .feature h3
 {
     color: var(--gold);
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+
+.feature p
+{
+    color: #888;
+    font-size: 14px;
+}
+
+/* layering */
+body > *
+{
+    position: relative;
+    z-index: 1;
+}
+
+/* scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #000; }
+::-webkit-scrollbar-thumb { background: #d4af37; }
+
+html
+{
+    scrollbar-width: thin;
+    scrollbar-color: #d4af37 #000;
 }
 
 </style>
@@ -289,36 +325,53 @@ body::before
 
 </div>
 
-<!-- HERO -->
-<section class="hero reveal">
+<!-- HERO SECTION -->
+<section class="hero">
   <h1>gRaviTy Insights</h1>
   <p>Decoding Markets. Understanding Movement.</p>
   <a href="#services" class="btn">Explore Insights</a>
 </section>
 
-<!-- SERVICES -->
+
+<!-- SERVICES PREVIEW -->
 <section id="services" class="reveal">
   <h2>What We Do</h2>
   <p>Market Analysis • Business Breakdown • Trend Insights</p>
+  <a href="services.html" class="btn">View Services →</a>
 </section>
 
-<!-- ABOUT -->
+
+<!-- ABOUT PREVIEW -->
 <section class="reveal">
   <h2>Who We Are</h2>
   <p>We simplify complexity and bring clarity to markets and businesses.</p>
+  <a href="about.html" class="btn">About Us →</a>
 </section>
 
-<!-- REPORTS -->
+
+<!-- REPORTS PREVIEW -->
 <section class="reveal">
   <h2>Reports</h2>
   <p>Structured insights and deep analysis of market movements.</p>
+  <a href="reports.html" class="btn">View Reports →</a>
 </section>
 
+
+<!-- NEWSLETTER -->
+<section class="reveal">
+  <h2>Stay Ahead</h2>
+  <p>Get insights directly to your inbox.</p>
+  <input type="email" placeholder="Enter your email">
+  <button class="btn">Subscribe</button>
+</section>
+
+
 <!-- CONTACT -->
-<footer class="reveal">
+<footer>
   <h3>Contact</h3>
   <p>Email: gravity.insights07@gmail.com</p>
   <p>Instagram: @gravity.insights</p>
+  <a href="contact.html" class="btn">Contact Us →</a>
 </footer>
 
 <script>
@@ -334,24 +387,20 @@ function go(page)
     window.location.href = page;
 }
 
-/* smooth reveal system */
-const elements = document.querySelectorAll(".reveal, .feature, .hero");
+const features = document.querySelectorAll(".feature");
 
-function reveal()
+window.addEventListener("scroll", () =>
 {
-    elements.forEach(el =>
+    features.forEach(el =>
     {
         const rect = el.getBoundingClientRect();
 
-        if(rect.top < window.innerHeight - 80)
+        if(rect.top < window.innerHeight - 50)
         {
             el.classList.add("show");
         }
     });
-}
-
-window.addEventListener("scroll", reveal);
-window.addEventListener("load", reveal);
+});
 
 </script>
 
