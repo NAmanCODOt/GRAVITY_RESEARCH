@@ -68,34 +68,62 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
-/* sidebar */
+/* ================= SIDEBAR (From calc.html) ================= */
 .sidebar {
     width: 0;
     height: 100%;
     position: fixed;
     left: 0;
     top: 0;
-    background: rgba(3, 3, 3, 0.98);
-    backdrop-filter: blur(20px);
+    background: #0a0a0a;
+    box-shadow: 2px 0 15px rgba(0,0,0,0.5);
+    transition: 0.4s ease-in-out;
+    padding-top: 80px;
+    z-index: 2000;
     overflow-x: hidden;
-    transition: 0.5s cubic-bezier(0.77, 0, 0.175, 1);
-    padding-top: 100px;
-    z-index: 1000;
-    border-right: 1px solid rgba(212, 175, 55, 0.15);
 }
 
-.sidebar.open { width: 280px; }
+.sidebar.open { 
+    width: 280px; 
+    border-right: 1px solid var(--gold);
+}
+
+.sidebar-content { 
+    min-width: 280px;
+    padding: 0 30px; 
+}
+
+.menu-label {
+    margin-top: 25px;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--gold);
+    text-transform: uppercase;
+    opacity: 0.7;
+}
 
 .sidebar a {
     display: block;
-    padding: 18px 40px;
-    color: #999;
+    padding: 14px 0;
+    color: #888;
     text-decoration: none;
+    transition: 0.25s;
     font-size: 14px;
-    transition: 0.3s;
 }
 
-.sidebar a:hover { color: var(--gold); padding-left: 50px; }
+.sidebar a:hover {
+    color: var(--gold);
+    padding-left: 10px;
+}
+
+.close-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 28px;
+    cursor: pointer;
+    color: var(--gold);
+}
 
 /* nav */
 .nav {
@@ -107,11 +135,15 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 25px 40px;
-    z-index: 10;
+    z-index: 100; /* Increased to stay above orbs */
     box-sizing: border-box;
 }
 
-.menu-icon { cursor: pointer; }
+.menu-icon { 
+    cursor: pointer; 
+    z-index: 101;
+}
+
 .menu-icon span {
     display: block;
     width: 22px;
@@ -120,12 +152,12 @@ body {
     margin: 6px 0;
 }
 
-.logo {
+.logo-text {
     font-family: 'Playfair Display', serif;
     font-size: 22px;
+    font-weight: 600;
     color: var(--gold);
     letter-spacing: 3px;
-    cursor: pointer;
     text-decoration: none;
 }
 
@@ -309,17 +341,31 @@ body {
 <div class="cursor-dot" id="cursor-dot"></div>
 
 <div id="sidebar" class="sidebar">
-    <a href="index.html">Home</a>
-    <a href="aboutus.html">About Us</a>
-    <a href="vision.html">Our Vision</a>
-    <a href="calc.html">Wealth Calculators</a>
-    <a href="clock.html">Market Clock</a>
-    <a href="contactus.html">Contact Us</a>
+    <span class="close-btn" onclick="closeMenu()">&times;</span>
+    <div class="sidebar-content">
+        <div class="menu-label">Advanced Tools</div>
+        <a href="calc.html">Wealth Calculators</a>
+        <a href="clock.html">Market Clock</a>
+
+        <div class="menu-label">Research</div>
+        <a href="researchportal.html">Research Portal</a>
+
+        <div class="menu-label">Our Firm</div>
+        <a href="aboutus.html">About Us</a>
+        <a href="vision.html">Our Vision</a>
+
+        <div class="menu-label">Access</div>
+        <a href="contactus.html">Contact Us</a>
+    </div>
 </div>
 
 <div class="nav">
-    <div class="menu-icon" id="menuBtn"><span></span><span></span><span></span></div>
-    <a href="index.html" class="logo">gRaviTy</a>
+    <div class="menu-icon" onclick="openMenu(event)">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+    <a href="index.html" class="logo-text">gRaviTy</a>
 </div>
 
 <div class="gold-orb orb1"></div>
@@ -377,31 +423,42 @@ if (!isTouchDevice) {
         cursorDot.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0) translate(-50%, -50%)`;
     });
     
-    document.querySelectorAll('a, button, .menu-icon, .logo, .unit-box').forEach(el => {
+    // Updated hover targets to include close-btn and logo-text
+    document.querySelectorAll('a, button, .menu-icon, .logo-text, .unit-box, .close-btn').forEach(el => {
         el.addEventListener('mouseenter', () => cursorDot.classList.add('hover-state'));
         el.addEventListener('mouseleave', () => cursorDot.classList.remove('hover-state'));
     });
 }
 
-/* MENU */
-const sidebar = document.getElementById("sidebar");
-const menuBtn = document.getElementById("menuBtn");
-menuBtn.addEventListener("click", (e) => { e.stopPropagation(); sidebar.classList.toggle("open"); });
-document.addEventListener("click", () => sidebar.classList.remove("open"));
+/* ================= MENU LOGIC ================= */
+function openMenu(event) {
+    event.stopPropagation(); 
+    document.getElementById("sidebar").classList.add("open");
+}
 
-/* SEAMLESS PAGE TRANSITIONS */
-// We select ALL anchor tags that have an href attribute. 
+function closeMenu() {
+    document.getElementById("sidebar").classList.remove("open");
+}
+
+document.addEventListener("click", function(e) {
+    const sb = document.getElementById("sidebar");
+    const menuIcon = document.querySelector(".menu-icon");
+
+    if (sb && menuIcon && !sb.contains(e.target) && !menuIcon.contains(e.target)) {
+        closeMenu();
+    }
+});
+
+/* ================= SEAMLESS PAGE TRANSITIONS ================= */
 document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll('a[href]').forEach(link => {
         link.addEventListener('click', function(e) {
             const targetUrl = this.getAttribute('href');
             
-            // Only run the transition if it's an internal link (not an external website or email)
             if (targetUrl && !targetUrl.startsWith('http') && !targetUrl.startsWith('mailto')) {
-                e.preventDefault(); // Stop immediate jump
-                document.body.classList.add('fade-out'); // Trigger CSS fade
+                e.preventDefault(); 
+                document.body.classList.add('fade-out'); 
                 
-                // Wait for the CSS transition (400ms) then force the browser to redirect
                 setTimeout(() => { 
                     window.location.assign(targetUrl); 
                 }, 400);
