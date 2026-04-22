@@ -16,7 +16,6 @@
     --bg: #050505;
 }
 
-/* GLOBAL */
 html
 {
     scroll-behavior: smooth;
@@ -139,26 +138,14 @@ body::before
     height: 2px;
     background: var(--gold);
     margin: 5px 0;
-    transition: 0.2s;
 }
 
-.menu-icon:hover span
-{
-    transform: translateX(3px);
-}
-
-.logo
-{
-    height: 36px;
-    cursor: pointer;
-}
-
-/* ================= HERO ================= */
+/* ================= HERO FIXED ================= */
 .hero
 {
     text-align: center;
-    padding: 160px 20px 80px;
-    max-width: 800px;
+    padding: 180px 20px 80px;
+    max-width: 900px;
     margin: auto;
 }
 
@@ -167,33 +154,21 @@ body::before
     font-family: 'Playfair Display', serif;
     font-size: clamp(34px, 6vw, 64px);
     color: var(--gold);
-    line-height: 1.2;
-    position: relative;
-}
-
-.hero h1::after
-{
-    content: "";
-    display: block;
-    width: 60px;
-    height: 2px;
-    margin: 14px auto 0;
-    background: var(--gold);
-    opacity: 0.6;
+    margin: 0;
 }
 
 .hero p
 {
     margin-top: 20px;
-    color: #8f8f8f;
+    color: #9a9a9a;
     font-size: 18px;
-    line-height: 1.7;
+    line-height: 1.6;
 }
 
-/* ================= BUTTON ================= */
+/* button */
 .btn
 {
-    margin-top: 18px;
+    margin-top: 22px;
     padding: 12px 24px;
     border: 1px solid var(--gold);
     background: transparent;
@@ -208,54 +183,55 @@ body::before
     background: var(--gold);
     color: black;
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(212,175,55,0.2);
 }
 
-/* ================= SECTIONS ================= */
+/* ================= SECTIONS FIXED ================= */
 section
 {
     max-width: 900px;
     margin: auto;
-    padding: 60px 20px;
+    padding: 70px 20px;
     text-align: center;
 
     opacity: 0;
-    transform: translateY(40px);
+    transform: translateY(30px);
     transition: 0.6s ease;
 }
 
-/* ACTIVE SCROLL STATE */
+/* IMPORTANT FIX: hero should NOT be hidden */
+.hero
+{
+    opacity: 1 !important;
+    transform: none !important;
+}
+
+/* reveal */
 section.show
 {
     opacity: 1;
     transform: translateY(0);
 }
 
-/* section glow hover */
-section:hover
-{
-    box-shadow: 0 0 25px rgba(212,175,55,0.15);
-    border-radius: 12px;
-}
-
+/* headings */
 h2
 {
     color: var(--gold);
-    font-family: 'Playfair Display', serif;
     margin-bottom: 10px;
+    font-family: 'Playfair Display', serif;
 }
 
+/* text */
 p
 {
     color: #888;
 }
 
-/* ================= NEWSLETTER ================= */
+/* input */
 input
 {
     margin-top: 15px;
     padding: 10px;
-    width: 250px;
+    width: 240px;
     background: transparent;
     border: 1px solid #333;
     color: white;
@@ -267,11 +243,11 @@ input:focus
     border-color: var(--gold);
 }
 
-/* ================= FOOTER ================= */
+/* footer */
 footer
 {
     text-align: center;
-    padding: 50px 20px;
+    padding: 60px 20px;
     color: #777;
     border-top: 1px solid #111;
 }
@@ -287,12 +263,6 @@ body > *
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: #000; }
 ::-webkit-scrollbar-thumb { background: #d4af37; }
-
-html
-{
-    scrollbar-width: thin;
-    scrollbar-color: #d4af37 #000;
-}
 
 </style>
 </head>
@@ -333,12 +303,12 @@ html
         <span></span>
     </div>
 
-    <img src="logo.png" class="logo" onclick="go('index.html')">
+    <img src="logo.png" height="36" onclick="go('index.html')">
 
 </div>
 
-<!-- HERO -->
-<section>
+<!-- HERO (NOW FIXED AND VISIBLE) -->
+<section class="hero show">
   <h1>gRaviTy Insights</h1>
   <p>Decoding Markets. Understanding Movement.</p>
   <a class="btn" href="#services">Explore Insights</a>
@@ -389,21 +359,24 @@ function go(page)
     window.location.href = page;
 }
 
-/* SCROLL REVEAL FIXED */
-const sections = document.querySelectorAll("section");
+/* FIXED REVEAL LOGIC */
+const sections = document.querySelectorAll("section:not(.hero)");
 
-window.addEventListener("scroll", () =>
+function reveal()
 {
     sections.forEach(el =>
     {
         const rect = el.getBoundingClientRect();
 
-        if(rect.top < window.innerHeight - 100)
+        if(rect.top < window.innerHeight - 80)
         {
             el.classList.add("show");
         }
     });
-});
+}
+
+window.addEventListener("scroll", reveal);
+reveal();
 
 </script>
 
