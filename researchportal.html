@@ -24,6 +24,40 @@ body {
     user-select: none;         /* Standard */
 }
 
+/* ================= SEAMLESS PAGE TRANSITIONS ================= */
+body {
+    opacity: 1;
+    transition: opacity 0.4s ease-in-out;
+}
+
+body.fade-out {
+    opacity: 0;
+}
+
+/* ================= CUSTOM CURSOR ================= */
+* {
+    cursor: none !important;
+}
+
+.cursor-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--gold);
+    position: fixed;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 10000;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 10px var(--gold);
+    transition: width 0.2s ease, height 0.2s ease, box-shadow 0.2s ease;
+}
+
+.cursor-dot.hover-state {
+    width: 12px;
+    height: 12px;
+    box-shadow: 0 0 15px var(--gold);
+}
+
 /* base */
 html { scroll-behavior: smooth; }
 
@@ -59,6 +93,7 @@ body::before
     background: rgba(5,5,5,0.9);
     backdrop-filter: blur(8px);
     z-index: 1001;
+    box-sizing: border-box;
 }
 
 .menu-icon
@@ -226,10 +261,31 @@ html
     scrollbar-color: #d4af37 #000;
 }
 
+/* ================= MOBILE RESPONSIVENESS ================= */
+@media screen and (max-width: 768px) {
+    /* Disable Custom Cursor on Mobile */
+    * {
+        cursor: auto !important; 
+    }
+    .cursor-dot {
+        display: none !important; 
+    }
+    
+    .sidebar.open {
+        width: 100%; 
+    }
+
+    h1 {
+        font-size: 30px;
+    }
+}
+
 </style>
 </head>
 
 <body oncontextmenu="return false;">
+
+<div class="cursor-dot" id="cursor-dot"></div>
 
 <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
 
@@ -319,10 +375,56 @@ function toggleMenu()
     document.getElementById("overlay").classList.toggle("show");
 }
 
-/* nav */
+/* ================= TOUCH DETECTION (MOBILE FIXES) ================= */
+const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
+/* ================= CUSTOM CURSOR LOGIC ================= */
+if (!isTouchDevice) {
+    const cursorDot = document.getElementById('cursor-dot');
+    window.addEventListener('mousemove', (e) => {
+        cursorDot.style.left = e.clientX + 'px';
+        cursorDot.style.top = e.clientY + 'px';
+    });
+
+    const interactables = document.querySelectorAll('a, button, .menu-icon');
+    interactables.forEach(el => {
+        el.addEventListener('mouseenter', () => cursorDot.classList.add('hover-state'));
+        el.addEventListener('mouseleave', () => cursorDot.classList.remove('hover-state'));
+    });
+}
+
+/* ================= SEAMLESS PAGE TRANSITIONS ================= */
+function transitionTo(url) {
+    document.body.classList.add('fade-out');
+    setTimeout(() => {
+        window.location.href = url;
+    }, 400);
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    const links = document.querySelectorAll('a[href]');
+    links.forEach(link => {
+        link.addEventListener('click', function(e) {
+            const target = this.getAttribute('href');
+            // Ignore PDF links, external links, and mailto
+            if (target && !target.endsWith('.pdf') && !target.startsWith('http') && !target.startsWith('mailto')) {
+                e.preventDefault();
+                transitionTo(target);
+            }
+        });
+    });
+});
+
+window.addEventListener('pageshow', (event) => {
+    if (event.persisted) {
+        document.body.classList.remove('fade-out');
+    }
+});
+
+/* nav function updated for transition */
 function go(page)
 {
-    window.location.href = page;
+    transitionTo(page);
 }
 
 </script>
