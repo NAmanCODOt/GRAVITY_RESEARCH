@@ -110,6 +110,17 @@ body::before
     margin: 5px 0;
 }
 
+.logo 
+{
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--gold);
+    letter-spacing: 3px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
 /* SIDEBAR */
 .sidebar
 {
@@ -219,23 +230,72 @@ h1
 .actions
 {
     margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
 .btn
 {
     padding: 10px 20px;
-    margin-right: 10px;
     border: 1px solid var(--gold);
     background: transparent;
     color: var(--gold);
     cursor: pointer;
     transition: 0.2s;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .btn:hover
 {
     background: var(--gold);
     color: black;
+}
+
+.btn-ai {
+    border: 1px solid #444;
+    color: #888;
+}
+
+.btn-ai:hover {
+    border-color: white;
+    color: white;
+    background: transparent;
+}
+
+/* AI Terminal Drawer */
+.terminal {
+    display: none; 
+    margin-top: 25px; 
+    padding: 25px;
+    background: #0a0a0a; 
+    border-left: 2px solid var(--gold);
+    font-family: 'Courier New', monospace; 
+    font-size: 13px; 
+    line-height: 1.6;
+}
+
+.term-header { 
+    color: var(--gold); 
+    margin-bottom: 15px; 
+    font-weight: bold; 
+    border-bottom: 1px solid #222; 
+    padding-bottom: 5px; 
+    display: flex; 
+    justify-content: space-between;
+}
+
+.close-term {
+    color: #555;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.close-term:hover {
+    color: white;
 }
 
 /* footer */
@@ -263,21 +323,10 @@ html
 
 /* ================= MOBILE RESPONSIVENESS ================= */
 @media screen and (max-width: 768px) {
-    /* Disable Custom Cursor on Mobile */
-    * {
-        cursor: auto !important; 
-    }
-    .cursor-dot {
-        display: none !important; 
-    }
-    
-    .sidebar.open {
-        width: 100%; 
-    }
-
-    h1 {
-        font-size: 30px;
-    }
+    * { cursor: auto !important; }
+    .cursor-dot { display: none !important; }
+    .sidebar.open { width: 100%; }
+    h1 { font-size: 30px; }
 }
 
 </style>
@@ -294,16 +343,16 @@ html
     <div class="sidebar-content">
 
         <div class="menu-label">Navigation</div>
-        <a onclick="go('index.html')">Home</a>
-        <a onclick="go('aboutus.html')">About Us</a>
-        <a onclick="go('vision.html')">Vision</a>
+        <a href="index.html">Home</a>
+        <a href="aboutus.html">About Us</a>
+        <a href="vision.html">Vision</a>
 
         <div class="menu-label">Tools</div>
-        <a onclick="go('calc.html')">Wealth Calculators</a>
-        <a onclick="go('clock.html')">Market Clock</a>
+        <a href="calc.html">Wealth Calculators</a>
+        <a href="clock.html">Market Clock</a>
 
         <div class="menu-label">Access</div>
-        <a onclick="go('contactus.html')">Contact</a>
+        <a href="contactus.html">Contact</a>
 
     </div>
 
@@ -317,7 +366,7 @@ html
         <span></span>
     </div>
 
-    <div style="color:var(--gold); font-size:14px;">Research Portal</div>
+    <a href="index.html" class="logo">gRaviTy</a>
 
 </div>
 
@@ -346,6 +395,16 @@ html
                 <button class="btn">Download</button>
             </a>
 
+            <button class="btn btn-ai" onclick="analyzeReport(this, 'Tata Motors structural analysis report for 2026. Key structural levels identified with major resistance zones. High liquidity void present in the upper quadrant. Market positioning remains strong long-term with EV expansion driving forward volume.')">AI Analysis</button>
+
+        </div>
+
+        <div class="terminal">
+            <div class="term-header">
+                <span>> gRaviTy AI ANALYST v1.5</span>
+                <span class="close-term" onclick="this.closest('.terminal').style.display='none'">[X]</span>
+            </div>
+            <div class="term-content">Initializing...</div>
         </div>
 
     </div>
@@ -386,7 +445,7 @@ if (!isTouchDevice) {
         cursorDot.style.top = e.clientY + 'px';
     });
 
-    const interactables = document.querySelectorAll('a, button, .menu-icon');
+    const interactables = document.querySelectorAll('a, button, .menu-icon, .close-term');
     interactables.forEach(el => {
         el.addEventListener('mouseenter', () => cursorDot.classList.add('hover-state'));
         el.addEventListener('mouseleave', () => cursorDot.classList.remove('hover-state'));
@@ -407,7 +466,7 @@ document.addEventListener("DOMContentLoaded", () => {
         link.addEventListener('click', function(e) {
             const target = this.getAttribute('href');
             // Ignore PDF links, external links, and mailto
-            if (target && !target.endsWith('.pdf') && !target.startsWith('http') && !target.startsWith('mailto')) {
+            if (target && !target.endsWith('.pdf') && !target.startsWith('http') && !target.startsWith('mailto') && target !== '#') {
                 e.preventDefault();
                 transitionTo(target);
             }
@@ -421,10 +480,47 @@ window.addEventListener('pageshow', (event) => {
     }
 });
 
-/* nav function updated for transition */
-function go(page)
-{
-    transitionTo(page);
+/* ================= AI TERMINAL LOGIC ================= */
+async function analyzeReport(btn, reportContent) {
+    const card = btn.closest('.report-card');
+    const terminal = card.querySelector('.terminal');
+    const content = card.querySelector('.term-content');
+    
+    // Open the terminal
+    terminal.style.display = 'block';
+    content.innerHTML = "Accessing Gemini Pro nodes...<br>Decrypting market structure...<br><br>";
+
+    try {
+        // Call the Netlify Serverless Function
+        const response = await fetch('/.netlify/functions/summarize', {
+            method: 'POST',
+            body: JSON.stringify({ reportText: reportContent })
+        });
+        
+        const data = await response.json();
+        
+        // Typing Effect
+        let i = 0;
+        content.innerHTML = "";
+        const text = data.summary || "No data returned from AI.";
+        
+        function type() {
+            if (i < text.length) {
+                // Handle newlines for bullet points
+                if (text.charAt(i) === '\n') {
+                    content.innerHTML += '<br>';
+                } else {
+                    content.innerHTML += text.charAt(i);
+                }
+                i++;
+                setTimeout(type, 15); // Speed of typing
+            }
+        }
+        type();
+
+    } catch (err) {
+        content.innerHTML = "<span style='color:#ff4d4d'>[SYSTEM ERROR: AI CONNECTION REFUSED]</span><br>Ensure netlify/functions/summarize.js is deployed.";
+    }
 }
 
 </script>
