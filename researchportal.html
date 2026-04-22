@@ -233,6 +233,7 @@ h1
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
+    align-items: center;
 }
 
 .btn
@@ -247,23 +248,15 @@ h1
     font-size: 13px;
     text-transform: uppercase;
     letter-spacing: 1px;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
 }
 
 .btn:hover
 {
     background: var(--gold);
     color: black;
-}
-
-.btn-ai {
-    border: 1px solid #444;
-    color: #888;
-}
-
-.btn-ai:hover {
-    border-color: white;
-    color: white;
-    background: transparent;
 }
 
 /* AI Terminal Drawer */
@@ -415,16 +408,12 @@ html
         </div>
 
         <div class="actions">
+            
+            <a href="tatamotors2026depthanalysis.pdf" target="_blank" class="btn">View Report</a>
 
-            <a href="tatamotors2026depthanalysis.pdf" target="_blank">
-                <button class="btn">View Report</button>
-            </a>
+            <a href="tatamotors2026depthanalysis.pdf" download class="btn">Download</a>
 
-            <a href="tatamotors2026depthanalysis.pdf" download>
-                <button class="btn">Download</button>
-            </a>
-
-            <button class="btn btn-ai" onclick="analyzeReport(this, 'Tata Motors structural analysis report for 2026. Key structural levels identified with major resistance zones. High liquidity void present in the upper quadrant. Market positioning remains strong long-term with EV expansion driving forward volume. P/E ratio is healthy and structural support sits at the 850 zone.')">AI Analysis</button>
+            <button class="btn" onclick="analyzeReport(this, 'Tata Motors structural analysis report for 2026. Key structural levels identified with major resistance zones. High liquidity void present in the upper quadrant. Market positioning remains strong long-term with EV expansion driving forward volume. P/E ratio is healthy and structural support sits at the 850 zone.')">AI Analysis</button>
 
         </div>
 
@@ -556,6 +545,7 @@ async function analyzeReport(btn, reportContent) {
 
     } catch (err) {
         content.innerHTML = "<span style='color:#ff4d4d'>[CONNECTION ERROR]</span><br>Verify Google Apps Script URL or API Key.";
+        console.error("AI Fetch Error:", err);
     }
 }
 
@@ -621,6 +611,7 @@ async function askQuestion(btn) {
         document.getElementById('loading-msg').innerHTML = "<span style='color:#ff4d4d'>[ERROR COMMUNICATING WITH AI NODE]</span>";
         input.disabled = false;
         btn.disabled = false;
+        console.error("AI Chat Error:", err);
     }
 }
 
