@@ -358,6 +358,16 @@ body > * {
     color: black;
 }
 
+/* Success / Error Message Styling */
+#form-status {
+    margin-top: 20px;
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    text-align: center;
+    letter-spacing: 1px;
+    min-height: 20px; /* Prevents layout jump */
+}
+
 /* footer */
 .footer 
 {
@@ -460,7 +470,7 @@ body > * {
     <div class="contact-form">
         <h2>Send a Message</h2>
         
-        <form action="https://formspree.io/f/meevrbpg" method="POST">
+        <form id="contactForm" action="https://formspree.io/f/meevrbpg" method="POST">
             
             <div class="form-group">
                 <label for="name">Full Name</label>
@@ -482,7 +492,9 @@ body > * {
                 <textarea id="message" name="message" required placeholder="How can gRaviTy Research assist you?"></textarea>
             </div>
 
-            <button type="submit" class="submit-btn">Submit Inquiry</button>
+            <button type="submit" class="submit-btn" id="submitBtn">Submit Inquiry</button>
+            
+            <div id="form-status"></div>
 
         </form>
     </div>
@@ -516,7 +528,6 @@ if (!isTouchDevice) {
         cursorDot.style.top = e.clientY + 'px';
     });
 
-    // Added form inputs and buttons to the hover state logic
     const interactables = document.querySelectorAll('a, .menu-icon, .logo, input, textarea, button');
     interactables.forEach(el => {
         el.addEventListener('mouseenter', () => cursorDot.classList.add('hover-state'));
@@ -542,7 +553,6 @@ document.addEventListener("DOMContentLoaded", () => {
     links.forEach(link => {
         link.addEventListener('click', function(e) {
             const target = this.getAttribute('href');
-            // Ignore external links (like instagram) and mailto links so they open normally
             if (target && !target.startsWith('http') && !target.startsWith('mailto')) {
                 e.preventDefault();
                 transitionTo(target);
@@ -554,6 +564,53 @@ document.addEventListener("DOMContentLoaded", () => {
 window.addEventListener('pageshow', (event) => {
     if (event.persisted) {
         document.body.classList.remove('fade-out');
+    }
+});
+
+/* ================= BACKGROUND FORM SUBMISSION (AJAX) ================= */
+const form = document.getElementById("contactForm");
+const statusMessage = document.getElementById("form-status");
+const submitBtn = document.getElementById("submitBtn");
+
+form.addEventListener("submit", async function(event) {
+    event.preventDefault(); // Stop the default redirect
+    const data = new FormData(form);
+
+    // Change button text while sending
+    submitBtn.innerText = "Sending...";
+
+    try {
+        const response = await fetch(event.target.action, {
+            method: form.method,
+            body: data,
+            headers: {
+                'Accept': 'application/json'
+            }
+        });
+
+        if (response.ok) {
+            statusMessage.innerHTML = "Success! Your inquiry has been sent.";
+            statusMessage.style.color = "var(--gold)"; // Success color
+            form.reset(); // Clear the form fields completely
+        } else {
+            const responseData = await response.json();
+            if (Object.hasOwn(responseData, 'errors')) {
+                statusMessage.innerHTML = responseData.errors.map(error => error.message).join(", ");
+            } else {
+                statusMessage.innerHTML = "Oops! There was a problem submitting your form.";
+            }
+            statusMessage.style.color = "#ff4d4d"; // Red for error
+        }
+    } catch (error) {
+        statusMessage.innerHTML = "Oops! Network error. Please try again later.";
+        statusMessage.style.color = "#ff4d4d";
+    } finally {
+        submitBtn.innerText = "Submit Inquiry"; // Restore button text
+        
+        // Hide the success message after 5 seconds
+        setTimeout(() => {
+            statusMessage.innerHTML = "";
+        }, 5000);
     }
 });
 
