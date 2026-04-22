@@ -15,8 +15,11 @@
 {
     --gold: #d4af37;
     --bg: #050505;
-    --glass: rgba(255,255,255,0.04);
 }
+
+/* =========================
+   BASE
+========================= */
 
 html
 {
@@ -32,36 +35,73 @@ body
     overflow-x: hidden;
 }
 
-/* ==============================
-   CINEMATIC BACKGROUND LAYER
-============================== */
+/* =========================
+   CINEMATIC TRANSITION OVERLAY
+========================= */
 
-.bg-noise
+.page-transition
 {
     position: fixed;
     inset: 0;
-    background-image: url("https://www.transparenttextures.com/patterns/noise.png");
-    opacity: 0.04;
-    z-index: 0;
+    background: radial-gradient(circle at center, rgba(212,175,55,0.2), black 70%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    opacity: 0;
     pointer-events: none;
+    transition: 0.6s ease;
+    z-index: 9999;
 }
 
-/* GOLD ORBS */
+.page-transition.active
+{
+    opacity: 1;
+    pointer-events: all;
+}
+
+.loader-ring
+{
+    width: 60px;
+    height: 60px;
+    border: 2px solid rgba(212,175,55,0.2);
+    border-top: 2px solid var(--gold);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin
+{
+    to { transform: rotate(360deg); }
+}
+
+.loading-text
+{
+    margin-top: 15px;
+    color: var(--gold);
+    font-size: 12px;
+    letter-spacing: 2px;
+}
+
+/* =========================
+   BACKGROUND ORBS
+========================= */
+
 .orb
 {
     position: fixed;
     border-radius: 50%;
     filter: blur(120px);
-    opacity: 0.25;
+    opacity: 0.2;
     z-index: 0;
     pointer-events: none;
-    mix-blend-mode: screen;
 }
 
 .orb1
 {
-    width: 400px;
-    height: 400px;
+    width: 420px;
+    height: 420px;
     background: var(--gold);
     animation: float1 22s infinite linear;
 }
@@ -71,7 +111,7 @@ body
     width: 300px;
     height: 300px;
     background: var(--gold);
-    opacity: 0.18;
+    opacity: 0.15;
     animation: float2 28s infinite linear;
 }
 
@@ -100,14 +140,14 @@ body
 
 @keyframes float3
 {
-    0% { top: 40%; left: 0%; }
+    0% { top: 50%; left: 0%; }
     50% { top: 10%; left: 90%; }
-    100% { top: 40%; left: 0%; }
+    100% { top: 50%; left: 0%; }
 }
 
-/* ==============================
-   SIDEBAR (UNCHANGED FUNCTIONAL CORE)
-============================== */
+/* =========================
+   SIDEBAR
+========================= */
 
 .sidebar
 {
@@ -121,7 +161,6 @@ body
     transition: 0.35s ease;
     padding-top: 80px;
     z-index: 1000;
-    border-right: 1px solid rgba(255,255,255,0.06);
 }
 
 .sidebar.open
@@ -140,7 +179,6 @@ body
     font-size: 10px;
     letter-spacing: 2px;
     color: var(--gold);
-    opacity: 0.7;
 }
 
 .sidebar a
@@ -163,7 +201,7 @@ body
 {
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.55);
+    background: rgba(0,0,0,0.5);
     opacity: 0;
     pointer-events: none;
     transition: 0.3s;
@@ -176,9 +214,9 @@ body
     pointer-events: all;
 }
 
-/* ==============================
-   NAV BAR
-============================== */
+/* =========================
+   NAV
+========================= */
 
 .nav
 {
@@ -194,7 +232,6 @@ body
     z-index: 1001;
 }
 
-/* menu icon */
 .menu-icon span
 {
     display: block;
@@ -202,12 +239,11 @@ body
     height: 2px;
     background: var(--gold);
     margin: 5px 0;
-    transition: 0.3s;
 }
 
-/* ==============================
-   HERO (CINEMATIC CORE)
-============================== */
+/* =========================
+   HERO
+========================= */
 
 .hero
 {
@@ -222,44 +258,27 @@ body
     font-family: 'Playfair Display', serif;
     font-size: clamp(44px, 6vw, 78px);
     color: var(--gold);
-    letter-spacing: 1px;
-
-    animation: fadeDown 1.2s ease;
 }
 
 .hero p
 {
-    max-width: 750px;
+    max-width: 700px;
     margin: 20px auto;
-    color: #a0a0a0;
+    color: #aaa;
     line-height: 1.8;
-    animation: fadeUp 1.4s ease;
 }
 
-/* HERO ANIMATIONS */
-@keyframes fadeDown
-{
-    from { opacity: 0; transform: translateY(-30px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes fadeUp
-{
-    from { opacity: 0; transform: translateY(30px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-/* CTA BUTTON */
+/* CTA */
 .btn
 {
     display: inline-block;
-    margin-top: 25px;
     padding: 12px 28px;
     border: 1px solid var(--gold);
     color: var(--gold);
     background: transparent;
     cursor: pointer;
     transition: 0.25s;
+    margin-top: 25px;
 }
 
 .btn:hover
@@ -267,21 +286,21 @@ body
     background: var(--gold);
     color: black;
     transform: translateY(-3px);
-    box-shadow: 0 0 30px rgba(212,175,55,0.3);
 }
 
-/* ==============================
-   PREMIUM SCROLL SECTIONS
-============================== */
+/* =========================
+   SECTIONS (LIGHT PREVIEW ONLY)
+========================= */
 
 section
 {
-    max-width: 1100px;
+    max-width: 1000px;
     margin: auto;
-    padding: 90px 20px;
+    padding: 60px 20px;
+    text-align: center;
     opacity: 0;
-    transform: translateY(50px);
-    transition: 0.7s ease;
+    transform: translateY(40px);
+    transition: 0.6s ease;
 }
 
 section.show
@@ -292,61 +311,14 @@ section.show
 
 h2
 {
-    text-align: center;
     color: var(--gold);
     font-family: 'Playfair Display', serif;
-    font-size: 32px;
 }
 
-/* GRID SYSTEM */
-.grid
-{
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px,1fr));
-    gap: 25px;
-    margin-top: 40px;
-}
+/* =========================
+   FOOTER
+========================= */
 
-/* PREMIUM CARD */
-.card
-{
-    background: var(--glass);
-    border: 1px solid rgba(255,255,255,0.06);
-    padding: 25px;
-    border-radius: 16px;
-    transition: 0.3s;
-    position: relative;
-    overflow: hidden;
-}
-
-/* LIGHT TRACKING EFFECT */
-.card::before
-{
-    content: "";
-    position: absolute;
-    width: 150px;
-    height: 150px;
-    background: radial-gradient(circle, rgba(212,175,55,0.2), transparent 70%);
-    top: var(--y, 50%);
-    left: var(--x, 50%);
-    transform: translate(-50%, -50%);
-    opacity: 0;
-    transition: 0.2s;
-}
-
-.card:hover::before
-{
-    opacity: 1;
-}
-
-.card:hover
-{
-    transform: translateY(-8px);
-    border-color: var(--gold);
-    box-shadow: 0 0 40px rgba(212,175,55,0.2);
-}
-
-/* FOOTER */
 footer
 {
     text-align: center;
@@ -373,8 +345,13 @@ body > *
 
 <body>
 
-<!-- BACKGROUND -->
-<div class="bg-noise"></div>
+<!-- TRANSITION SCREEN -->
+<div class="page-transition" id="transition">
+    <div class="loader-ring"></div>
+    <div class="loading-text">ENTERING SYSTEM</div>
+</div>
+
+<!-- ORBS -->
 <div class="orb orb1"></div>
 <div class="orb orb2"></div>
 <div class="orb orb3"></div>
@@ -386,11 +363,11 @@ body > *
 
 <div class="sidebar-content">
 
-<div class="menu-label">Advanced Tools</div>
+<div class="menu-label">Tools</div>
 <a onclick="go('calc.html')">Wealth Calculators</a>
 <a onclick="go('clock.html')">Market Clock</a>
 
-<div class="menu-label">Our Firm</div>
+<div class="menu-label">Firm</div>
 <a onclick="go('aboutus.html')">About Us</a>
 <a onclick="go('vision.html')">Our Vision</a>
 
@@ -420,64 +397,31 @@ body > *
 
 <h1>gRaviTy Intelligence</h1>
 
-<p>
-A structured financial intelligence system built to decode liquidity, behavior, and probability flow in modern markets.
-</p>
+<p>Markets behave like systems — not randomness. We decode structure, liquidity, and human reaction flow.</p>
 
-<a class="btn" href="#core">Enter System</a>
-
-</div>
-
-<!-- CORE -->
-<section id="core">
-
-<h2>Core Engine</h2>
-
-<div class="grid">
-
-<div class="card">Liquidity Mapping</div>
-<div class="card">Market Structure Logic</div>
-<div class="card">Price Action Decoding</div>
-<div class="card">Volatility Tracking</div>
+<!-- FIXED BUTTON -->
+<button class="btn" onclick="enterSystem()">Enter System</button>
 
 </div>
 
+<!-- MINIMAL PREVIEW ONLY -->
+<section>
+<h2>Structure</h2>
+<p>Market behavior is built on repeating structural logic.</p>
 </section>
 
-<!-- SYSTEM -->
 <section>
-
-<h2>Research System</h2>
-
-<div class="grid">
-
-<div class="card">Behavioral Analysis</div>
-<div class="card">Probability Weighting</div>
-<div class="card">Trend Architecture</div>
-<div class="card">Signal Filtering</div>
-
-</div>
-
+<h2>Behavior</h2>
+<p>Human emotion drives volatility more than data.</p>
 </section>
 
-<!-- ACCESS -->
 <section>
-
-<h2>Access Layer</h2>
-
-<div class="grid">
-
-<div class="card" onclick="go('researchportal.html')">Research Portal</div>
-<div class="card" onclick="go('calc.html')">Financial Tools</div>
-<div class="card" onclick="go('clock.html')">Market Clock</div>
-<div class="card">Insights Feed</div>
-
-</div>
-
+<h2>Probability</h2>
+<p>Every move is weighted, not random.</p>
 </section>
 
 <footer>
-gRaviTy Research • Market Intelligence System
+gRaviTy Research • Intelligence Layer
 </footer>
 
 <script>
@@ -493,6 +437,18 @@ function go(p)
     window.location.href = p;
 }
 
+/* ENTER SYSTEM FIX (REAL TRANSITION) */
+function enterSystem()
+{
+    const t = document.getElementById("transition");
+    t.classList.add("active");
+
+    setTimeout(() =>
+    {
+        window.location.href = "aboutus.html";
+    }, 1200);
+}
+
 /* scroll reveal */
 const sections = document.querySelectorAll("section");
 
@@ -504,17 +460,6 @@ window.addEventListener("scroll", () =>
         {
             s.classList.add("show");
         }
-    });
-});
-
-/* interactive glow tracking */
-document.querySelectorAll(".card").forEach(card =>
-{
-    card.addEventListener("mousemove", e =>
-    {
-        const rect = card.getBoundingClientRect();
-        card.style.setProperty("--x", (e.clientX - rect.left) + "px");
-        card.style.setProperty("--y", (e.clientY - rect.top) + "px");
     });
 });
 
