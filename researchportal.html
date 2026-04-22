@@ -4,239 +4,520 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Research Portal | gRaviTy Research</title>
+
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Inter:wght@100;200;300;400;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Inter:wght@300;400;500&display=swap');
 
         :root {
             --gold: #d4af37;
             --bg: #050505;
         }
 
-        /* ================= PROTECTION & TRANSITIONS ================= */
+        /* ================= PROTECTION STYLES ================= */
         body {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
             margin: 0;
             font-family: 'Inter', sans-serif;
             background: var(--bg);
             color: white;
             overflow-x: hidden;
-            -webkit-user-select: none;
-            user-select: none;
             opacity: 1;
-            transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: opacity 0.4s ease-in-out;
         }
 
-        body.fade-out { opacity: 0; }
+        body.fade-out {
+            opacity: 0;
+        }
 
         /* ================= CUSTOM CURSOR ================= */
         * { cursor: none !important; }
-
+        
         .cursor-dot {
-            width: 6px; height: 6px; background: var(--gold);
-            position: fixed; top: 0; left: 0; border-radius: 50%;
-            pointer-events: none; z-index: 10000;
+            width: 6px;
+            height: 6px;
+            background: var(--gold);
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 10000;
             transform: translate(-50%, -50%);
+            box-shadow: 0 0 10px var(--gold);
+            transition: width 0.2s, height 0.2s, box-shadow 0.2s;
+        }
+        
+        .cursor-dot.hover-state {
+            width: 12px;
+            height: 12px;
             box-shadow: 0 0 15px var(--gold);
-            transition: width 0.3s ease, height 0.3s ease;
         }
 
-        .cursor-dot.hover-state { width: 30px; height: 30px; background: rgba(212, 175, 55, 0.05); border: 1px solid var(--gold); }
+        /* ================= BACKGROUND GLOW ================= */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle at 30% 20%, rgba(212,175,55,0.06), transparent 50%),
+                        radial-gradient(circle at 70% 80%, rgba(212,175,55,0.04), transparent 60%);
+            z-index: 0;
+        }
 
-        /* ================= NAV & SIDEBAR ================= */
+        /* ================= NAVIGATION ================= */
         .nav {
-            position: fixed; top: 0; width: 100%; display: flex;
-            justify-content: space-between; align-items: center;
-            padding: 25px 40px; z-index: 1001; box-sizing: border-box;
-            background: rgba(5, 5, 5, 0.8); backdrop-filter: blur(10px);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 25px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(5,5,5,0.9);
+            backdrop-filter: blur(8px);
+            z-index: 1001;
+            box-sizing: border-box;
         }
 
         .menu-icon { cursor: pointer; }
-        .menu-icon span { display: block; width: 22px; height: 1px; background: var(--gold); margin: 6px 0; }
-
-        .logo { font-family: 'Playfair Display', serif; font-size: 22px; color: var(--gold); letter-spacing: 3px; text-decoration: none; }
-
-        .sidebar {
-            width: 0; height: 100%; position: fixed; left: 0; top: 0;
-            background: rgba(3, 3, 3, 0.98); backdrop-filter: blur(20px);
-            overflow-x: hidden; transition: 0.5s cubic-bezier(0.77, 0, 0.175, 1);
-            padding-top: 100px; z-index: 1000; border-right: 1px solid rgba(212, 175, 55, 0.15);
+        .menu-icon span {
+            display: block;
+            width: 22px;
+            height: 1px;
+            background: var(--gold);
+            margin: 6px 0;
         }
 
-        .sidebar.open { width: 280px; }
-        .sidebar a { display: block; padding: 18px 40px; color: #999; text-decoration: none; font-size: 14px; transition: 0.3s; }
-        .sidebar a:hover { color: var(--gold); padding-left: 50px; }
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--gold);
+            letter-spacing: 3px;
+            text-decoration: none;
+            cursor: pointer;
+        }
 
-        /* ================= CONTENT ================= */
-        .container { padding: 140px 20px 60px; max-width: 900px; margin: auto; position: relative; z-index: 2; }
+        /* ================= SIDEBAR ================= */
+        .sidebar {
+            width: 0;
+            height: 100%;
+            position: fixed;
+            left: 0;
+            top: 0;
+            background: rgba(3, 3, 3, 0.98);
+            backdrop-filter: blur(20px);
+            transition: 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+            padding-top: 100px;
+            z-index: 1000;
+            border-right: 1px solid rgba(212, 175, 55, 0.15);
+            overflow-x: hidden;
+        }
         
-        h1 { font-family: 'Playfair Display', serif; color: var(--gold); font-size: 40px; text-align: center; margin-bottom: 50px; }
+        .sidebar.open { width: 280px; }
+        .sidebar-content { padding: 0 30px; }
+        
+        .menu-label {
+            margin-top: 25px;
+            font-size: 10px;
+            letter-spacing: 2px;
+            color: var(--gold);
+            opacity: 0.6;
+            text-transform: uppercase;
+        }
+        
+        .sidebar a {
+            display: block;
+            padding: 18px 0;
+            color: #999;
+            text-decoration: none;
+            font-size: 14px;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+        
+        .sidebar a:hover {
+            color: var(--gold);
+            padding-left: 10px;
+        }
 
+        /* ================= MAIN CONTAINER ================= */
+        .container {
+            padding: 140px 20px 60px;
+            max-width: 900px;
+            margin: auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        h1 {
+            text-align: center;
+            font-family: 'Playfair Display', serif;
+            color: var(--gold);
+            font-size: clamp(32px, 5vw, 48px);
+            margin-bottom: 50px;
+        }
+
+        /* ================= REPORT CARD ================= */
         .report-card {
             background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(212, 175, 55, 0.1);
-            padding: 35px; margin-bottom: 30px; transition: 0.4s;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 35px;
+            transition: 0.4s ease;
+            border-radius: 8px;
         }
-
-        .report-card:hover { border-color: var(--gold); transform: translateY(-5px); }
-
-        .report-title { font-family: 'Playfair Display', serif; font-size: 24px; color: var(--gold); margin-bottom: 15px; }
-        .report-desc { color: #aaa; font-size: 15px; line-height: 1.8; margin-bottom: 25px; }
-
-        .actions { display: flex; gap: 15px; flex-wrap: wrap; }
-
-        .btn {
-            padding: 12px 25px; border: 1px solid var(--gold); background: transparent;
-            color: var(--gold); font-family: 'Inter', sans-serif; font-size: 12px;
-            letter-spacing: 2px; text-transform: uppercase; cursor: pointer; transition: 0.3s;
-            text-decoration: none; display: inline-block;
-        }
-
-        .btn:hover { background: var(--gold); color: black; box-shadow: 0 0 20px rgba(212, 175, 55, 0.2); }
-        .btn:active { transform: scale(0.95); }
-
-        /* ================= TERMINAL ================= */
-        .terminal {
-            display: none; margin-top: 30px; background: #000;
-            border-left: 2px solid var(--gold); padding: 25px;
-            font-family: 'Courier New', monospace; font-size: 13px;
-        }
-
-        .term-header { color: var(--gold); display: flex; justify-content: space-between; border-bottom: 1px solid #222; padding-bottom: 10px; margin-bottom: 20px; }
         
-        .term-content { max-height: 400px; overflow-y: auto; color: #00ff41; line-height: 1.6; }
-
-        .chat-box { display: none; margin-top: 20px; border-top: 1px solid #222; padding-top: 20px; gap: 10px; }
-        .chat-input {
-            flex: 1; background: transparent; border: 1px solid #333;
-            color: white; padding: 12px; font-family: 'Inter', sans-serif; outline: none;
+        .report-card:hover {
+            border-color: var(--gold);
+            transform: translateY(-5px);
         }
-        .chat-input:focus { border-color: var(--gold); }
+        
+        .report-title {
+            font-size: 22px;
+            color: var(--gold);
+            margin-bottom: 15px;
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .report-desc {
+            color: #888;
+            font-size: 15px;
+            line-height: 1.7;
+            margin-bottom: 30px;
+        }
 
-        .footer { text-align: center; padding: 60px 20px; color: #444; font-size: 11px; letter-spacing: 2px; }
+        /* ================= BUTTONS ================= */
+        .actions {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            border: 1px solid var(--gold);
+            background: transparent;
+            color: var(--gold);
+            font-family: 'Inter', sans-serif;
+            font-size: 12px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+        
+        .btn:hover {
+            background: var(--gold);
+            color: black;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+        }
 
-        @media (max-width: 768px) {
-            * { cursor: auto !important; } .cursor-dot { display: none; }
-            .sidebar.open { width: 100%; } .nav { padding: 20px; }
-            .actions { flex-direction: column; } .btn { width: 100%; text-align: center; box-sizing: border-box; }
+        /* ================= AI TERMINAL ================= */
+        .terminal {
+            display: none;
+            margin-top: 30px;
+            padding: 25px;
+            background: #080808;
+            border-left: 2px solid var(--gold);
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        .term-header {
+            color: var(--gold);
+            margin-bottom: 15px;
+            border-bottom: 1px solid #222;
+            padding-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .term-content {
+            max-height: 400px;
+            overflow-y: auto;
+            padding-bottom: 15px;
+            color: #ccc;
+        }
+        
+        .chat-box {
+            display: none;
+            margin-top: 15px;
+            border-top: 1px solid #222;
+            padding-top: 20px;
+            gap: 10px;
+        }
+        
+        .chat-input {
+            flex: 1;
+            background: #111;
+            border: 1px solid #333;
+            color: white;
+            padding: 12px;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            transition: 0.3s;
+        }
+        
+        .chat-input:focus {
+            border-color: var(--gold);
+        }
+
+        .footer {
+            text-align: center;
+            padding: 60px;
+            color: #444;
+            font-size: 11px;
+            letter-spacing: 2px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #000; }
+        ::-webkit-scrollbar-thumb { background: #d4af37; }
+        html { scrollbar-width: thin; scrollbar-color: #d4af37 #000; scroll-behavior: smooth; }
+
+        /* ================= MOBILE RESPONSIVENESS ================= */
+        @media screen and (max-width: 768px) {
+            * { cursor: auto !important; }
+            .cursor-dot { display: none !important; }
+            .sidebar.open { width: 100%; }
+            .actions { flex-direction: column; width: 100%; }
+            .btn { width: 100%; box-sizing: border-box; }
+            .chat-box { flex-direction: column; }
         }
     </style>
 </head>
-<body>
+<body oncontextmenu="return false;">
 
-<div class="cursor-dot" id="cursor-dot"></div>
+    <div class="cursor-dot" id="cursor-dot"></div>
 
-<div id="sidebar" class="sidebar">
-    <a href="index.html">Home</a>
-    <a href="aboutus.html">About Us</a>
-    <a href="vision.html">Our Vision</a>
-    <a href="calc.html">Wealth Calculators</a>
-    <a href="clock.html">Market Clock</a>
-    <a href="contactus.html">Contact Us</a>
-</div>
-
-<div class="nav">
-    <div class="menu-icon" id="menuBtn"><span></span><span></span><span></span></div>
-    <div class="logo" style="cursor:pointer" onclick="goHome()">gRaviTy</div>
-</div>
-
-<div class="container">
-    <h1>Research Portal</h1>
-
-    <div class="report-card">
-        <div class="report-title">Tata Motors — 2026 Depth Analysis</div>
-        <div class="report-desc">A professional breakdown of structural market behavior and fundamental growth drivers for Tata Motors through the 2026 fiscal cycle.</div>
-        
-        <div class="actions">
-            <a href="tatamotors2026depthanalysis.pdf" target="_blank" class="btn ignore-transition">View Report</a>
-            <a href="tatamotors2026depthanalysis.pdf" download class="btn ignore-transition">Download</a>
-            <button class="btn ignore-transition" onclick="analyzeReport(this, 'Context: Tata Motors Analysis 2026. Key resistance at 1100, Support at 850. Bullish on EV infrastructure and long-term liquidity voids.')">AI Analysis</button>
+    <div id="sidebar" class="sidebar">
+        <div class="sidebar-content">
+            <div class="menu-label">Navigation</div>
+            <a href="index.html">Home</a>
+            <a href="aboutus.html">About Us</a>
+            <a href="vision.html">Our Vision</a>
+            
+            <div class="menu-label">Tools</div>
+            <a href="calc.html">Wealth Calculators</a>
+            <a href="clock.html">Market Clock</a>
+            
+            <div class="menu-label">Access</div>
+            <a href="contactus.html">Contact Us</a>
+            <a href="researchportal.html" style="color: var(--gold);">Research Portal</a>
         </div>
+    </div>
 
-        <div class="terminal">
-            <div class="term-header"><span>> gRaviTy AI ANALYST v2.0</span><span style="cursor:pointer" onclick="this.closest('.terminal').style.display='none'">[X]</span></div>
-            <div class="term-content">Initializing security protocols...</div>
-            <div class="chat-box">
-                <input type="text" class="chat-input" placeholder="Query the AI regarding this report..." onkeypress="if(event.key==='Enter') askQuestion(this.nextElementSibling)">
-                <button class="btn" onclick="askQuestion(this)" style="padding: 12px 20px;">Ask</button>
+    <div class="nav">
+        <div class="menu-icon" id="menuBtn">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <a href="index.html" class="logo">gRaviTy</a>
+    </div>
+
+    <div class="container">
+        <h1>Research Reports</h1>
+
+        <div class="report-card">
+            <div class="report-title">Tata Motors — 2026 Depth Analysis</div>
+            <div class="report-desc">
+                A high-conviction structural breakdown. We analyze the 2026 expansion cycle, EV dominance, 
+                and key institutional liquidity zones for the upcoming fiscal years.
+            </div>
+            
+            <div class="actions">
+                <a href="tatamotors2026depthanalysis.pdf" target="_blank" class="btn">View Report</a>
+                <a href="tatamotors2026depthanalysis.pdf" download class="btn">Download</a>
+                
+                <button class="btn" onclick="analyzeReport(this, 'Tata Motors Depth Analysis 2026. Focus: EV segment growth, JLR margin recovery, and structural support at 850. Major resistance at 1150. Outlook: Bullish above structural pivots. Institutional holding remains strong.')">AI Analysis</button>
+            </div>
+
+            <div class="terminal">
+                <div class="term-header">
+                    <span>> gRaviTy AI ANALYST v2.0</span>
+                    <span style="cursor:pointer; color: #555; transition: 0.3s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#555'" onclick="this.closest('.terminal').style.display='none'">[X]</span>
+                </div>
+                <div class="term-content">Initializing neural link...</div>
+                
+                <div class="chat-box">
+                    <input type="text" class="chat-input" placeholder="Ask specific questions about this report..." onkeypress="if(event.key==='Enter') askQuestion(this.nextElementSibling)">
+                    <button class="btn" onclick="askQuestion(this)">Send</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<div class="footer">© 2026 gRaviTy RESEARCH — SYSTEM SECURE</div>
+    <div class="footer">
+        © 2026 gRaviTy RESEARCH — ALL RIGHTS RESERVED
+    </div>
 
-<script>
-    // CONFIG: PASTE YOUR GOOGLE SCRIPT URL HERE
-    const GAS_URL = "https://script.google.com/macros/s/AKfycbycKRN36WPz1nPVZVfIl9bY3ISWWezB93mwxY8mqBAPQTdQvBe7iWFEEYO7dOjELOFE/exec";
+    <script>
+        // ================= YOUR GAS DEPLOYMENT URL =================
+        const GAS_URL = "https://script.google.com/macros/s/AKfycbyNfb0K6JZQSKaSbChxJcVf0_X_UJVG109YUsSQfaFJSxZbx1Prko5U6CI8f6k3uf5y/exec";
 
-    // Navigation & Sidebar
-    const sidebar = document.getElementById("sidebar");
-    const menuBtn = document.getElementById("menuBtn");
-    menuBtn.addEventListener("click", (e) => { e.stopPropagation(); sidebar.classList.toggle("open"); });
-    document.addEventListener("click", () => sidebar.classList.remove("open"));
+        // ================= SIDEBAR MENU LOGIC =================
+        const menuBtn = document.getElementById('menuBtn');
+        const sidebar = document.getElementById('sidebar');
+        
+        menuBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            sidebar.classList.toggle('open');
+        });
+        
+        document.addEventListener('click', (e) => {
+            if(!sidebar.contains(e.target) && e.target !== menuBtn) {
+                sidebar.classList.remove('open');
+            }
+        });
 
-    function goHome() { transitionTo('index.html'); }
-    function transitionTo(url) {
-        document.body.classList.add('fade-out');
-        setTimeout(() => { window.location.href = url; }, 400);
-    }
-
-    // Protection for Internal Links
-    document.addEventListener("click", (e) => {
-        const link = e.target.closest("a");
-        if (link && !link.classList.contains('ignore-transition') && !link.href.includes('.pdf') && !link.href.startsWith('http')) {
-            e.preventDefault();
-            transitionTo(link.href);
+        // ================= CUSTOM CURSOR LOGIC =================
+        const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+        
+        if (!isTouchDevice) {
+            const cursorDot = document.getElementById('cursor-dot');
+            window.addEventListener('mousemove', (e) => {
+                cursorDot.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0) translate(-50%, -50%)`;
+            });
+            
+            const interactables = document.querySelectorAll('a, button, .menu-icon, .logo, input');
+            interactables.forEach(el => {
+                el.addEventListener('mouseenter', () => cursorDot.classList.add('hover-state'));
+                el.addEventListener('mouseleave', () => cursorDot.classList.remove('hover-state'));
+            });
         }
-    });
 
-    // Custom Cursor
-    if (!isTouchDevice()) {
-        const dot = document.getElementById('cursor-dot');
-        window.addEventListener('mousemove', (e) => {
-            dot.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0) translate(-50%, -50%)`;
+        // ================= SEAMLESS PAGE TRANSITIONS =================
+        function transitionTo(url) {
+            document.body.classList.add('fade-out');
+            setTimeout(() => { window.location.href = url; }, 400);
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            document.querySelectorAll('a[href]').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    const target = this.getAttribute('href');
+                    // Ensure links bypass the transition if they are external, pdf downloads, or empty links
+                    if (target && !target.endsWith('.pdf') && !target.startsWith('http') && !target.startsWith('mailto') && target !== '#') {
+                        e.preventDefault();
+                        transitionTo(target);
+                    }
+                });
+            });
         });
-        document.querySelectorAll('a, button, .menu-icon, .logo').forEach(el => {
-            el.addEventListener('mouseenter', () => dot.classList.add('hover-state'));
-            el.addEventListener('mouseleave', () => dot.classList.remove('hover-state'));
+
+        window.addEventListener('pageshow', (event) => {
+            if (event.persisted) document.body.classList.remove('fade-out');
         });
-    }
-    function isTouchDevice() { return 'ontouchstart' in window || navigator.maxTouchPoints > 0; }
 
-    // AI LOGIC
-    async function analyzeReport(btn, content) {
-        const term = btn.closest('.report-card').querySelector('.terminal');
-        const termBody = term.querySelector('.term-content');
-        term.style.display = 'block';
-        term.setAttribute('data-report', content);
-        termBody.innerHTML = "> Connecting to Gemini Pro...<br>> Decrypting structure...";
+        // ================= AI TERMINAL & CHAT LOGIC =================
+        async function analyzeReport(btn, content) {
+            const terminal = btn.closest('.report-card').querySelector('.terminal');
+            const termContent = terminal.querySelector('.term-content');
+            const chatBox = terminal.querySelector('.chat-box');
+            
+            terminal.style.display = 'block';
+            chatBox.style.display = 'none'; // Hide until summary is complete
+            terminal.setAttribute('data-report', content); // Store report text for context
+            
+            termContent.innerHTML = "Establishing secure link to gRaviTy AI Node...<br>Decrypting structural market data...<br><br>";
+            
+            try {
+                const res = await fetch(GAS_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({ reportText: content, question: "" })
+                });
+                
+                const data = await res.json();
+                termContent.innerHTML = "";
+                
+                // Typing effect callback unhides the chatbox
+                typeText(termContent, data.summary || "No data received.", () => {
+                    chatBox.style.display = 'flex';
+                });
+                
+            } catch (e) {
+                termContent.innerHTML = "<span style='color:#ff4d4d'>[SYSTEM ERROR: AI CONNECTION REFUSED]</span><br>Ensure Google Apps Script deployment is correct and unrestricted.";
+                console.error("Fetch error: ", e);
+            }
+        }
 
-        try {
-            const res = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ reportText: content, question: "" }) });
-            const data = await res.json();
-            termBody.innerHTML = "> SUMMARY GENERATED:<br><br>" + data.summary.replace(/\n/g, '<br>');
-            term.querySelector('.chat-box').style.display = 'flex';
-        } catch (e) { termBody.innerHTML = "> [CONNECTION ERROR] Deployment must be set to 'Anyone'."; }
-    }
+        async function askQuestion(btn) {
+            const terminal = btn.closest('.terminal');
+            const input = terminal.querySelector('.chat-input');
+            const termContent = terminal.querySelector('.term-content');
+            const question = input.value.trim();
+            
+            if(!question) return;
 
-    async function askQuestion(btn) {
-        const term = btn.closest('.terminal');
-        const input = term.querySelector('.chat-input');
-        const termBody = term.querySelector('.term-content');
-        const q = input.value;
-        if(!q) return;
+            // Display user message and loading state
+            termContent.innerHTML += `<br><br><span style="color:#fff">> USER: ${question}</span><br><span style="color:var(--gold)" id="loading-msg">> gRaviTy AI: Processing algorithm...</span>`;
+            termContent.scrollTop = termContent.scrollHeight;
+            input.value = "";
+            
+            // Disable inputs while fetching
+            input.disabled = true;
+            btn.disabled = true;
+            
+            try {
+                const res = await fetch(GAS_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({ 
+                        reportText: terminal.getAttribute('data-report'), 
+                        question: question 
+                    })
+                });
+                
+                const data = await res.json();
+                
+                // Remove loading message
+                document.getElementById('loading-msg').remove();
+                
+                // Type the AI's response
+                const answerSpan = document.createElement('span');
+                answerSpan.style.color = 'var(--gold)';
+                answerSpan.innerHTML = '> gRaviTy AI: ';
+                termContent.appendChild(answerSpan);
+                
+                typeText(answerSpan, data.summary || "No data received.", () => {
+                    input.disabled = false;
+                    btn.disabled = false;
+                    input.focus();
+                }, termContent);
+                
+            } catch (e) {
+                document.getElementById('loading-msg').remove();
+                termContent.innerHTML += "<br><span style='color:#ff4d4d'>[ERROR COMMUNICATING WITH AI NODE]</span>";
+                input.disabled = false;
+                btn.disabled = false;
+            }
+        }
 
-        termBody.innerHTML += `<br><br><span style="color:white">> USER QUERY: ${q}</span><br>> Processing...`;
-        const report = term.getAttribute('data-report');
-        input.value = "";
-        termBody.scrollTop = termBody.scrollHeight;
-
-        try {
-            const res = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ reportText: report, question: q }) });
-            const data = await res.json();
-            termBody.innerHTML += `<br>> gRaviTy AI: ${data.summary.replace(/\n/g, '<br>')}`;
-            termBody.scrollTop = termBody.scrollHeight;
-        } catch (e) { termBody.innerHTML += "<br>> [ERROR] AI Node unreachable."; }
-    }
-</script>
+        // Reusable typing animation
+        function typeText(el, text, callback, scrollContainer = null) {
+            let i = 0;
+            function step() {
+                if(i < text.length) {
+                    el.innerHTML += text.charAt(i) === '\n' ? '<br>' : text.charAt(i);
+                    i++;
+                    if(scrollContainer) scrollContainer.scrollTop = scrollContainer.scrollHeight;
+                    setTimeout(step, 15);
+                } else if(callback) {
+                    callback();
+                }
+            }
+            step();
+        }
+    </script>
 </body>
 </html>
