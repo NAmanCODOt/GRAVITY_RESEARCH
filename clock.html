@@ -68,7 +68,7 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
-/* ================= SIDEBAR (From calc.html) ================= */
+/* ================= SIDEBAR & MENU ================= */
 .sidebar {
     width: 0;
     height: 100%;
@@ -76,21 +76,20 @@ body {
     left: 0;
     top: 0;
     background: #0a0a0a;
-    box-shadow: 2px 0 15px rgba(0,0,0,0.5);
-    transition: 0.4s ease-in-out;
+    overflow-x: hidden;
+    transition: 0.35s ease;
     padding-top: 80px;
     z-index: 2000;
-    overflow-x: hidden;
 }
 
-.sidebar.open { 
-    width: 280px; 
-    border-right: 1px solid var(--gold);
+.sidebar.open {
+    width: 270px;
+    border-right: 1px solid var(--gold-dim);
 }
 
 .sidebar-content { 
-    min-width: 280px;
-    padding: 0 30px; 
+    min-width: 270px;
+    padding: 0 40px; 
 }
 
 .menu-label {
@@ -104,6 +103,7 @@ body {
 
 .sidebar a {
     display: block;
+    position: relative;
     padding: 14px 0;
     color: #888;
     text-decoration: none;
@@ -113,16 +113,42 @@ body {
 
 .sidebar a:hover {
     color: var(--gold);
-    padding-left: 10px;
+    transform: translateX(6px);
 }
 
-.close-btn {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    font-size: 28px;
-    cursor: pointer;
+/* "You Are Here" Active Indicator */
+.sidebar a.active {
     color: var(--gold);
+    padding-left: 12px;
+    letter-spacing: 0.5px;
+}
+
+.sidebar a.active::before {
+    content: '';
+    position: absolute;
+    left: -4px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 4px;
+    background: var(--gold);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--gold);
+}
+
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    opacity: 0;
+    pointer-events: none;
+    transition: 0.3s;
+    z-index: 1500;
+}
+
+.overlay.show {
+    opacity: 1;
+    pointer-events: all;
 }
 
 /* nav */
@@ -135,11 +161,12 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 25px 40px;
-    z-index: 100; /* Increased to stay above orbs */
+    z-index: 100;
     box-sizing: border-box;
 }
 
 .menu-icon { 
+    position: relative;
     cursor: pointer; 
     z-index: 101;
 }
@@ -205,6 +232,43 @@ body {
     z-index: 2;
     padding: 0 20px;
     box-sizing: border-box;
+}
+
+/* ================= PREMIUM HOME BUTTON ================= */
+.home-btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 24px;
+    background: rgba(212, 175, 55, 0.04);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    color: var(--gold);
+    text-decoration: none;
+    font-size: 11px;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    margin-bottom: 30px;
+    backdrop-filter: blur(4px);
+}
+
+.home-btn::before {
+    content: '←';
+    margin-right: 10px;
+    font-size: 14px;
+    transition: transform 0.4s ease;
+}
+
+.home-btn:hover {
+    background: var(--gold);
+    color: var(--bg);
+    border-color: var(--gold);
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.25);
+    transform: translateY(-2px);
+}
+
+.home-btn:hover::before {
+    transform: translateX(-4px);
 }
 
 .label {
@@ -340,10 +404,13 @@ body {
 
 <div class="cursor-dot" id="cursor-dot"></div>
 
+<div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
 <div id="sidebar" class="sidebar">
-    <span class="close-btn" onclick="closeMenu()">&times;</span>
     <div class="sidebar-content">
-        <div class="menu-label">Advanced Tools</div>
+        <div class="menu-label">System</div>
+        <a href="index.html">Home</a>
+        <a href="launch.html" class="active">Launch Status</a> <div class="menu-label">Advanced Tools</div>
         <a href="calc.html">Wealth Calculators</a>
         <a href="clock.html">Market Clock</a>
 
@@ -360,7 +427,7 @@ body {
 </div>
 
 <div class="nav">
-    <div class="menu-icon" onclick="openMenu(event)">
+    <div class="menu-icon" onclick="toggleMenu()">
         <span></span>
         <span></span>
         <span></span>
@@ -372,6 +439,7 @@ body {
 <div class="gold-orb orb2"></div>
 
 <div class="container">
+    <a href="index.html" class="home-btn">Home</a>
     <div class="label">System Launch Imminent</div>
 
     <div class="timer">
@@ -423,31 +491,17 @@ if (!isTouchDevice) {
         cursorDot.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0) translate(-50%, -50%)`;
     });
     
-    // Updated hover targets to include close-btn and logo-text
     document.querySelectorAll('a, button, .menu-icon, .logo-text, .unit-box, .close-btn').forEach(el => {
         el.addEventListener('mouseenter', () => cursorDot.classList.add('hover-state'));
         el.addEventListener('mouseleave', () => cursorDot.classList.remove('hover-state'));
     });
 }
 
-/* ================= MENU LOGIC ================= */
-function openMenu(event) {
-    event.stopPropagation(); 
-    document.getElementById("sidebar").classList.add("open");
+/* ================= MENU LOGIC (OVERLAY BASED) ================= */
+function toggleMenu() {
+    document.getElementById("sidebar").classList.toggle("open");
+    document.getElementById("overlay").classList.toggle("show");
 }
-
-function closeMenu() {
-    document.getElementById("sidebar").classList.remove("open");
-}
-
-document.addEventListener("click", function(e) {
-    const sb = document.getElementById("sidebar");
-    const menuIcon = document.querySelector(".menu-icon");
-
-    if (sb && menuIcon && !sb.contains(e.target) && !menuIcon.contains(e.target)) {
-        closeMenu();
-    }
-});
 
 /* ================= SEAMLESS PAGE TRANSITIONS ================= */
 document.addEventListener("DOMContentLoaded", () => {
