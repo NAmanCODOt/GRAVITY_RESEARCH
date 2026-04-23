@@ -7,12 +7,12 @@
 <title>Vision | gRaviTy Research</title>
 
 <style>
-
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Inter:wght@300;400&display=swap');
 
 :root {
     --gold: #d4af37;
-    --bg: #000;
+    --bg: #050505;
+    --gold-dim: rgba(212, 175, 55, 0.3);
 }
 
 /* ================= PROTECTION STYLES ================= */
@@ -66,7 +66,7 @@ body {
     overflow-x: hidden;
 }
 
-/* orbs */
+/* background orbs */
 .gold-orb {
     position: fixed;
     border-radius: 50%;
@@ -84,12 +84,12 @@ body {
 @keyframes move2 { 0% { transform: translate(80vw, 80vh); } 50% { transform: translate(10vw, 20vh); } 100% { transform: translate(80vw, 80vh); } }
 @keyframes move3 { 0% { transform: translate(0vw, 50vh); } 50% { transform: translate(90vw, 10vh); } 100% { transform: translate(0vw, 50vh); } }
 
-/* NAV */
+/* ================= NAV & STANDALONE HOME BUTTON ================= */
 .nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 30px;
+    padding: 25px 40px;
     position: fixed;
     width: 100%;
     top: 0;
@@ -98,6 +98,47 @@ body {
     backdrop-filter: blur(8px);
     z-index: 1002;
     box-sizing: border-box;
+}
+
+.nav-left {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+/* PREMIUM HOME BUTTON (MODERN) */
+.home-btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 20px;
+    background: rgba(212, 175, 55, 0.04);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    color: var(--gold);
+    text-decoration: none;
+    font-size: 10px;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    backdrop-filter: blur(4px);
+}
+
+.home-btn::before {
+    content: '←';
+    margin-right: 8px;
+    font-size: 12px;
+    transition: transform 0.4s ease;
+}
+
+.home-btn:hover {
+    background: var(--gold);
+    color: #000;
+    border-color: var(--gold);
+    transform: translateY(-2px);
+}
+
+.home-btn:hover::before {
+    transform: translateX(-3px);
 }
 
 /* Premium Hamburger Animation */
@@ -110,9 +151,9 @@ body {
 .menu-icon span {
     display: block;
     width: 22px;
-    height: 2px;
+    height: 1px; /* Matches launch page thickness */
     background: var(--gold);
-    margin: 5px 0;
+    margin: 6px 0;
     transition: 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
     transform-origin: left center;
 }
@@ -123,11 +164,12 @@ body {
 
 .logo {
     font-family: 'Playfair Display', serif;
-    font-size: 18px;
+    font-size: 22px;
     color: var(--gold);
     cursor: pointer;
     text-decoration: none;
-    letter-spacing: 2px;
+    letter-spacing: 3px;
+    font-weight: 600;
 }
 
 /* SIDEBAR & OVERLAY */
@@ -155,9 +197,9 @@ body {
     background: #0a0a0a;
     overflow-x: hidden;
     transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-    padding-top: 80px;
+    padding-top: 100px;
     z-index: 1001;
-    border-right: 1px solid rgba(212, 175, 55, 0.1);
+    border-right: 1px solid var(--gold-dim);
 }
 
 .sidebar.open {
@@ -212,10 +254,10 @@ body {
     box-shadow: 0 0 8px var(--gold);
 }
 
-/* hero */
+/* Content Styles */
 .hero {
     text-align: center;
-    padding: 140px 20px 80px;
+    padding: 180px 20px 80px;
     position: relative;
     z-index: 1;
 }
@@ -224,11 +266,12 @@ body {
     font-family: 'Playfair Display', serif;
     font-size: 42px;
     color: var(--gold);
+    margin-bottom: 20px;
 }
 
 .hero p {
     max-width: 750px;
-    margin: 20px auto;
+    margin: 0 auto;
     color: #9ca3af;
     font-size: 18px;
     line-height: 1.7;
@@ -251,11 +294,12 @@ body {
     background: #0a0a0a;
     padding: 25px;
     margin: 20px auto;
-    border-radius: 12px;
+    border-radius: 4px;
     max-width: 650px;
     border: 1px solid #1f1f1f;
     transition: 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
     will-change: transform;
+    backdrop-filter: blur(10px);
 }
 
 .card:hover {
@@ -263,28 +307,9 @@ body {
     transform: translateY(-4px);
 }
 
-.btn {
-    margin-top: 30px;
-    padding: 12px 28px;
-    background: rgba(212, 175, 55, 0.05);
-    border: 1px solid var(--gold);
-    color: var(--gold);
-    font-family: 'Inter';
-    font-size: 12px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.btn:hover {
-    background: var(--gold);
-    color: black;
-}
-
 .footer {
     text-align: center;
-    padding: 60px 20px 30px;
+    padding: 80px 20px 40px;
     font-size: 11px;
     color: #6b7280;
     letter-spacing: 1px;
@@ -296,9 +321,10 @@ body {
     .cursor-dot { display: none !important; }
     .sidebar.open { width: 100%; }
     .hero h1 { font-size: 34px; }
-    .hero p { font-size: 16px; }
+    .nav { padding: 20px; }
+    .nav-left { gap: 15px; }
+    .home-btn { padding: 6px 12px; font-size: 8px; }
 }
-
 </style>
 </head>
 
@@ -313,10 +339,13 @@ body {
 <div class="gold-orb orb3"></div>
 
 <div class="nav">
-    <div class="menu-icon" onclick="toggleMenu()">
-        <span></span>
-        <span></span>
-        <span></span>
+    <div class="nav-left">
+        <div class="menu-icon" onclick="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <a href="index.html" class="home-btn">Home</a>
     </div>
     <a href="index.html" class="logo">gRaviTy</a>
 </div>
@@ -324,7 +353,6 @@ body {
 <div id="sidebar" class="sidebar">
     <div class="sidebar-content">
         <div class="menu-label">System</div>
-        <a href="index.html">Home</a>
         <a href="launch.html">System Launch</a>
 
         <div class="menu-label">Advanced Tools</div>
@@ -359,10 +387,6 @@ body {
     <div class="card">
         Make structured market thinking accessible to everyone.
     </div>
-</div>
-
-<div class="section">
-    <button class="btn" onclick="goHome()">← Back to Home</button>
 </div>
 
 <div class="footer">
@@ -430,10 +454,6 @@ window.addEventListener('pageshow', (event) => {
         document.body.classList.remove('fade-out');
     }
 });
-
-function goHome() {
-    transitionTo('index.html');
-}
 </script>
 
 </body>
