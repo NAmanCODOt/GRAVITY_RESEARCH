@@ -227,6 +227,11 @@
             font-size: 14px;
             line-height: 1.6;
         }
+
+        /* FIX 1: Allow normal cursor inside the terminal so scrolling works! */
+        .terminal * {
+            cursor: auto !important; 
+        }
         
         .term-header {
             color: var(--gold);
@@ -235,12 +240,14 @@
             padding-bottom: 10px;
             display: flex;
             justify-content: space-between;
+            align-items: center;
         }
         
         .term-content {
-            max-height: 400px;
+            max-height: 350px;
             overflow-y: auto;
             padding-bottom: 15px;
+            padding-right: 15px; /* Room for scrollbar */
             color: #ccc;
         }
         
@@ -267,6 +274,12 @@
             border-color: var(--gold);
         }
 
+        /* Custom Scrollbar for Terminal */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #050505; }
+        ::-webkit-scrollbar-thumb { background: #d4af37; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #fff; }
+
         .footer {
             text-align: center;
             padding: 60px;
@@ -276,12 +289,6 @@
             position: relative;
             z-index: 1;
         }
-
-        /* Scrollbar styling */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #000; }
-        ::-webkit-scrollbar-thumb { background: #d4af37; }
-        html { scrollbar-width: thin; scrollbar-color: #d4af37 #000; scroll-behavior: smooth; }
 
         /* ================= MOBILE RESPONSIVENESS ================= */
         @media screen and (max-width: 768px) {
@@ -344,7 +351,10 @@
             <div class="terminal">
                 <div class="term-header">
                     <span>> gRaviTy AI ANALYST v2.0</span>
-                    <span style="cursor:pointer; color: #555; transition: 0.3s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#555'" onclick="this.closest('.terminal').style.display='none'">[X]</span>
+                    <div>
+                        <span style="color: #ff4d4d; font-size: 11px; letter-spacing: 1px; margin-right: 15px; cursor: pointer; transition: 0.3s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#ff4d4d'" onclick="endChat(this)">[END CHAT]</span>
+                        <span style="color: #555; cursor: pointer; transition: 0.3s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#555'" onclick="this.closest('.terminal').style.display='none'">[X]</span>
+                    </div>
                 </div>
                 <div class="term-content">Initializing neural link...</div>
                 
@@ -418,6 +428,20 @@
         });
 
         // ================= AI TERMINAL & CHAT LOGIC =================
+        
+        // FIX 4: Function to end the chat safely
+        window.endChat = function(btn) {
+            const terminal = btn.closest('.terminal');
+            const termContent = terminal.querySelector('.term-content');
+            const chatBox = terminal.querySelector('.chat-box');
+            
+            termContent.innerHTML += `<br><span style="color:#ff4d4d">> SYSTEM: Session manually terminated. Connection closed.</span><br>`;
+            termContent.scrollTop = termContent.scrollHeight;
+            
+            chatBox.style.display = 'none';
+            terminal.querySelector('.chat-input').value = "";
+        }
+
         async function analyzeReport(btn, content) {
             const terminal = btn.closest('.report-card').querySelector('.terminal');
             const termContent = terminal.querySelector('.term-content');
@@ -430,15 +454,16 @@
             termContent.innerHTML = "Establishing secure link to gRaviTy AI Node...<br>Decrypting structural market data...<br><br>";
             
             try {
+                // Initial load: Add hidden prompt for concise summary
+                const hiddenInstruction = "\n\n(System: Provide a very concise, 2-sentence executive summary. No markdown asterisks.)";
+                
                 const res = await fetch(VERCEL_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ reportText: content, question: "" })
+                    body: JSON.stringify({ reportText: content + hiddenInstruction, question: "" })
                 });
                 
-                if (!res.ok) {
-                    throw new Error(`HTTP error! status: ${res.status}`);
-                }
+                if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
 
                 const data = await res.json();
                 termContent.innerHTML = "";
@@ -448,8 +473,7 @@
                 });
                 
             } catch (e) {
-                termContent.innerHTML = `<span style='color:#ff4d4d'>[SYSTEM ERROR: AI CONNECTION REFUSED]</span><br>Details: ${e.message}<br>Check Vercel Server Logs for details.`;
-                console.error("Fetch error: ", e);
+                termContent.innerHTML = `<span style='color:#ff4d4d'>[SYSTEM ERROR: AI CONNECTION REFUSED]</span><br>Details: ${e.message}`;
             }
         }
 
@@ -464,23 +488,23 @@
             termContent.innerHTML += `<br><br><span style="color:#fff">> USER: ${question}</span><br><span style="color:var(--gold)" id="loading-msg">> gRaviTy AI: Processing algorithm...</span>`;
             termContent.scrollTop = termContent.scrollHeight;
             input.value = "";
-            
             input.disabled = true;
             btn.disabled = true;
             
             try {
+                // FIX 3: Force the AI to stop giving long rubbish answers
+                const strictPrompt = question + "\n\n(System Note: Answer extremely concisely in 1 to 3 sentences max. Do NOT use markdown asterisks or bullet points. Respond in plain professional text.)";
+
                 const res = await fetch(VERCEL_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ 
                         reportText: terminal.getAttribute('data-report'), 
-                        question: question 
+                        question: strictPrompt 
                     })
                 });
                 
-                if (!res.ok) {
-                    throw new Error(`HTTP error! status: ${res.status}`);
-                }
+                if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
 
                 const data = await res.json();
                 
@@ -500,24 +524,46 @@
                 }, termContent);
                 
             } catch (e) {
-                if(document.getElementById('loading-msg')) {
-                    document.getElementById('loading-msg').remove();
-                }
+                if(document.getElementById('loading-msg')) document.getElementById('loading-msg').remove();
                 termContent.innerHTML += `<br><span style='color:#ff4d4d'>[ERROR COMMUNICATING WITH AI NODE: ${e.message}]</span>`;
                 input.disabled = false;
                 btn.disabled = false;
             }
         }
 
-        // Reusable typing animation
+        // FIX 2: Upgraded Rich-Text Typewriter 
         function typeText(el, text, callback, scrollContainer = null) {
+            // Parses Markdown into clean HTML (bolding turns bright white)
+            let parsedText = text.replace(/\*\*(.*?)\*\*/g, '<strong style="color:#fff; font-weight:500;">$1</strong>');
+            parsedText = parsedText.replace(/\*(.*?)\*/g, '<em style="color:#e0c870;">$1</em>');
+            
             let i = 0;
+            let isTag = false;
+            let currentHTML = '';
+            
             function step() {
-                if(i < text.length) {
-                    el.innerHTML += text.charAt(i) === '\n' ? '<br>' : text.charAt(i);
+                if(i < parsedText.length) {
+                    let char = parsedText.charAt(i);
+                    if(char === '<') isTag = true;
+                    
+                    // Convert line breaks safely
+                    currentHTML += (char === '\n' && !isTag) ? '<br>' : char;
                     i++;
+                    
+                    if(isTag && char === '>') {
+                        isTag = false;
+                        step(); // skip delay for HTML tags
+                        return;
+                    }
+                    
+                    el.innerHTML = currentHTML;
                     if(scrollContainer) scrollContainer.scrollTop = scrollContainer.scrollHeight;
-                    setTimeout(step, 15);
+                    
+                    if(!isTag) {
+                        setTimeout(step, 10); // typing speed
+                    } else {
+                        step();
+                    }
                 } else if(callback) {
                     callback();
                 }
