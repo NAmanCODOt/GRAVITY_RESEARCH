@@ -361,8 +361,8 @@
     </div>
 
     <script>
-        // ================= YOUR GAS DEPLOYMENT URL =================
-        const GAS_URL = "https://script.google.com/macros/s/AKfycbxZKsDjsh7HcwwbEJUPkvEKPQ952Q4qfoFelphDJF2QFu6gTiJ8bYLsofI4ZfAoAKg/exec";
+        // ================= YOUR LIVE VERCEL AI BRIDGE =================
+        const VERCEL_URL = "https://gemini-api-bridge.vercel.app/api/chat";
 
         // ================= SIDEBAR MENU LOGIC =================
         const menuBtn = document.getElementById('menuBtn');
@@ -430,9 +430,9 @@
             termContent.innerHTML = "Establishing secure link to gRaviTy AI Node...<br>Decrypting structural market data...<br><br>";
             
             try {
-                // FIXED: Stripped out ALL custom headers to bypass the 405 error
-                const res = await fetch(GAS_URL, {
+                const res = await fetch(VERCEL_URL, {
                     method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ reportText: content, question: "" })
                 });
                 
@@ -448,7 +448,7 @@
                 });
                 
             } catch (e) {
-                termContent.innerHTML = `<span style='color:#ff4d4d'>[SYSTEM ERROR: AI CONNECTION REFUSED]</span><br>Details: ${e.message}<br>Verify script is set to 'Execute as: Me' and 'Access: Anyone'.`;
+                termContent.innerHTML = `<span style='color:#ff4d4d'>[SYSTEM ERROR: AI CONNECTION REFUSED]</span><br>Details: ${e.message}<br>Check Vercel Server Logs for details.`;
                 console.error("Fetch error: ", e);
             }
         }
@@ -469,9 +469,9 @@
             btn.disabled = true;
             
             try {
-                // FIXED: Stripped out ALL custom headers to bypass the 405 error
-                const res = await fetch(GAS_URL, {
+                const res = await fetch(VERCEL_URL, {
                     method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ 
                         reportText: terminal.getAttribute('data-report'), 
                         question: question 
