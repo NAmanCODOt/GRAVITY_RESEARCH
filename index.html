@@ -245,11 +245,6 @@
             transition: 0.25s;
         }
 
-        .sidebar a:hover {
-            color: var(--gold);
-            transform: translateX(6px);
-        }
-
         .sidebar a.active-link {
             color: var(--gold);
         }
@@ -410,11 +405,6 @@
             text-decoration: none;
         }
 
-        .btn:hover {
-            background: var(--gold);
-            color: black;
-        }
-
         /* ================= FEATURES (INSIGHTS CARDS) ================= */
         .features {
             max-width: 1000px;
@@ -451,10 +441,6 @@
             pointer-events: none;
         }
 
-        .feature:hover::before {
-            opacity: 1;
-        }
-
         .feature > * {
             position: relative;
             z-index: 1;
@@ -467,11 +453,6 @@
         .feature.show {
             opacity: 1;
             transform: translateY(0) scale(1); 
-        }
-
-        .feature:hover {
-            border-color: rgba(212,175,55,0.5);
-            box-shadow: 0 0 25px rgba(212,175,55,0.1), 0 0 80px rgba(212,175,55,0.05);
         }
 
         .feature h3 {
@@ -489,6 +470,29 @@
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #000; }
         ::-webkit-scrollbar-thumb { background: var(--gold); }
+
+        /* ================= PROTECTIVE HOVER QUERY ================= */
+        /* Only apply hover interactions on devices with a mouse/trackpad */
+        @media (hover: hover) and (pointer: fine) {
+            .sidebar a:hover {
+                color: var(--gold);
+                transform: translateX(6px);
+            }
+
+            .btn:hover {
+                background: var(--gold);
+                color: black;
+            }
+
+            .feature:hover::before {
+                opacity: 1;
+            }
+
+            .feature:hover {
+                border-color: rgba(212,175,55,0.5);
+                box-shadow: 0 0 25px rgba(212,175,55,0.1), 0 0 80px rgba(212,175,55,0.05);
+            }
+        }
 
         /* ================= MOBILE RESPONSIVENESS ================= */
         @media screen and (max-width: 768px) {
