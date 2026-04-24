@@ -46,6 +46,7 @@
             transform: translate(-50%, -50%);
             box-shadow: 0 0 10px var(--gold);
             transition: width 0.2s, height 0.2s, box-shadow 0.2s;
+            will-change: transform, width, height;
         }
         
         .cursor-dot.hover-state {
@@ -62,6 +63,24 @@
             background: radial-gradient(circle at 30% 20%, rgba(212,175,55,0.06), transparent 50%),
                         radial-gradient(circle at 70% 80%, rgba(212,175,55,0.04), transparent 60%);
             z-index: 0;
+            pointer-events: none;
+        }
+
+        /* ================= OVERLAY ================= */
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.65);
+            backdrop-filter: blur(4px);
+            opacity: 0;
+            pointer-events: none;
+            transition: 0.4s ease;
+            z-index: 1500;
+        }
+
+        .overlay.show {
+            opacity: 1;
+            pointer-events: all;
         }
 
         /* ================= NAVIGATION ================= */
@@ -69,14 +88,15 @@
             position: fixed;
             top: 0;
             width: 100%;
-            padding: 25px 40px;
+            padding: 20px 40px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(5,5,5,0.9);
-            backdrop-filter: blur(8px);
-            z-index: 1001;
+            background: rgba(5,5,5,0.85);
+            backdrop-filter: blur(12px);
+            z-index: 2500;
             box-sizing: border-box;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
         }
 
         .nav-left {
@@ -86,31 +106,30 @@
         }
 
         /* HAMBURGER TO X ANIMATION */
-        .menu-icon { 
-            cursor: pointer; 
-            z-index: 1002;
-        }
-        
-        .menu-icon span {
-            display: block;
-            width: 22px;
-            height: 1px;
-            background: var(--gold);
-            margin: 6px 0;
-            transition: 0.3s ease-in-out;
+        .menu-icon {
+            cursor: pointer;
+            position: relative;
+            z-index: 2501;
+            width: 30px;
+            height: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
-        .menu-icon.active span:nth-child(1) {
-            transform: translateY(7px) rotate(45deg);
+        .menu-icon span {
+            display: block;
+            width: 26px;
+            height: 2px;
+            background: var(--gold);
+            margin: 3px 0;
+            transition: 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            transform-origin: left center;
         }
-        
-        .menu-icon.active span:nth-child(2) {
-            opacity: 0;
-        }
-        
-        .menu-icon.active span:nth-child(3) {
-            transform: translateY(-7px) rotate(-45deg);
-        }
+
+        .menu-icon.active span:nth-child(1) { transform: rotate(45deg); width: 28px; }
+        .menu-icon.active span:nth-child(2) { opacity: 0; width: 0; }
+        .menu-icon.active span:nth-child(3) { transform: rotate(-45deg); width: 28px; }
 
         /* TEXT HOME BUTTON */
         .home-btn {
@@ -120,19 +139,21 @@
             justify-content: center;
             transition: 0.3s;
             text-decoration: none;
-            border: 1px solid var(--gold);
-            padding: 8px 16px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            background: rgba(212, 175, 55, 0.04);
+            padding: 10px 20px;
             font-family: 'Inter', sans-serif;
             font-size: 11px;
             letter-spacing: 2px;
             text-transform: uppercase;
-            opacity: 0.8;
         }
 
         .home-btn:hover {
-            opacity: 1;
-            background: rgba(212, 175, 55, 0.1);
-            box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
+            background: var(--gold);
+            color: var(--bg);
+            border-color: var(--gold);
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.25);
+            transform: translateY(-2px);
         }
 
         .logo {
@@ -147,45 +168,68 @@
 
         /* ================= SIDEBAR ================= */
         .sidebar {
-            width: 0;
+            width: 280px;
             height: 100%;
             position: fixed;
             left: 0;
             top: 0;
-            background: rgba(3, 3, 3, 0.98);
-            backdrop-filter: blur(20px);
-            transition: 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+            background: #0a0a0a;
+            box-shadow: 2px 0 25px rgba(0,0,0,0.8);
+            transform: translateX(-100%);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             padding-top: 100px;
-            z-index: 1000;
-            border-right: 1px solid rgba(212, 175, 55, 0.15);
+            z-index: 2000;
+            border-right: 1px solid rgba(212, 175, 55, 0.2);
             overflow-x: hidden;
         }
         
-        .sidebar.open { width: 280px; }
-        .sidebar-content { padding: 0 30px; }
+        .sidebar.open { 
+            transform: translateX(0); 
+        }
+        
+        .sidebar-content { 
+            padding: 0 30px; 
+        }
         
         .menu-label {
             margin-top: 25px;
             font-size: 10px;
             letter-spacing: 2px;
             color: var(--gold);
-            opacity: 0.6;
+            opacity: 0.7;
             text-transform: uppercase;
+            margin-bottom: 5px;
         }
         
         .sidebar a {
-            display: block;
-            padding: 18px 0;
-            color: #999;
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            color: #888;
             text-decoration: none;
-            font-size: 14px;
-            transition: 0.3s;
+            font-size: 15px;
+            transition: 0.25s;
             cursor: pointer;
         }
         
         .sidebar a:hover {
             color: var(--gold);
-            padding-left: 10px;
+            transform: translateX(6px);
+        }
+
+        /* --- ACTIVE LINK STYLES --- */
+        .sidebar a.active-link {
+            color: var(--gold);
+        }
+
+        .active-dot {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            background-color: var(--gold);
+            border-radius: 50%;
+            margin-right: 12px;
+            box-shadow: 0 0 8px var(--gold);
         }
 
         /* ================= MAIN CONTAINER ================= */
@@ -215,7 +259,7 @@
         }
         
         .report-card:hover {
-            border-color: var(--gold);
+            border-color: rgba(212, 175, 55, 0.3);
             transform: translateY(-5px);
         }
         
@@ -255,6 +299,7 @@
             text-decoration: none;
             display: inline-block;
             text-align: center;
+            border-radius: 2px;
         }
         
         .btn:hover {
@@ -340,7 +385,9 @@
         @media screen and (max-width: 768px) {
             * { cursor: auto !important; }
             .cursor-dot { display: none !important; }
-            .sidebar.open { width: 100%; }
+            .sidebar { width: 85%; }
+            .nav { padding: 15px 20px; }
+            .nav-left { gap: 15px; }
             .actions { flex-direction: column; width: 100%; }
             .btn { width: 100%; box-sizing: border-box; }
             .chat-box { flex-direction: column; }
@@ -350,27 +397,33 @@
 <body oncontextmenu="return false;">
 
     <div class="cursor-dot" id="cursor-dot"></div>
+    
+    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
 
     <div id="sidebar" class="sidebar">
         <div class="sidebar-content">
-            <div class="menu-label">Navigation</div>
+            <div class="menu-label">System</div>
             <a href="index.html">Home</a>
-            <a href="aboutus.html">About Us</a>
-            <a href="vision.html">Our Vision</a>
             
-            <div class="menu-label">Tools</div>
+            <div class="menu-label">Advanced Tools</div>
             <a href="calc.html">Wealth Calculators</a>
             <a href="clock.html">Market Clock</a>
             
+            <div class="menu-label">Research</div>
+            <a href="researchportal.html" class="active-link"><span class="active-dot"></span>Research Portal</a>
+            
+            <div class="menu-label">Our Firm</div>
+            <a href="aboutus.html">About Us</a>
+            <a href="vision.html">Our Vision</a>
+
             <div class="menu-label">Access</div>
             <a href="contactus.html">Contact Us</a>
-            <a href="researchportal.html" style="color: var(--gold);">Research Portal</a>
         </div>
     </div>
 
     <div class="nav">
         <div class="nav-left">
-            <div class="menu-icon" id="menuBtn">
+            <div class="menu-icon" id="menuBtn" onclick="toggleMenu()">
                 <span></span>
                 <span></span>
                 <span></span>
@@ -420,23 +473,23 @@
     </div>
 
     <script>
-        const menuBtn = document.getElementById('menuBtn');
-        const sidebar = document.getElementById('sidebar');
-        
-        // HAMBURGER TOGGLE LOGIC
-        menuBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            sidebar.classList.toggle('open');
-            menuBtn.classList.toggle('active');
-        });
-        
-        document.addEventListener('click', (e) => {
-            if(!sidebar.contains(e.target) && e.target !== menuBtn) {
-                sidebar.classList.remove('open');
-                menuBtn.classList.remove('active');
+        /* ================= KEYBOARD SHORTCUT PROTECTION & ESC MENU CLOSE ================= */
+        document.addEventListener('keydown', function(e) {
+            if (e.key === "Escape" && document.getElementById("sidebar").classList.contains("open")) {
+                toggleMenu();
+                return;
+            }
+            
+            if (e.keyCode == 123 || 
+                (e.ctrlKey && e.shiftKey && (e.keyCode == 'I'.charCodeAt(0) || e.keyCode == 'J'.charCodeAt(0))) || 
+                (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) ||
+                (e.ctrlKey && e.keyCode == 'C'.charCodeAt(0))) {
+                e.preventDefault();
+                return false;
             }
         });
 
+        /* ================= TOUCH DETECTION (MOBILE FIXES) ================= */
         const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
         
         if (!isTouchDevice) {
@@ -452,6 +505,21 @@
             });
         }
 
+        /* ================= MENU LOGIC ================= */
+        function toggleMenu() {
+            const sidebar = document.getElementById("sidebar");
+            const overlay = document.getElementById("overlay");
+            const menuBtn = document.getElementById("menuBtn");
+            const body = document.body;
+
+            const isOpen = sidebar.classList.toggle("open");
+            overlay.classList.toggle("show");
+            menuBtn.classList.toggle("active");
+
+            body.style.overflow = isOpen ? "hidden" : "";
+        }
+
+        /* ================= SEAMLESS PAGE TRANSITIONS ================= */
         function transitionTo(url) {
             document.body.classList.add('fade-out');
             setTimeout(() => { window.location.href = url; }, 400);
@@ -473,7 +541,7 @@
             if (event.persisted) document.body.classList.remove('fade-out');
         });
 
-        // ================= TYPEWRITER (NATURAL TAB PAUSING RESTORED) =================
+        /* ================= TYPEWRITER (NATURAL TAB PAUSING RESTORED) ================= */
         window.typeText = function(el, text, callback, scrollContainer = null) {
             let parsedText = text.replace(/\*\*(.*?)\*\*/g, '<strong style="color:#fff; font-weight:500;">$1</strong>');
             parsedText = parsedText.replace(/\*(.*?)\*/g, '<em style="color:#e0c870;">$1</em>');
@@ -511,7 +579,7 @@
             step();
         }
 
-        // ================= END CHAT FUNCTION =================
+        /* ================= END CHAT FUNCTION ================= */
         window.endChat = function(btn) {
             const terminal = btn.closest('.terminal');
             const termContent = terminal.querySelector('.term-content');
@@ -526,7 +594,7 @@
     </script>
 
     <script type="module">
-        // ================= AI RESTRICTION OVERRIDE =================
+        /* ================= AI RESTRICTION OVERRIDE ================= */
         window.analyzeReport = async function(btn, content) {
             const terminal = btn.closest('.report-card').querySelector('.terminal');
             const termContent = terminal.querySelector('.term-content');
