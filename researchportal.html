@@ -79,6 +79,12 @@
             box-sizing: border-box;
         }
 
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
         .menu-icon { cursor: pointer; }
         .menu-icon span {
             display: block;
@@ -86,6 +92,22 @@
             height: 1px;
             background: var(--gold);
             margin: 6px 0;
+        }
+
+        .home-btn {
+            color: var(--gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.3s;
+            opacity: 0.8;
+            text-decoration: none;
+        }
+
+        .home-btn:hover {
+            opacity: 1;
+            filter: drop-shadow(0 0 8px var(--gold));
+            transform: scale(1.1);
         }
 
         .logo {
@@ -299,14 +321,6 @@
             .chat-box { flex-direction: column; }
         }
     </style>
-
-    <script type="importmap">
-      {
-        "imports": {
-          "@google/generative-ai": "https://esm.run/@google/generative-ai"
-        }
-      }
-    </script>
 </head>
 <body oncontextmenu="return false;">
 
@@ -330,10 +344,18 @@
     </div>
 
     <div class="nav">
-        <div class="menu-icon" id="menuBtn">
-            <span></span>
-            <span></span>
-            <span></span>
+        <div class="nav-left">
+            <div class="menu-icon" id="menuBtn">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <a href="index.html" class="home-btn" title="Return Home">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                    <polyline points="9 22 9 12 15 12 15 22"/>
+                </svg>
+            </a>
         </div>
         <a href="index.html" class="logo">gRaviTy</a>
     </div>
@@ -430,7 +452,6 @@
 
         // ================= TYPEWRITER (NATURAL TAB PAUSING RESTORED) =================
         window.typeText = function(el, text, callback, scrollContainer = null) {
-            // Parses Markdown into clean HTML
             let parsedText = text.replace(/\*\*(.*?)\*\*/g, '<strong style="color:#fff; font-weight:500;">$1</strong>');
             parsedText = parsedText.replace(/\*(.*?)\*/g, '<em style="color:#e0c870;">$1</em>');
             
@@ -456,7 +477,6 @@
                     if(scrollContainer) scrollContainer.scrollTop = scrollContainer.scrollHeight;
                     
                     if(!isTag) {
-                        // Standard setTimeout naturally throttles when you switch tabs
                         setTimeout(step, 10);
                     } else {
                         step();
@@ -483,17 +503,7 @@
     </script>
 
     <script type="module">
-        import { GoogleGenerativeAI } from "@google/generative-ai";
-
-        const API_KEY = "AIzaSyCIYoGawcDl48X3COFep1aXkxmKSkA2lxM"; // Your API Key
-        const genAI = new GoogleGenerativeAI(API_KEY);
-        
-        // ⚡️ THIS MAKES THE AI LIVE! We added Google Search as a tool.
-        const model = genAI.getGenerativeModel({ 
-            model: "gemini-3-flash-preview",
-            tools: [{ googleSearch: {} }] 
-        });
-
+        // ================= AI RESTRICTION OVERRIDE =================
         window.analyzeReport = async function(btn, content) {
             const terminal = btn.closest('.report-card').querySelector('.terminal');
             const termContent = terminal.querySelector('.term-content');
@@ -501,71 +511,18 @@
             
             terminal.style.display = 'block';
             chatBox.style.display = 'none'; 
-            terminal.setAttribute('data-report', content); 
             
-            termContent.innerHTML = "Establishing secure link to gRaviTy AI Node...<br>Decrypting structural market data...<br><br>";
+            termContent.innerHTML = "Establishing secure link to gRaviTy AI Node...<br>";
             
-            try {
-                const prompt = `Provide an executive summary for this report: ${content}\n\n(System Note: Keep it strictly between 1 to 5 sentences maximum. No markdown asterisks.)`;
-                
-                const result = await model.generateContent(prompt);
-                const responseText = result.response.text();
-                
+            // Simulate a slight network delay before showing the restriction message
+            setTimeout(() => {
                 termContent.innerHTML = "";
-                window.typeText(termContent, responseText, () => {
-                    chatBox.style.display = 'flex';
+                const lockMessage = "ACCESS RESTRICTED: Neural link is currently in synchronization phase. Kindly wait until 30 May 2026 to access gRaviTy AI Analyst v2.0 features.";
+                
+                window.typeText(termContent, lockMessage, () => {
+                    termContent.innerHTML += `<br><br><span style="color:#ff4d4d">> SYSTEM: Connection suspended until launch date.</span>`;
                 });
-                
-            } catch (e) {
-                termContent.innerHTML = `<span style='color:#ff4d4d'>[SYSTEM ERROR: AI CONNECTION REFUSED]</span><br>Details: ${e.message}`;
-            }
-        };
-
-        window.askQuestion = async function(btn) {
-            const terminal = btn.closest('.terminal');
-            const input = terminal.querySelector('.chat-input');
-            const termContent = terminal.querySelector('.term-content');
-            const question = input.value.trim();
-            const reportText = terminal.getAttribute('data-report');
-            
-            if(!question) return;
-
-            termContent.innerHTML += `<br><br><span style="color:#fff">> USER: ${question}</span><br><span style="color:var(--gold)" id="loading-msg">> gRaviTy AI: Processing live search algorithm...</span>`;
-            termContent.scrollTop = termContent.scrollHeight;
-            input.value = "";
-            input.disabled = true;
-            btn.disabled = true;
-            
-            try {
-                // Told the AI to prioritize live searching for current stats
-                const prompt = `Report Context: ${reportText}\n\nUser Question: ${question}\n\n(System Note: If the user asks for current prices or current events, use your Google Search tool to find the live, up-to-date information. Answer extremely concisely in exactly 1 to 5 sentences maximum. Do not exceed 5 sentences. Do NOT use markdown asterisks or bullet points. Respond in plain professional text.)`;
-                
-                const result = await model.generateContent(prompt);
-                const responseText = result.response.text();
-                
-                if(document.getElementById('loading-msg')) {
-                    document.getElementById('loading-msg').remove();
-                }
-                
-                const answerSpan = document.createElement('span');
-                answerSpan.style.color = 'var(--gold)';
-                answerSpan.innerHTML = '> gRaviTy AI: ';
-                termContent.appendChild(answerSpan);
-                
-                window.typeText(answerSpan, responseText, () => {
-                    input.disabled = false;
-                    btn.disabled = false;
-                    input.focus();
-                }, termContent);
-                
-            } catch (e) {
-                if(document.getElementById('loading-msg')) {
-                    document.getElementById('loading-msg').remove();
-                }
-                termContent.innerHTML += `<br><span style='color:#ff4d4d'>[ERROR COMMUNICATING WITH AI NODE: ${e.message}]</span>`;
-                input.disabled = false;
-                btn.disabled = false;
-            }
+            }, 800);
         };
     </script>
 </body>
