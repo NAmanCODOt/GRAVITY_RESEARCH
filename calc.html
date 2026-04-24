@@ -1,622 +1,366 @@
 <!DOCTYPE html>
 <html lang="en">
-   
 <head>
-     <script defer src="https://cloud.umami.is/script.js" data-website-id="73132b12-a822-434c-8854-888438105660"></script>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Wealth Tools | gRaviTy Research</title>
+    <script defer src="https://cloud.umami.is/script.js" data-website-id="73132b12-a822-434c-8854-888438105660"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wealth Tools | gRaviTy Research</title>
     <link rel="icon" type="image/png" href="logo.png">
-<link rel="apple-touch-icon" href="logo.png">
-<meta name="theme-color" content="#050505">
-<meta name="msapplication-navbutton-color" content="#050505">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Inter:wght@300;400&display=swap');
+    <link rel="apple-touch-icon" href="logo.png">
+    <meta name="theme-color" content="#050505">
+    <meta name="msapplication-navbutton-color" content="#050505">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Inter:wght@300;400&display=swap');
 
-:root {
-    --gold: #d4af37;
-    --bg: #050505;
-    --error: #ff4d4d;
-}
+        :root {
+            --gold: #d4af37;
+            --bg: #050505;
+            --error: #ff4d4d;
+        }
 
-/* ================= PROTECTION STYLES ================= */
-body {
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-}
+        /* ================= PROTECTION STYLES ================= */
+        body {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            opacity: 1;
+            transition: opacity 0.4s ease-in-out;
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: white;
+            overflow-x: hidden;
+        }
 
-/* ================= SEAMLESS PAGE TRANSITIONS ================= */
-body {
-    opacity: 1;
-    transition: opacity 0.4s ease-in-out;
-    margin: 0;
-    font-family: 'Inter', sans-serif;
-    background: var(--bg);
-    color: white;
-    overflow-x: hidden;
-}
+        body.fade-out { opacity: 0; }
 
-body.fade-out {
-    opacity: 0;
-}
+        /* ================= COLD AF SCROLLBAR ================= */
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb {
+            background: #0a0a0a;
+            border: 1px solid var(--gold);
+            box-shadow: inset 0 0 5px rgba(212, 175, 55, 0.2);
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--gold);
+            box-shadow: 0 0 15px var(--gold);
+        }
 
-/* ================= CUSTOM CURSOR ================= */
-* {
-    cursor: none !important;
-}
+        /* ================= CUSTOM CURSOR ================= */
+        * { cursor: none !important; }
+        .cursor-dot {
+            width: 6px; height: 6px; background: var(--gold);
+            position: fixed; border-radius: 50%; pointer-events: none;
+            z-index: 10000; transform: translate(-50%, -50%);
+            box-shadow: 0 0 10px var(--gold);
+            transition: width 0.2s ease, height 0.2s ease, box-shadow 0.2s ease;
+        }
+        .cursor-dot.hover-state { width: 12px; height: 12px; box-shadow: 0 0 15px var(--gold); }
 
-.cursor-dot {
-    width: 6px;
-    height: 6px;
-    background: var(--gold);
-    position: fixed;
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 10000;
-    transform: translate(-50%, -50%);
-    box-shadow: 0 0 10px var(--gold);
-    transition: width 0.2s ease, height 0.2s ease, box-shadow 0.2s ease;
-}
+        /* ================= SIDEBAR & NAV ================= */
+        .overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.65);
+            backdrop-filter: blur(4px); opacity: 0; pointer-events: none;
+            transition: 0.4s ease; z-index: 1500;
+        }
+        .overlay.show { opacity: 1; pointer-events: all; }
 
-.cursor-dot.hover-state {
-    width: 12px;
-    height: 12px;
-    box-shadow: 0 0 15px var(--gold);
-}
+        .sidebar {
+            width: 280px; height: 100%; position: fixed; left: 0; top: 0;
+            background: #0a0a0a; box-shadow: 2px 0 25px rgba(0,0,0,0.8);
+            transform: translateX(-100%); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            padding-top: 100px; z-index: 2000; border-right: 1px solid rgba(212, 175, 55, 0.2);
+        }
+        .sidebar.open { transform: translateX(0); }
+        .sidebar-content { padding: 0 30px; }
+        .menu-label { margin-top: 25px; font-size: 10px; letter-spacing: 2px; color: var(--gold); text-transform: uppercase; opacity: 0.7; }
+        .sidebar a { display: flex; align-items: center; padding: 12px 0; color: #888; text-decoration: none; transition: 0.25s; font-size: 15px; }
+        .sidebar a.active-link { color: var(--gold); }
+        .active-dot { display: inline-block; width: 6px; height: 6px; background-color: var(--gold); border-radius: 50%; margin-right: 12px; box-shadow: 0 0 8px var(--gold); }
 
-/* ================= OVERLAY ================= */
-.overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.65);
-    backdrop-filter: blur(4px);
-    opacity: 0;
-    pointer-events: none;
-    transition: 0.4s ease;
-    z-index: 1500;
-}
+        .nav {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 20px 40px; position: fixed; width: 100%; box-sizing: border-box;
+            top: 0; background: rgba(5,5,5,0.85); backdrop-filter: blur(12px);
+            z-index: 2500; border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
 
-.overlay.show {
-    opacity: 1;
-    pointer-events: all;
-}
+        .menu-icon { cursor: pointer; position: relative; z-index: 2501; width: 30px; height: 24px; display: flex; flex-direction: column; justify-content: center; }
+        .menu-icon span { display: block; width: 26px; height: 2px; background: var(--gold); margin: 3px 0; transition: 0.4s cubic-bezier(0.165, 0.84, 0.44, 1); transform-origin: left center; }
+        .menu-icon.active span:nth-child(1) { transform: rotate(45deg); width: 28px; }
+        .menu-icon.active span:nth-child(2) { opacity: 0; width: 0; }
+        .menu-icon.active span:nth-child(3) { transform: rotate(-45deg); width: 28px; }
+        .logo-text { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 600; color: var(--gold); letter-spacing: 3px; text-decoration: none; }
 
-/* ================= SIDEBAR ================= */
-.sidebar {
-    width: 280px;
-    height: 100%;
-    position: fixed;
-    left: 0;
-    top: 0;
-    background: #0a0a0a;
-    box-shadow: 2px 0 25px rgba(0,0,0,0.8);
-    transform: translateX(-100%);
-    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    padding-top: 100px;
-    z-index: 2000;
-    overflow-x: hidden;
-    border-right: 1px solid rgba(212, 175, 55, 0.2);
-}
+        /* ================= CONTAINER & CARDS ================= */
+        .container { max-width: 600px; margin: 100px auto 80px auto; padding: 0 20px; position: relative; z-index: 10; }
+        
+        .home-btn {
+            display: inline-flex; align-items: center; padding: 10px 24px;
+            background: rgba(212, 175, 55, 0.04); border: 1px solid rgba(212, 175, 55, 0.3);
+            color: var(--gold); text-decoration: none; font-size: 11px; text-transform: uppercase;
+            letter-spacing: 2px; transition: all 0.4s ease; margin-bottom: 30px; backdrop-filter: blur(4px);
+        }
+        .home-btn::before { content: '←'; margin-right: 10px; font-size: 14px; }
 
-.sidebar.open { 
-    transform: translateX(0);
-}
+        h1 { font-family: 'Playfair Display', serif; color: var(--gold); text-align: center; font-size: 2.5rem; margin-bottom: 40px; }
 
-.sidebar-content { 
-    padding: 0 30px; 
-}
+        .card {
+            background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);
+            padding: 30px; margin-top: 30px; border-radius: 8px; position: relative; overflow: hidden;
+        }
 
-.menu-label {
-    margin-top: 25px;
-    font-size: 10px;
-    letter-spacing: 2px;
-    color: var(--gold);
-    text-transform: uppercase;
-    opacity: 0.7;
-    margin-bottom: 5px;
-}
+        .card h3 { margin-top: 0; font-weight: 400; color: #eee; font-family: 'Playfair Display', serif; font-size: 1.4rem; margin-bottom: 25px; }
 
-.sidebar a {
-    display: flex;
-    align-items: center;
-    padding: 12px 0;
-    color: #888;
-    text-decoration: none;
-    transition: 0.25s;
-    font-size: 15px;
-}
+        label { display: block; font-size: 10px; color: #888; margin-top: 15px; text-transform: uppercase; letter-spacing: 1px; }
+        
+        .hint { font-size: 9px; color: var(--gold); opacity: 0.6; text-transform: none; letter-spacing: 0.5px; margin-top: 4px; display: block; }
 
-/* --- ACTIVE LINK STYLES --- */
-.sidebar a.active-link {
-    color: var(--gold);
-}
+        input {
+            width: 100%; background: transparent; border: none; border-bottom: 1px solid #333;
+            color: var(--gold); padding: 10px 0; margin-bottom: 5px; font-size: 18px; outline: none;
+            transition: 0.3s ease; font-family: 'Inter', sans-serif;
+        }
+        input:focus { border-bottom: 1px solid var(--gold); }
+        input.error { border-bottom: 1px solid var(--error) !important; color: var(--error) !important; }
 
-.active-dot {
-    display: inline-block;
-    width: 6px;
-    height: 6px;
-    background-color: var(--gold);
-    border-radius: 50%;
-    margin-right: 12px;
-    box-shadow: 0 0 8px var(--gold);
-}
+        .result { font-size: 28px; color: var(--gold); margin-top: 25px; font-weight: 600; font-family: 'Playfair Display', serif; }
 
-/* ================= NAV & MENU ICON ================= */
-.nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 40px;
-    position: fixed;
-    width: 100%;
-    box-sizing: border-box;
-    top: 0;
-    background: rgba(5,5,5,0.85);
-    backdrop-filter: blur(12px);
-    z-index: 2500; 
-    border-bottom: 1px solid rgba(255,255,255,0.05);
-}
+        /* ================= DYNAMIC SVG CHART ================= */
+        .chart-container {
+            width: 100%; height: 80px; margin-top: 20px;
+            filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.3));
+        }
+        .chart-path {
+            fill: none; stroke: var(--gold); stroke-width: 2;
+            stroke-linecap: round; transition: d 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
 
-.menu-icon {
-    cursor: pointer;
-    position: relative;
-    z-index: 2501;
-    width: 30px;
-    height: 24px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
+        /* ================= DESKTOP HOVER ================= */
+        @media (hover: hover) and (pointer: fine) {
+            .sidebar a:hover { color: var(--gold); transform: translateX(6px); }
+            .home-btn:hover { background: var(--gold); color: var(--bg); border-color: var(--gold); box-shadow: 0 4px 15px rgba(212, 175, 55, 0.25); transform: translateY(-2px); }
+            .card:hover { border-color: rgba(212, 175, 55, 0.3); }
+        }
 
-.menu-icon span {
-    display: block;
-    width: 26px;
-    height: 2px;
-    background: var(--gold);
-    margin: 3px 0;
-    transition: 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-    transform-origin: left center;
-}
-
-.menu-icon.active span:nth-child(1) { transform: rotate(45deg); width: 28px; }
-.menu-icon.active span:nth-child(2) { opacity: 0; width: 0; }
-.menu-icon.active span:nth-child(3) { transform: rotate(-45deg); width: 28px; }
-
-.logo-text {
-    font-family: 'Playfair Display', serif;
-    font-size: 22px;
-    font-weight: 600;
-    color: var(--gold);
-    letter-spacing: 3px;
-    text-decoration: none;
-}
-
-/* ================= CONTAINER & CARDS ================= */
-.container {
-    max-width: 600px;
-    margin: 100px auto 80px auto;
-    padding: 0 20px;
-    position: relative;
-    z-index: 10;
-}
-
-.home-btn {
-    display: inline-flex;
-    align-items: center;
-    padding: 10px 24px;
-    background: rgba(212, 175, 55, 0.04);
-    border: 1px solid rgba(212, 175, 55, 0.3);
-    color: var(--gold);
-    text-decoration: none;
-    font-size: 11px;
-    font-weight: 400;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-    margin-bottom: 30px;
-    backdrop-filter: blur(4px);
-}
-
-.home-btn::before {
-    content: '←';
-    margin-right: 10px;
-    font-size: 14px;
-    transition: transform 0.4s ease;
-}
-
-h1 {
-    font-family: 'Playfair Display', serif;
-    color: var(--gold);
-    text-align: center;
-    font-size: 2.5rem;
-    margin-bottom: 40px;
-}
-
-.card {
-    background: rgba(255,255,255,0.02);
-    border: 1px solid rgba(255,255,255,0.05);
-    padding: 30px;
-    margin-top: 30px;
-    border-radius: 8px;
-    transition: border-color 0.3s ease;
-}
-
-.card h3 {
-    margin-top: 0;
-    font-weight: 400;
-    color: #eee;
-    font-family: 'Playfair Display', serif;
-    font-size: 1.4rem;
-    margin-bottom: 25px;
-}
-
-label {
-    display: block;
-    font-size: 10px;
-    color: #888;
-    margin-top: 15px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-input {
-    width: 100%;
-    background: transparent;
-    border: none;
-    border-bottom: 1px solid #333;
-    color: var(--gold);
-    padding: 10px 0;
-    margin-bottom: 5px;
-    font-size: 18px;
-    outline: none;
-    transition: 0.3s ease;
-    font-family: 'Inter', sans-serif;
-}
-
-input:focus {
-    border-bottom: 1px solid var(--gold);
-}
-
-input.error {
-    border-bottom: 1px solid var(--error) !important;
-    color: var(--error) !important;
-}
-
-.result {
-    font-size: 28px;
-    color: var(--gold);
-    margin-top: 25px;
-    font-weight: 600;
-    font-family: 'Playfair Display', serif;
-}
-
-/* ================= DESKTOP HOVER PROTECTIONS ================= */
-@media (hover: hover) and (pointer: fine) {
-    .sidebar a:hover {
-        color: var(--gold);
-        transform: translateX(6px);
-    }
-    
-    .home-btn:hover {
-        background: var(--gold);
-        color: var(--bg);
-        border-color: var(--gold);
-        box-shadow: 0 4px 15px rgba(212, 175, 55, 0.25);
-        transform: translateY(-2px);
-    }
-
-    .home-btn:hover::before {
-        transform: translateX(-4px);
-    }
-
-    .card:hover {
-        border-color: rgba(212, 175, 55, 0.3);
-    }
-}
-
-/* ================= MOBILE RESPONSIVENESS ================= */
-@media screen and (max-width: 768px) {
-    * { cursor: auto !important; }
-    .cursor-dot { display: none !important; }
-    
-    .sidebar { width: 85%; }
-    .nav { padding: 15px 20px; }
-    .container { margin-top: 80px; }
-}
-
-</style>
+        @media screen and (max-width: 768px) {
+            * { cursor: auto !important; }
+            .cursor-dot { display: none !important; }
+            .sidebar { width: 85%; }
+            .nav { padding: 15px 20px; }
+            .container { margin-top: 80px; }
+        }
+    </style>
 </head>
 
 <body oncontextmenu="return false;">
 
 <div class="cursor-dot" id="cursor-dot"></div>
-
 <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
 
 <div id="sidebar" class="sidebar">
     <div class="sidebar-content">
-
         <div class="menu-label">Advanced Tools</div>
         <a href="calc.html" class="active-link"><span class="active-dot"></span>Wealth Calculators</a>
         <a href="clock.html">Market Clock</a>
-
         <div class="menu-label">Research</div>
         <a href="researchportal.html">Research Portal</a>
-
         <div class="menu-label">Our Firm</div>
         <a href="aboutus.html">About Us</a>
         <a href="vision.html">Our Vision</a>
-
         <div class="menu-label">Access</div>
         <a href="contactus.html">Contact Us</a>
-
     </div>
 </div>
 
 <div class="nav">
-    <div class="menu-icon" onclick="toggleMenu()">
-        <span></span>
-        <span></span>
-        <span></span>
-    </div>
+    <div class="menu-icon" onclick="toggleMenu()"><span></span><span></span><span></span></div>
     <a href="index.html" class="logo-text">gRaviTy</a>
 </div>
 
 <div class="container">
-
     <a href="index.html" class="home-btn">Home</a>
-
-    <h1>Wealth Calculators</h1>
+    <h1>Wealth Tools</h1>
 
     <div class="card">
         <h3>Wealth Projection</h3>
         <label>Initial Investment (P)</label>
         <input id="p" type="number" min="0" value="100000" oninput="calcWealth()">
-
         <label>Monthly Addition (M)</label>
         <input id="m" type="number" min="0" value="10000" oninput="calcWealth()">
-
         <label>Annual Return (%)</label>
         <input id="r" type="number" min="0" value="12" oninput="calcWealth()">
-
         <label>Duration (Years)</label>
         <input id="y" type="number" min="0" value="10" oninput="calcWealth()">
-
+        
         <div id="res1" class="result" data-val="0">₹ 0</div>
+        <div class="chart-container">
+            <svg viewBox="0 0 100 40" preserveAspectRatio="none" style="width:100%; height:100%;">
+                <path id="path1" class="chart-path" d="M0,40 L100,40" />
+            </svg>
+        </div>
     </div>
 
     <div class="card">
         <h3>SIP Calculator</h3>
         <label>Monthly SIP Amount</label>
         <input id="sip" type="number" min="0" value="5000" oninput="calcSIP()">
-
         <label>Expected Return (%)</label>
         <input id="sipr" type="number" min="0" value="12" oninput="calcSIP()">
-
         <label>Time Period (Years)</label>
         <input id="sipy" type="number" min="0" value="10" oninput="calcSIP()">
-
+        
         <div id="res2" class="result" data-val="0">₹ 0</div>
+        <div class="chart-container">
+            <svg viewBox="0 0 100 40" preserveAspectRatio="none" style="width:100%; height:100%;">
+                <path id="path2" class="chart-path" d="M0,40 L100,40" />
+            </svg>
+        </div>
     </div>
 
     <div class="card">
         <h3>Inflation Adjuster</h3>
         <label>Current Cost</label>
         <input id="fv" type="number" min="0" value="1000000" oninput="calcInflation()">
-
         <label>Inflation Rate (%)</label>
         <input id="inf" type="number" min="0" value="6" oninput="calcInflation()">
-
+        <span class="hint">Avg. expected inflation in India is ~6%.</span>
         <label>Time Horizon (Years)</label>
         <input id="infy" type="number" min="0" value="10" oninput="calcInflation()">
-
+        
         <div id="res3" class="result" data-val="0">₹ 0</div>
+        <div class="chart-container">
+            <svg viewBox="0 0 100 40" preserveAspectRatio="none" style="width:100%; height:100%;">
+                <path id="path3" class="chart-path" d="M0,40 L100,40" />
+            </svg>
+        </div>
     </div>
-
 </div>
 
 <script>
-
-/* ================= KEYBOARD SHORTCUT PROTECTION ================= */
+/* ================= UI LOGIC ================= */
 document.addEventListener('keydown', function(e) {
-    // Escape key closes menu
-    if (e.key === "Escape" && document.getElementById("sidebar").classList.contains("open")) {
-        toggleMenu();
-        return;
-    }
-    
-    // Dev tools protection
-    if (e.keyCode == 123 || 
-        (e.ctrlKey && e.shiftKey && (e.keyCode == 'I'.charCodeAt(0) || e.keyCode == 'J'.charCodeAt(0))) || 
-        (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) ||
-        (e.ctrlKey && e.keyCode == 'C'.charCodeAt(0))) {
-        e.preventDefault();
-        return false;
-    }
+    if (e.key === "Escape" && document.getElementById("sidebar").classList.contains("open")) toggleMenu();
+    if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74)) || (e.ctrlKey && e.keyCode == 85)) e.preventDefault();
 });
 
-/* ================= TOUCH DETECTION (MOBILE FIXES) ================= */
 const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-
-/* ================= CUSTOM CURSOR LOGIC ================= */
 if (!isTouchDevice) {
     const cursorDot = document.getElementById('cursor-dot');
     window.addEventListener('mousemove', (e) => {
         cursorDot.style.left = e.clientX + 'px';
         cursorDot.style.top = e.clientY + 'px';
     });
-
-    const interactables = document.querySelectorAll('a, button, input, .menu-icon');
-    interactables.forEach(el => {
+    document.querySelectorAll('a, button, input, .menu-icon').forEach(el => {
         el.addEventListener('mouseenter', () => cursorDot.classList.add('hover-state'));
         el.addEventListener('mouseleave', () => cursorDot.classList.remove('hover-state'));
     });
 }
 
-/* ================= MENU LOGIC (UPDATED WITH OVERLAY) ================= */
 function toggleMenu() {
-    const sidebar = document.getElementById("sidebar");
-    const overlay = document.getElementById("overlay");
-    const menuIcon = document.querySelector(".menu-icon");
-    const body = document.body;
-
-    const isOpen = sidebar.classList.toggle("open");
-    overlay.classList.toggle("show");
-    menuIcon.classList.toggle("active");
-
-    // Prevent background scrolling when menu is open
-    body.style.overflow = isOpen ? "hidden" : "";
+    document.getElementById("sidebar").classList.toggle("open");
+    document.getElementById("overlay").classList.toggle("show");
+    document.querySelector(".menu-icon").classList.toggle("active");
 }
 
-/* ================= SEAMLESS PAGE TRANSITIONS ================= */
-function transitionTo(url) {
-    document.body.classList.add('fade-out');
-    setTimeout(() => {
-        window.location.href = url;
-    }, 400);
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-    const links = document.querySelectorAll('a[href]');
-    links.forEach(link => {
-        link.addEventListener('click', function(e) {
-            const target = this.getAttribute('href');
-            if (target && !target.startsWith('http') && !target.startsWith('mailto')) {
-                e.preventDefault();
-                transitionTo(target);
-            }
-        });
-    });
-});
-
-window.addEventListener('pageshow', (event) => {
-    if (event.persisted) {
-        document.body.classList.remove('fade-out');
-    }
-});
-
-/* ================= CALCULATOR ENGINE & ANIMATION ================= */
-
-const formatter = new Intl.NumberFormat('en-IN', {
-    style: 'currency',
-    currency: 'INR',
-    maximumFractionDigits: 0
-});
-
+/* ================= CALCULATOR ENGINE & CHARTING ================= */
+const formatter = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 });
 const animationState = {};
 
 function animateValue(objId, endVal) {
     const obj = document.getElementById(objId);
     let startVal = parseFloat(obj.getAttribute("data-val")) || 0;
-    
     if (startVal === endVal) return;
-    
     obj.setAttribute("data-val", endVal);
     let startTime = null;
     const duration = 500; 
 
-    if (animationState[objId]) cancelAnimationFrame(animationState[objId]);
-
     const step = (timestamp) => {
         if (!startTime) startTime = timestamp;
         const progress = Math.min((timestamp - startTime) / duration, 1);
-        
         const easeOut = progress * (2 - progress);
         const currentVal = startVal + (endVal - startVal) * easeOut;
-
         obj.innerHTML = formatter.format(currentVal);
-
-        if (progress < 1) {
-            animationState[objId] = requestAnimationFrame(step);
-        } else {
-            obj.innerHTML = formatter.format(endVal);
-        }
+        if (progress < 1) requestAnimationFrame(step);
+        else obj.innerHTML = formatter.format(endVal);
     };
-    animationState[objId] = requestAnimationFrame(step);
+    requestAnimationFrame(step);
+}
+
+function updateChart(pathId, dataPoints) {
+    const path = document.getElementById(pathId);
+    if (!dataPoints.length) return;
+
+    const max = Math.max(...dataPoints);
+    const min = Math.min(...dataPoints);
+    const range = max - min || 1;
+    
+    let pathData = `M 0 ${40 - ((dataPoints[0] - min) / range * 35)}`;
+    
+    dataPoints.forEach((val, i) => {
+        const x = (i / (dataPoints.length - 1)) * 100;
+        const y = 38 - ((val - min) / range * 35); // Keep padding from edges
+        pathData += ` L ${x} ${y}`;
+    });
+    
+    path.setAttribute("d", pathData);
 }
 
 function getValidFloat(id) {
     const el = document.getElementById(id);
     const val = parseFloat(el.value);
-    
-    if (isNaN(val) || val < 0) {
-        el.classList.add('error');
-        return null;
-    } else {
-        el.classList.remove('error');
-        return val;
-    }
+    if (isNaN(val) || val < 0) { el.classList.add('error'); return null; }
+    else { el.classList.remove('error'); return val; }
 }
 
 function calcWealth() {
-    let p = getValidFloat('p');
-    let m = getValidFloat('m');
-    let r = getValidFloat('r');
-    let y = getValidFloat('y');
+    let p = getValidFloat('p'), m = getValidFloat('m'), r = getValidFloat('r'), y = getValidFloat('y');
+    if (p === null || m === null || r === null || y === null) return;
 
-    if (p === null || m === null || r === null || y === null) {
-        animateValue('res1', 0); return;
+    let i = r / 12 / 100, n = y * 12, points = [];
+    for(let t=0; t<=y; t++) {
+        let nt = t * 12;
+        let fvt = p * Math.pow(1 + i, nt) + (i > 0 ? m * ((Math.pow(1 + i, nt) - 1) / i) * (1 + i) : m * nt);
+        points.push(fvt);
     }
-
-    let i = r / 12 / 100;
-    let n = y * 12;
-    let fv = p * Math.pow(1 + i, n);
-    
-    if (i > 0) {
-        fv += m * ((Math.pow(1 + i, n) - 1) / i) * (1 + i);
-    } else {
-        fv += m * n;
-    }
-    animateValue('res1', Math.round(fv));
+    animateValue('res1', Math.round(points[points.length-1]));
+    updateChart('path1', points);
 }
 
 function calcSIP() {
-    let sip = getValidFloat('sip');
-    let r = getValidFloat('sipr');
-    let y = getValidFloat('sipy');
+    let sip = getValidFloat('sip'), r = getValidFloat('sipr'), y = getValidFloat('sipy');
+    if (sip === null || r === null || y === null) return;
 
-    if (sip === null || r === null || y === null) {
-        animateValue('res2', 0); return;
+    let i = r / 12 / 100, points = [];
+    for(let t=0; t<=y; t++) {
+        let nt = t * 12;
+        let fvt = i > 0 ? sip * ((Math.pow(1 + i, nt) - 1) / i) * (1 + i) : sip * nt;
+        points.push(fvt);
     }
-
-    let i = r / 12 / 100;
-    let n = y * 12;
-    let fv = 0;
-    
-    if (i > 0) {
-        fv = sip * ((Math.pow(1 + i, n) - 1) / i) * (1 + i);
-    } else {
-        fv = sip * n;
-    }
-    animateValue('res2', Math.round(fv));
+    animateValue('res2', Math.round(points[points.length-1]));
+    updateChart('path2', points);
 }
 
 function calcInflation() {
-    let fv = getValidFloat('fv');
-    let inf = getValidFloat('inf');
-    let y = getValidFloat('infy');
+    let fv = getValidFloat('fv'), inf = getValidFloat('inf'), y = getValidFloat('infy');
+    if (fv === null || inf === null || y === null) return;
 
-    if (fv === null || inf === null || y === null) {
-        animateValue('res3', 0); return;
+    let r = inf / 100, points = [];
+    for(let t=0; t<=y; t++) {
+        points.push(fv * Math.pow(1 + r, t));
     }
-
-    let r = inf / 100;
-    let cost = fv * Math.pow(1 + r, y);
-    animateValue('res3', Math.round(cost));
+    animateValue('res3', Math.round(points[points.length-1]));
+    updateChart('path3', points);
 }
 
-// Initial Calculations on Load
-calcWealth();
-calcSIP();
-calcInflation();
-
+// Initial Run
+calcWealth(); calcSIP(); calcInflation();
 </script>
 
 </body>
