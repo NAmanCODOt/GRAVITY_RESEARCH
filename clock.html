@@ -137,11 +137,6 @@
             font-size: 15px;
         }
 
-        .sidebar a:hover {
-            color: var(--gold);
-            transform: translateX(6px);
-        }
-
         .sidebar a.active-link {
             color: var(--gold);
         }
@@ -288,18 +283,6 @@
             transition: transform 0.4s ease;
         }
 
-        .home-btn:hover {
-            background: var(--gold);
-            color: var(--bg);
-            border-color: var(--gold);
-            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.25);
-            transform: translateY(-2px);
-        }
-
-        .home-btn:hover::before {
-            transform: translateX(-4px);
-        }
-
         .label {
             font-size: 12px;
             font-weight: 300;
@@ -328,11 +311,6 @@
             text-align: center;
             transition: transform 0.3s ease, border-color 0.3s ease;
             box-sizing: border-box;
-        }
-
-        .unit-box:hover {
-            border-color: var(--gold);
-            transform: translateY(-5px);
         }
 
         .unit-value {
@@ -377,11 +355,6 @@
             -webkit-backdrop-filter: blur(12px);
             transition: border-color 0.4s ease, box-shadow 0.4s ease;
             box-sizing: border-box;
-        }
-
-        .waitlist-container:hover {
-            border-color: rgba(212, 175, 55, 0.4);
-            box-shadow: 0 0 20px rgba(212, 175, 55, 0.05);
         }
 
         .waitlist-title {
@@ -441,7 +414,7 @@
         }
 
         .waitlist-btn::before {
-            display: none; 
+            display: none; 
         }
 
         /* launch text */
@@ -458,6 +431,36 @@
         }
 
         .launch-text span { color: var(--gold); }
+
+        /* ================= PROTECTIVE HOVER QUERY ================= */
+        @media (hover: hover) and (pointer: fine) {
+            .sidebar a:hover {
+                color: var(--gold);
+                transform: translateX(6px);
+            }
+
+            .home-btn:hover {
+                background: var(--gold);
+                color: var(--bg);
+                border-color: var(--gold);
+                box-shadow: 0 4px 15px rgba(212, 175, 55, 0.25);
+                transform: translateY(-2px);
+            }
+
+            .home-btn:hover::before {
+                transform: translateX(-4px);
+            }
+
+            .unit-box:hover {
+                border-color: var(--gold);
+                transform: translateY(-5px);
+            }
+
+            .waitlist-container:hover {
+                border-color: rgba(212, 175, 55, 0.4);
+                box-shadow: 0 0 20px rgba(212, 175, 55, 0.05);
+            }
+        }
 
         /* ================= MOBILE OPTIMIZATION ================= */
         @media screen and (max-width: 768px) {
@@ -676,7 +679,7 @@ const waitlistDesc = document.getElementById('waitlist-desc');
 
 if (waitlistForm) {
     waitlistForm.addEventListener('submit', async function(e) {
-        e.preventDefault(); // Stops the Formspree redirect
+        e.preventDefault(); 
         waitlistSubmitBtn.innerText = "SUBMITTING...";
 
         const formData = new FormData(waitlistForm);
@@ -691,7 +694,6 @@ if (waitlistForm) {
             });
 
             if (response.ok) {
-                // Success: Wipe the email input, hide form, show thank you message
                 waitlistForm.reset(); 
                 waitlistForm.style.display = 'none';
                 waitlistDesc.style.display = 'none';
@@ -716,7 +718,6 @@ function updateClock() {
     const now = new Date().getTime();
     let currentTarget;
 
-    // Dynamically update text based on which phase we are in
     if (now < phase1Target) {
         currentTarget = phase1Target;
         dateDisplay.innerText = "25 APR 2026";
@@ -727,7 +728,7 @@ function updateClock() {
         phaseLabel.innerText = "Global System Launch";
     } else {
         document.querySelector(".timer").innerHTML = "<div class='unit-value' style='letter-spacing: 10px;'>SYSTEM LIVE</div>";
-        document.querySelector(".waitlist-container").style.display = "none"; // Hide form when live
+        document.querySelector(".waitlist-container").style.display = "none"; 
         dateDisplay.innerText = "ACCESS GRANTED";
         return;
     }
