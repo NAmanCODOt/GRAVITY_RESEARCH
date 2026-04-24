@@ -4,8 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Vision | gRaviTy Research</title>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Inter:wght@300;400&display=swap');
 
@@ -38,7 +40,7 @@ body.fade-out {
     opacity: 0;
 }
 
-/* ================= CUSTOM CURSOR (GPU ACCELERATED) ================= */
+/* ================= CUSTOM CURSOR ================= */
 * { cursor: none !important; }
 
 .cursor-dot {
@@ -115,13 +117,8 @@ body.fade-out {
     overflow-x: hidden;
 }
 
-.sidebar.open { 
-    transform: translateX(0); 
-}
-
-.sidebar-content { 
-    padding: 0 30px; 
-}
+.sidebar.open { transform: translateX(0); }
+.sidebar-content { padding: 0 30px; }
 
 .menu-label {
     margin-top: 25px;
@@ -148,9 +145,7 @@ body.fade-out {
     transform: translateX(6px);
 }
 
-.sidebar a.active-link {
-    color: var(--gold);
-}
+.sidebar a.active-link { color: var(--gold); }
 
 .active-dot {
     display: inline-block;
@@ -185,6 +180,7 @@ body.fade-out {
     gap: 25px;
 }
 
+/* Animated Hamburger */
 .menu-icon {
     cursor: pointer;
     position: relative;
@@ -210,6 +206,7 @@ body.fade-out {
 .menu-icon.active span:nth-child(2) { opacity: 0; width: 0; }
 .menu-icon.active span:nth-child(3) { transform: rotate(-45deg); width: 28px; }
 
+/* Home Button - Sized to match Contact Us */
 .home-btn {
     display: inline-flex;
     align-items: center;
@@ -243,6 +240,7 @@ body.fade-out {
 
 .home-btn:hover::before { transform: translateX(-3px); }
 
+/* Logo - Sized to match Index/Contact */
 .logo {
     font-family: 'Playfair Display', serif;
     font-size: 22px;
@@ -325,7 +323,6 @@ body.fade-out {
     .hero h1 { font-size: 34px; }
     .nav { padding: 15px 20px; }
     .nav-left { gap: 15px; }
-    .home-btn { padding: 6px 12px; font-size: 8px; }
 }
 </style>
     <script defer src="https://cloud.umami.is/script.js" data-website-id="73132b12-a822-434c-8854-888438105660"></script>
@@ -334,7 +331,6 @@ body.fade-out {
 <body oncontextmenu="return false;">
 
 <div class="cursor-dot" id="cursor-dot"></div>
-
 <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
 
 <div class="gold-orb orb1"></div>
@@ -396,6 +392,7 @@ body.fade-out {
 </div>
 
 <script>
+/* ================= KEYBOARD PROTECTION & ESC CLOSE ================= */
 document.addEventListener('keydown', function(e) {
     if (e.key === "Escape" && document.getElementById("sidebar").classList.contains("open")) {
         toggleMenu();
@@ -411,6 +408,7 @@ document.addEventListener('keydown', function(e) {
     }
 });
 
+/* ================= CUSTOM CURSOR ================= */
 const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
 if (!isTouchDevice) {
@@ -426,6 +424,7 @@ if (!isTouchDevice) {
     });
 }
 
+/* ================= MENU LOGIC ================= */
 function toggleMenu() {
     const sidebar = document.getElementById("sidebar");
     const overlay = document.getElementById("overlay");
@@ -439,6 +438,7 @@ function toggleMenu() {
     body.style.overflow = isOpen ? "hidden" : "";
 }
 
+/* ================= SEAMLESS PAGE TRANSITIONS ================= */
 function transitionTo(url) {
     document.body.classList.add('fade-out');
     setTimeout(() => {
