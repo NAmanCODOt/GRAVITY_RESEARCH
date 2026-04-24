@@ -258,7 +258,7 @@
             flex-direction: column;
             position: relative;
             z-index: 2;
-            padding: 100px 20px 40px; /* added top padding for nav */
+            padding: 100px 20px 40px; 
             box-sizing: border-box;
         }
 
@@ -441,7 +441,7 @@
         }
 
         .waitlist-btn::before {
-            display: none; /* removes the back arrow from the reused home-btn class */
+            display: none; 
         }
 
         /* launch text */
@@ -589,14 +589,17 @@
 
     <div class="waitlist-container">
         <h3 class="waitlist-title">Phase 1 Access</h3>
-        <p class="waitlist-desc">Join the secure waitlist. Be notified the exact moment the system goes live.</p>
+        <p class="waitlist-desc" id="waitlist-desc">Join the secure waitlist. Be notified the exact moment the system goes live.</p>
         
-        <form action="https://formspree.io/f/meevrbpg" method="POST" class="waitlist-form">
+        <form id="waitlist-form" action="https://formspree.io/f/meevrbpg" method="POST" class="waitlist-form">
             <input type="email" name="email" placeholder="Enter your email address" required class="waitlist-input">
             <input type="hidden" name="_subject" value="New Waitlist Signup from Market Clock!">
-            <input type="hidden" name="_next" value="https://gravityinsights.github.io/GRAVITY_RESEARCH/clock.html">
-            <button type="submit" class="home-btn waitlist-btn">Join Waitlist</button>
+            <button type="submit" class="home-btn waitlist-btn" id="waitlist-submit">Join Waitlist</button>
         </form>
+
+        <div id="waitlist-success" style="display: none; color: var(--gold); font-size: 16px; font-weight: 500; letter-spacing: 1px;">
+            Thank you. Your access is secured.
+        </div>
     </div>
 
     <div class="launch-text">
@@ -643,7 +646,7 @@ function toggleMenu() {
     body.style.overflow = isOpen ? "hidden" : "";
 }
 
-/* ================= SEAMLESS PAGE TRANSITIONS (FIXED HASH BUG) ================= */
+/* ================= SEAMLESS PAGE TRANSITIONS ================= */
 document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll('a[href]').forEach(link => {
         link.addEventListener('click', function(e) {
@@ -664,6 +667,43 @@ document.addEventListener("DOMContentLoaded", () => {
 window.addEventListener('pageshow', (event) => {
     if (event.persisted) document.body.classList.remove('fade-out');
 });
+
+/* ================= AJAX FORM SUBMISSION ================= */
+const waitlistForm = document.getElementById('waitlist-form');
+const waitlistSuccess = document.getElementById('waitlist-success');
+const waitlistSubmitBtn = document.getElementById('waitlist-submit');
+const waitlistDesc = document.getElementById('waitlist-desc');
+
+if (waitlistForm) {
+    waitlistForm.addEventListener('submit', async function(e) {
+        e.preventDefault(); // Stops the Formspree redirect
+        waitlistSubmitBtn.innerText = "SUBMITTING...";
+
+        const formData = new FormData(waitlistForm);
+
+        try {
+            const response = await fetch(waitlistForm.action, {
+                method: waitlistForm.method,
+                body: formData,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
+
+            if (response.ok) {
+                // Success: Wipe the email input, hide form, show thank you message
+                waitlistForm.reset(); 
+                waitlistForm.style.display = 'none';
+                waitlistDesc.style.display = 'none';
+                waitlistSuccess.style.display = 'block';
+            } else {
+                waitlistSubmitBtn.innerText = "ERROR. TRY AGAIN.";
+            }
+        } catch (error) {
+            waitlistSubmitBtn.innerText = "ERROR. TRY AGAIN.";
+        }
+    });
+}
 
 /* ================= DYNAMIC TIMER LOGIC ================= */
 const phase1Target = new Date("2026-04-24T18:30:00Z").getTime(); 
