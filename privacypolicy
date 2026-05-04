@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy | gRaviTy Research</title>
+    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="apple-touch-icon" href="logo.png">
+    <meta name="theme-color" content="#050505">
+    <meta name="msapplication-navbutton-color" content="#050505">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta property="og:title" content="Privacy Policy | gRaviTy Research">
+    <meta property="og:description" content="Privacy Policy and Data Handling for gRaviTy Research.">
+    <meta property="og:image" content="https://gravityinsights.github.io/GRAVITY_RESEARCH/image.png">
+    <meta property="og:url" content="https://gravityinsights.github.io/GRAVITY_RESEARCH/privacypolicy.html">
+    <meta property="og:type" content="website">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Privacy Policy | gRaviTy Research">
+    <meta name="twitter:description" content="Privacy Policy and Data Handling for gRaviTy Research.">
+    <meta name="twitter:image" content="https://gravityinsights.github.io/GRAVITY_RESEARCH/image.png">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600&display=swap');
+
+        :root {
+            --gold: #d4af37;
+            --bg: #050505;
+        }
+
+        /* ================= PROTECTION STYLES ================= */
+        body {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        /* ================= SEAMLESS PAGE TRANSITIONS ================= */
+        body {
+            opacity: 1;
+            transition: opacity 0.4s ease-in-out;
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: white;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased; 
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body.fade-out {
+            opacity: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* ================= CUSTOM CURSOR ================= */
+        * {
+            cursor: none !important;
+        }
+
+        .cursor-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--gold);
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 10000;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 10px var(--gold);
+            transition: width 0.2s ease, height 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .cursor-dot.hover-state {
+            width: 12px;
+            height: 12px;
+            box-shadow: 0 0 15px var(--gold);
+        }
+
+        /* ================= NOISE OVERLAY ================= */
+        .noise-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 998;
+            opacity: 0.05;
+            background-image: url('data:image/svg+xml;utf8,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)"/%3E%3C/svg%3E');
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(circle at 20% 20%, rgba(212,175,55,0.08), transparent 40%),
+                radial-gradient(circle at 80% 80%, rgba(212,175,55,0.06), transparent 45%);
+            z-index: 0;
+        }
+
+        /* ================= ORBS ================= */
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.18;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .orb1 { width: 420px; height: 420px; background: var(--gold); animation: float1 25s infinite linear; }
+        .orb2 { width: 300px; height: 300px; background: var(--gold); opacity: 0.12; animation: float2 32s infinite linear; }
+        .orb3 { width: 220px; height: 220px; background: var(--gold); opacity: 0.1; animation: float3 38s infinite linear; }
+
+        @keyframes float1 { 0% { top: 10%; left: 10%; } 50% { top: 75%; left: 80%; } 100% { top: 10%; left: 10%; } }
+        @keyframes float2 { 0% { top: 80%; left: 70%; } 50% { top: 20%; left: 15%; } 100% { top: 80%; left: 70%; } }
+        @keyframes float3 { 0% { top: 50%; left: 0%; } 50% { top: 10%; left: 90%; } 100% { top: 50%; left: 0%; } }
+
+        /* ================= OVERLAY ================= */
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.65);
+            backdrop-filter: blur(4px);
+            opacity: 0;
+            pointer-events: none;
+            transition: 0.4s ease;
+            z-index: 1500;
+        }
+
+        .overlay.show {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        /* ================= SIDEBAR ================= */
+        .sidebar {
+            width: 280px;
+            height: 100%;
+            position: fixed;
+            left: 0;
+            top: 0;
+            background: #0a0a0a;
+            box-shadow: 2px 0 25px rgba(0,0,0,0.8);
+            transform: translateX(-100%);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            padding-top: 100px;
+            z-index: 2000;
+            border-right: 1px solid rgba(212, 175, 55, 0.2);
+            overflow-x: hidden;
+        }
+
+        .sidebar.open { 
+            transform: translateX(0); 
+        }
+
+        .sidebar-content { 
+            padding: 0 30px; 
+        }
+
+        .menu-label {
+            margin-top: 25px;
+            font-size: 10px;
+            letter-spacing: 2px;
+            color: var(--gold);
+            opacity: 0.7;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .sidebar a {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            color: #888;
+            text-decoration: none;
+            font-size: 15px;
+            transition: 0.25s;
+        }
+
+        .sidebar a.active-link {
+            color: var(--gold);
+        }
+
+        .active-dot {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            background-color: var(--gold);
+            border-radius: 50%;
+            margin-right: 12px;
+            box-shadow: 0 0 8px var(--gold);
+        }
+
+        /* ================= NAV & HAMBURGER ================= */
+        .nav {
+            display: flex;
+            align-items: center;
+            padding: 20px 40px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            box-sizing: border-box; 
+            background: rgba(5,5,5,0.85);
+            backdrop-filter: blur(12px);
+            z-index: 2500;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .menu-icon {
+            cursor: pointer;
+            position: relative;
+            z-index: 2501;
+            width: 30px;
+            height: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .menu-icon span {
+            display: block;
+            width: 26px;
+            height: 2px;
+            background: var(--gold);
+            margin: 3px 0;
+            transition: 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            transform-origin: left center;
+        }
+
+        .menu-icon.active span:nth-child(1) { transform: rotate(45deg); width: 28px; }
+        .menu-icon.active span:nth-child(2) { opacity: 0; width: 0; }
+        .menu-icon.active span:nth-child(3) { transform: rotate(-45deg); width: 28px; }
+
+        .logo-shimmer {
+            font-family: 'Playfair Display', serif;
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--gold) 0%, #fff 40%, var(--gold) 80%);
+            background-size: 200% auto;
+            color: var(--gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer 3s linear infinite;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        @keyframes shimmer {
+            to { background-position: 200% center; }
+        }
+
+        /* ================= POLICY PAGE STYLES ================= */
+        .policy-wrapper {
+            position: relative;
+            z-index: 2;
+            max-width: 850px;
+            margin: 160px auto 100px;
+            padding: 0 20px;
+        }
+
+        .cinematic-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(36px, 5vw, 64px);
+            color: var(--gold);
+            margin-bottom: 40px;
+            text-align: center;
+            overflow: hidden; 
+            display: flex;
+            justify-content: center;
+            gap: 15px; 
+            margin-top: 0;
+        }
+
+        .cinematic-word {
+            display: inline-block;
+            transform: translateY(120%);
+            opacity: 0;
+            transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1), opacity 1s ease-out;
+        }
+
+        .cinematic-title.revealed .cinematic-word {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .policy-content {
+            padding: 45px;
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 12px;
+            background: rgba(255,255,255,0.02);
+            backdrop-filter: blur(12px);         
+            -webkit-backdrop-filter: blur(12px); 
+            line-height: 1.8;
+            color: #b3b3b3;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 1s ease, transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .policy-content.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .policy-content h2 {
+            font-family: 'Playfair Display', serif;
+            color: var(--gold);
+            margin-top: 40px;
+            margin-bottom: 15px;
+            font-size: 24px;
+            border-bottom: 1px solid rgba(212,175,55,0.2);
+            padding-bottom: 10px;
+        }
+
+        .policy-content h2:first-child {
+            margin-top: 0;
+        }
+
+        .policy-content p, .policy-content ul {
+            margin-bottom: 20px;
+            letter-spacing: 0.5px;
+        }
+
+        .policy-content ul {
+            padding-left: 20px;
+        }
+
+        .policy-content li {
+            margin-bottom: 10px;
+        }
+
+        .policy-content a {
+            color: var(--gold);
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .policy-content a:hover {
+            text-shadow: 0 0 10px rgba(212,175,55,0.5);
+        }
+
+        .last-updated {
+            text-align: center;
+            font-size: 13px;
+            color: rgba(255,255,255,0.4);
+            margin-bottom: 30px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* ================= DESKTOP HOVER PROTECTIONS ================= */
+        @media (hover: hover) and (pointer: fine) {
+            .sidebar a:hover {
+                color: var(--gold);
+                transform: translateX(6px);
+            }
+        }
+
+        footer {
+            text-align: center;
+            padding: 60px 20px;
+            color: #777;
+            border-top: 1px solid #111;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* ================= COLD AF SCROLLBAR ================= */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--bg);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #0a0a0a;
+            border: 1px solid var(--gold);
+            border-radius: 0px;
+            box-shadow: inset 0 0 5px rgba(212, 175, 55, 0.2);
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--gold);
+            box-shadow: 0 0 15px var(--gold);
+        }
+
+        /* ================= MOBILE RESPONSIVENESS ================= */
+        @media screen and (max-width: 768px) {
+            .nav { justify-content: space-between; padding: 15px 20px; }
+            .logo-shimmer { position: relative; left: auto; top: auto; transform: none; font-size: 20px; }
+            .policy-wrapper { margin-top: 120px; padding: 0 15px; }
+            .policy-content { padding: 25px; }
+            .cinematic-title { font-size: 10vw; gap: 10px; }
+            .sidebar { width: 85%; }
+            * { cursor: auto !important; }
+            .cursor-dot { display: none !important; }
+        }
+    </style>
+    <script defer src="https://cloud.umami.is/script.js" data-website-id="73132b12-a822-434c-8854-888438105660"></script>
+</head>
+
+<body oncontextmenu="return false;">
+
+<div class="noise-overlay"></div>
+<div class="cursor-dot" id="cursor-dot"></div>
+
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+<div class="orb orb3"></div>
+
+<div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
+<div id="sidebar" class="sidebar">
+    <div class="sidebar-content">
+        <div class="menu-label">System</div>
+        <a href="index.html">Home</a>
+        <div class="menu-label">Advanced Tools</div>
+        <a href="calc.html">Wealth Calculators</a>
+        <a href="clock.html">Market Clock</a>
+        <div class="menu-label">Research</div>
+        <a href="researchportal.html">Research Portal</a>
+        <div class="menu-label">Our Firm</div>
+        <a href="aboutus.html">About Us</a>
+        <a href="vision.html">Our Vision</a>
+        <div class="menu-label">Access</div>
+        <a href="contactus.html">Contact Us</a>
+        <a href="privacypolicy.html" class="active-link"><span class="active-dot"></span>Privacy Policy</a>
+    </div>
+</div>
+
+<div class="nav">
+    <div class="menu-icon" onclick="toggleMenu()">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+    <a href="index.html" class="logo-shimmer">gRaviTy</a>
+</div>
+
+<div class="policy-wrapper">
+    <h1 class="cinematic-title" id="main-title">
+        <span class="cinematic-word" style="transition-delay: 0.1s;">Privacy</span>
+        <span class="cinematic-word" style="transition-delay: 0.3s;">Policy</span>
+    </h1>
+
+    <div class="policy-content" id="policy-body">
+        <div class="last-updated">Last Updated: May 5, 2026</div>
+
+        <h2>1. Intelligence Gathering (Data Collection)</h2>
+        <p>At gRaviTy Research, we approach data the same way we approach markets—with strict logic and absolute security. We collect only what is necessary to optimize your experience within our Market Intelligence System. This includes:</p>
+        <ul>
+            <li><strong>Technical Telemetry:</strong> IP addresses, browser specifications, and hardware identifiers to ensure optimal system performance.</li>
+            <li><strong>Interaction Data:</strong> Behavioral tracking within our calculators, clocks, and research portals to improve user interface efficiency.</li>
+            <li><strong>Communication Logs:</strong> Information you voluntarily provide when utilizing our contact systems.</li>
+        </ul>
+
+        <h2>2. System Utilization (How We Use Data)</h2>
+        <p>Your data is processed strictly for systemic improvement and operational integrity. We utilize collected information to:</p>
+        <ul>
+            <li>Maintain, deliver, and enhance our analytical tools and research portals.</li>
+            <li>Monitor systemic health and prevent unauthorized access or system abuse.</li>
+            <li>Respond accurately and securely to your inquiries and support requests.</li>
+        </ul>
+
+        <h2>3. Security Protocols</h2>
+        <p>We treat your privacy with the same rigor applied to our market research. Advanced encryption, secure data routing, and stringent access protocols are permanently active. Data is housed in heavily monitored environments, and access is restricted exclusively to cleared personnel required for systemic maintenance.</p>
+
+        <h2>4. Third-Party Integrations</h2>
+        <p>Our platform incorporates highly vetted third-party modules (e.g., TradingView charts, Umami analytics). While these modules function within our ecosystem, they operate under their own strict data policies. We do not sell, rent, or recklessly distribute your data to external entities.</p>
+
+        <h2>5. Your System Access Rights</h2>
+        <p>You maintain ultimate sovereignty over your data profile. You reserve the right to request access to the data we have gathered, request corrections to systemic inaccuracies, or petition for total data erasure from our servers, subject to governing legal limitations.</p>
+
+        <h2>6. Contact Protocol</h2>
+        <p>If you require clarification on our data handling logic or wish to exercise your rights, initiate contact via our <a href="contactus.html">Contact Us</a> interface.</p>
+    </div>
+</div>
+
+<footer>
+    gRaviTy Research • Intelligence System
+</footer>
+
+<script>
+    /* ================= PROTECTION & ESC ================= */
+    document.addEventListener('keydown', function(e) {
+        if (e.key === "Escape" && document.getElementById("sidebar").classList.contains("open")) {
+            toggleMenu();
+        }
+        if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74)) || (e.ctrlKey && e.keyCode == 85)) {
+            e.preventDefault();
+        }
+    });
+
+    /* ================= CONTENT REVEAL ON LOAD ================= */
+    document.addEventListener("DOMContentLoaded", () => {
+        document.getElementById("main-title").classList.add("revealed");
+        setTimeout(() => {
+            document.getElementById("policy-body").classList.add("revealed");
+        }, 300);
+    });
+
+    /* ================= CURSOR & MOUSE EFFECTS ================= */
+    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    if (!isTouchDevice) {
+        const cursorDot = document.getElementById('cursor-dot');
+        window.addEventListener('mousemove', (e) => {
+            cursorDot.style.left = e.clientX + 'px';
+            cursorDot.style.top = e.clientY + 'px';
+        });
+
+        document.querySelectorAll('a, button, .menu-icon, .logo-shimmer').forEach(el => {
+            el.addEventListener('mouseenter', () => cursorDot.classList.add('hover-state'));
+            el.addEventListener('mouseleave', () => cursorDot.classList.remove('hover-state'));
+        });
+    }
+
+    /* ================= UI LOGIC ================= */
+    function toggleMenu() {
+        document.getElementById("sidebar").classList.toggle("open");
+        document.getElementById("overlay").classList.toggle("show");
+        document.querySelector(".menu-icon").classList.toggle("active");
+        document.body.style.overflow = document.getElementById("sidebar").classList.contains("open") ? "hidden" : "";
+    }
+</script>
+</body>
+</html>
